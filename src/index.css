@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+/* index.css */
+
+/* 폰트 설정 */
+@font-face {
+  font-family: "TJJoyofsinging";
+  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingL_WOFF2.woff2")
+      format("woff2"),
+    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingL_TTF.ttf")
+      format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TJJoyofsinging";
+  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingM_WOFF2.woff2")
+      format("woff2"),
+    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingM_TTF.ttf")
+      format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TJJoyofsinging";
+  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingB_WOFF2.woff2")
+      format("woff2"),
+    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingB_TTF.ttf")
+      format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "TJJoyofsinging";
+  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingEB_WOFF2.woff2")
+      format("woff2"),
+    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingEB_TTF.ttf")
+      format("truetype");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-TJ: "TJJoyofsinging", sans-serif;
+  --breakpoint-sm: 430px;
+  --breakpoint-md: 615px;
+  --breakpoint-xl: 1180px;
+
+  --color-main-yellow-700: #ffd640; /* -main-button-text */
+  --color-main-yellow-800: #fcc53b; /* -main-title */
+  --color-main-brown-700: #6a3909; /* -main-title-stroke */
+  --color-main-brown-800: #6e3500; /* -main-button-text-stroke, -main-button-text */
+  --color-main-blue-700: #8fd5fa; /* -main-attandance-text */
+  --color-main-blue-800: #2f3f53; /* -main-attandance-text-stroke */
+}
+
+@utility text-stroke-width-* {
+  -webkit-text-stroke-width: --value([length]);
+}
+
+@utility text-stroke-color-* {
+  -webkit-text-stroke-color: --value([color]);
+}
+
+@media (max-width: 430px) {
+  html {
+    font-size: 60%;
+  }
+}
+
+@media (min-width: 431px) and (max-width: 615px) {
+  html {
+    font-size: 70%;
+  }
+}
+
+@media (min-width: 616px) and (max-width: 1179px) {
+  html {
+    font-size: 100%;
+  }
+}
+
+@media screen and (min-width: 1180px) {
+  html {
+    font-size: 190%;
+  }
+}
