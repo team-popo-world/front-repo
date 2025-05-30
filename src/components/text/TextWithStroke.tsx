@@ -7,6 +7,9 @@ interface TextWithStrokeProps {
   strokeClassName?: string;
 }
 
+// textClassName에 글자 색, 크기 지정
+// strokeClassName에 글자색, 크기 테두리 색 지정
+// prettier-ignore
 export const TextWithStroke = ({ text, className, textClassName, strokeClassName }: TextWithStrokeProps) => {
   return (
     <p className={clsx("relative z-0 inline-flex justify-center select-none", className)}>
