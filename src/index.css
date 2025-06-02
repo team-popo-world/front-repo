@@ -5,10 +5,8 @@
 /* 폰트 설정 */
 @font-face {
   font-family: "TJJoyofsinging";
-  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingL_WOFF2.woff2")
-      format("woff2"),
-    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingL_TTF.ttf")
-      format("truetype");
+  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingL_WOFF2.woff2") format("woff2"),
+    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingL_TTF.ttf") format("truetype");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -16,10 +14,8 @@
 
 @font-face {
   font-family: "TJJoyofsinging";
-  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingM_WOFF2.woff2")
-      format("woff2"),
-    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingM_TTF.ttf")
-      format("truetype");
+  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingM_WOFF2.woff2") format("woff2"),
+    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingM_TTF.ttf") format("truetype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -27,10 +23,8 @@
 
 @font-face {
   font-family: "TJJoyofsinging";
-  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingB_WOFF2.woff2")
-      format("woff2"),
-    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingB_TTF.ttf")
-      format("truetype");
+  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingB_WOFF2.woff2") format("woff2"),
+    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingB_TTF.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -38,10 +32,8 @@
 
 @font-face {
   font-family: "TJJoyofsinging";
-  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingEB_WOFF2.woff2")
-      format("woff2"),
-    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingEB_TTF.ttf")
-      format("truetype");
+  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingEB_WOFF2.woff2") format("woff2"),
+    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingEB_TTF.ttf") format("truetype");
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -53,12 +45,41 @@
   --breakpoint-md: 615px;
   --breakpoint-xl: 1180px;
 
-  --color-main-yellow-700: #ffd640; /* -main-button-text */
-  --color-main-yellow-800: #fcc53b; /* -main-title */
-  --color-main-brown-700: #6a3909; /* -main-title-stroke */
-  --color-main-brown-800: #6e3500; /* -main-button-text-stroke, -main-button-text */
-  --color-main-blue-700: #8fd5fa; /* -main-attandance-text */
-  --color-main-blue-800: #2f3f53; /* -main-attandance-text-stroke */
+  /* 기본 커스텀텀 컬러 */
+  /* 오렌지계열 */
+  --color-main-orange-400: #ffac2a;
+  --color-main-orange-500: #e45628;
+  /* 노랑계열 */
+  --color-main-yellow-150: #fefef1;
+  --color-main-yellow-200: #fff9d0;
+  --color-main-yellow-300: #ffe6b7;
+  --color-main-yellow-350: #f9d24c;
+  --color-main-yellow-400: #c47d00;
+  --color-main-yellow-700: #ffd640;
+  --color-main-yellow-800: #fcc53b;
+  /* 갈색계열 */
+  --color-main-brown-300: #dfd3b6;
+  --color-main-brown-350: #cfab60;
+  --color-main-brown-400: #d3910f;
+  --color-main-brown-450: #ba9462;
+  --color-main-brown-500: #a86332;
+  --color-main-brown-550: #7a5c34;
+  --color-main-brown-575: #7b5025;
+  --color-main-brown-600: #895835;
+  --color-main-brown-700: #6a3909;
+  --color-main-brown-800: #6e3500;
+  --color-main-brown-850: #472a0c;
+  /* 파랑계열 */
+  --color-main-blue-600: #5188d9;
+  --color-main-blue-700: #8fd5fa;
+  --color-main-blue-800: #2f3f53;
+  /* 빨강계열 */
+  --color-main-red-400: #fe6e38;
+  --color-main-red-500: #e45628;
+  --color-main-red-600: #dd4b4b;
+  /* 핑크색 계열 */
+  --color-main-pink-500: #ff9d9d;
+  --color-main-pink-600: #c55e5e;
 }
 
 @utility text-stroke-width-* {
