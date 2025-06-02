@@ -53,7 +53,7 @@ export const LittlePigGameStart = () => {
           </div>
           {/* 게임 시작 버튼 */}
           <Link to="/investing/game/little_pig?stage=game-play">
-            <div className="absolute bottom-5 right-13.25 px-3 py-1.5 text-white text-[0.7rem] bg-main-pink-600 rounded-lg active:scale-95 transition-all duration-100">
+            <div className="absolute bottom-3 right-13 px-3 py-1.5 text-white text-[0.7rem] bg-main-pink-600 rounded-lg active:scale-95 transition-all duration-100">
               게임 시작
             </div>
           </Link>

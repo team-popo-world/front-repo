@@ -13,16 +13,105 @@ import { PigCard } from "../../component/little-pig-component/pig-card";
 import { NewsBox } from "../../component/little-pig-component/news-box";
 import { useState } from "react";
 import { PinkBorderModal } from "@/module/investing-game/component/little-pig-component/pink-border-modal";
+import { Link } from "react-router-dom";
 
 export const GamePlay = () => {
   const [turnFinish, setTurnFinish] = useState(false);
-  const [buyPig, setBuyPig] = useState<number>(1);
+  const [buyPig, setBuyPig] = useState<number>(0);
 
   if (turnFinish) {
     return (
       <Background backgroundImage={backgroundImage} backgroundClassName="flex flex-col items-center justify-center">
         <PinkBorderModal className="flex flex-col items-start">
-          <h1>게임 종료</h1>
+          <h1 className="self-center mt-3 mb-4 text-main-pink-600 text-[1.65rem] font-extrabold">1턴 종료!</h1>
+          <div className="grid grid-cols-3 mb-2 gap-x-2 w-full">
+            {/* 첫째 돼지 */}
+            <div className="flex flex-col px-2">
+              <img src={littlePig1} alt="첫째 돼지" className="mb-3 min-w-0 h-16 object-contain" />
+              <h4 className="text-main-brown-575 text-[0.65rem] font-bold mb-1">종목명: 첫째 돼지</h4>
+              <p className="text-main-brown-575 text-[0.5rem] font-bold">
+                설명: 바람에 약하지만 귀여운 디자인으로 인기가 많아요
+              </p>
+              <div className="flex flex-col gap-y-0.5 mt-3 ">
+                <div className="flex items-center gap-x-0.5">
+                  <img src={coin} alt="코인" className="w-4 h-4 object-contain" />
+                  <span className=" text-main-brown-575 text-[0.5rem] font-bold">현재 가격: 1000냥</span>
+                  <span className="pl-1.5 text-main-red-600 text-[0.5rem] font-bold">+5%</span>
+                </div>
+                <div className="flex items-center gap-x-0.5">
+                  <img src={coin} alt="코인" className="w-4 h-4 object-contain" />
+                  <span className="text-main-brown-575 text-[0.5rem] font-bold">이전 가격: 1000냥</span>
+                </div>
+                <div className="flex items-center gap-x-0.5">
+                  <img src={box} alt="물건" className="w-4 h-4 object-contain" />
+                  <span className="text-main-brown-575 text-[0.5rem] font-bold">판매 수량: 3개</span>
+                </div>
+                <div className="flex items-center gap-x-0.5">
+                  <img src={coin} alt="코인" className="w-4 h-4 object-contain" />
+                  <span className="text-main-brown-575 text-[0.5rem] font-bold">얻은 수익: 1000냥</span>
+                </div>
+              </div>
+            </div>
+            {/* 둘째 돼지 */}
+            <div className="flex flex-col px-2">
+              <img src={littlePig1} alt="첫째 돼지" className="mb-3 min-w-0 h-16 object-contain" />
+              <h4 className="text-main-brown-575 text-[0.65rem] font-bold mb-1">종목명: 첫째 돼지</h4>
+              <p className="text-main-brown-575 text-[0.5rem] font-bold">
+                설명: 바람에 약하지만 귀여운 디자인으로 인기가 많아요
+              </p>
+              <div className="flex flex-col gap-y-0.5 mt-3">
+                <div className="flex items-center gap-x-0.5">
+                  <img src={coin} alt="코인" className="w-4 h-4 object-contain" />
+                  <span className=" text-main-brown-575 text-[0.5rem] font-bold">현재 가격: 1000냥</span>
+                  <span className="pl-1.5 text-main-red-600 text-[0.5rem] font-bold">+5%</span>
+                </div>
+                <div className="flex items-center gap-x-0.5">
+                  <img src={coin} alt="코인" className="w-4 h-4 object-contain" />
+                  <span className="text-main-brown-575 text-[0.5rem] font-bold">이전 가격: 1000냥</span>
+                </div>
+                <div className="flex items-center gap-x-0.5">
+                  <img src={box} alt="물건" className="w-4 h-4 object-contain" />
+                  <span className="text-main-brown-575 text-[0.5rem] font-bold">판매 수량: 3개</span>
+                </div>
+                <div className="flex items-center gap-x-0.5">
+                  <img src={coin} alt="코인" className="w-4 h-4 object-contain" />
+                  <span className="text-main-brown-575 text-[0.5rem] font-bold">얻은 수익: 1000냥</span>
+                </div>
+              </div>
+            </div>
+            {/* 셋째 돼지 */}
+            <div className="flex flex-col px-2">
+              <img src={littlePig1} alt="첫째 돼지" className="mb-3 min-w-0 h-16 object-contain" />
+              <h4 className="text-main-brown-575 text-[0.65rem] font-bold mb-1">종목명: 첫째 돼지</h4>
+              <p className="text-main-brown-575 text-[0.5rem] font-bold">
+                설명: 바람에 약하지만 귀여운 디자인으로 인기가 많아요
+              </p>
+              <div className="flex flex-col gap-y-0.5 mt-3 ">
+                <div className="flex items-center gap-x-0.5">
+                  <img src={coin} alt="코인" className="w-4 h-4 object-contain" />
+                  <span className=" text-main-brown-575 text-[0.5rem] font-bold">현재 가격: 1000냥</span>
+                  <span className="pl-1.5 text-main-red-600 text-[0.5rem] font-bold">+5%</span>
+                </div>
+                <div className="flex items-center gap-x-0.5">
+                  <img src={coin} alt="코인" className="w-4 h-4 object-contain" />
+                  <span className="text-main-brown-575 text-[0.5rem] font-bold">이전 가격: 1000냥</span>
+                </div>
+                <div className="flex items-center gap-x-0.5">
+                  <img src={box} alt="물건" className="w-4 h-4 object-contain" />
+                  <span className="text-main-brown-575 text-[0.5rem] font-bold">판매 수량: 3개</span>
+                </div>
+                <div className="flex items-center gap-x-0.5">
+                  <img src={coin} alt="코인" className="w-4 h-4 object-contain" />
+                  <span className="text-main-brown-575 text-[0.5rem] font-bold">얻은 수익: 1000냥</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <Link to="/investing/game/little_pig?stage=game-play">
+            <div className="absolute bottom-2 right-13 px-3 py-1.5 text-white text-[0.7rem] bg-main-pink-600 rounded-lg active:scale-95 transition-all duration-100">
+              다음 턴!
+            </div>
+          </Link>
         </PinkBorderModal>
       </Background>
     );
