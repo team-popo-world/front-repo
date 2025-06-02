@@ -9,6 +9,8 @@ import EmotionDiary from "./page/emotionDiary";
 import Attandance from "./page/attandance";
 import Quiz from "./page/quiz";
 import NotFound from "./page/notfound";
+import LoginPage from './page/auth/login';
+import RegisterPage from './page/auth/register';
 
 function App() {
   return (
@@ -25,6 +27,8 @@ function App() {
           <Route path="/attandance" element={<Attandance />} />
           <Route path="/quiz" element={<Quiz />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="/auth/login" element={<LoginPage />} />
+          <Route path="/auth/register" element={<RegisterPage />} />
         </Routes>
       </BrowserRouter>
     </>
