@@ -9,14 +9,19 @@ import EmotionDiary from "./page/emotionDiary";
 import Attandance from "./page/attandance";
 import Quiz from "./page/quiz";
 import NotFound from "./page/notfound";
-
+import InvestingGame from "./page/investing/game";
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Main />} />
-          <Route path="/investing" element={<Investing />} />
+
+          <Route path="/investing">
+            <Route index element={<Investing />} />
+            <Route path="game/:gametype" element={<InvestingGame />} />
+          </Route>
+
           <Route path="/market" element={<Market />} />
           <Route path="/savings" element={<Savings />} />
           <Route path="/quest" element={<Quest />} />
