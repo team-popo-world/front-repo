@@ -6,7 +6,7 @@ interface BackgroundProps {
 }
 
 export function Background({ backgroundImage, children }: BackgroundProps) {
-  return ~~(
+  return (
     <div className="w-screen h-screen bg-black font-TJ overflow-hidden flex justify-center items-center">
       <div
         className={clsx(
