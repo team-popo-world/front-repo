@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Background } from "../../../components/layout/Background";
-import LoginBackground from "../../../../assets/image/auth/login/auth_login_background.png";
-import backgroundImage from "../../../../assets/image/main/main_background.webp";
 export default function LoginPage() {
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
@@ -20,7 +17,6 @@ export default function LoginPage() {
   };
 
   return (
-    <Background backgroundImage={backgroundImage}>
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <form onSubmit={handleSubmit} className="bg-white p-8 rounded shadow-md w-full max-w-md">
           <h2 className="text-2xl font-bold mb-6 text-center">로그인</h2>
@@ -55,6 +51,5 @@ export default function LoginPage() {
           </button>
         </form>
       </div>
-    </Background>
   );
 }
