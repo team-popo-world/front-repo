@@ -10,6 +10,7 @@ import { YellowBorderModal } from "../../component/little-pig-component/yellow-b
 import littlePig1 from "@/assets/image/investing-game/little_pig/little_pig_1.webp";
 import littlePig2 from "@/assets/image/investing-game/little_pig/little_pig_2.webp";
 import littlePig3 from "@/assets/image/investing-game/little_pig/little_pig_3.webp";
+import chartPig from "@/assets/image/investing-game/little_pig/little_pig_chart.webp";
 import { Link } from "react-router-dom";
 
 // 각 돼지별 차트 색상 정의
@@ -334,7 +335,10 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
           strokeClassName="text-main-brown-700 text-[1.75rem] font-bold text-stroke-width-[0.25rem] text-stroke-color-main-brown-700"
         />
         {/* 그래프 */}
-        <div className="flex flex-col items-start">
+        <div className="relative flex flex-col items-start">
+          {/* 차트 돼지  */}
+          <img src={chartPig} alt="차트돼지" className="absolute -top-3 -left-3 w-11 h-11 object-contain z-100" />
+
           <div className="bg-[#FFFDFA] p-3 mb-2 rounded-lg shadow-lg w-[600px] h-[350px] relative mx-auto">
             <svg ref={svgRef} width="100%" height="100%" viewBox="0 0 600 350" preserveAspectRatio="xMidYMid meet" />
           </div>
