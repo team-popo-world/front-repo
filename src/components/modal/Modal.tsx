@@ -4,9 +4,9 @@ import { createPortal } from "react-dom";
 
 // Modal 컴포넌트의 props 타입 정의
 interface ModalProps {
-  isOpen: boolean; // 모달이 열려있는지 여부
-  onClose: () => void; // 모달을 닫는 함수
-  children: React.ReactNode; // 모달 내부에 표시될 내용
+  isOpen?: boolean; // 모달이 열려있는지 여부
+  onClose?: () => void; // 모달을 닫는 함수
+  children?: React.ReactNode; // 모달 내부에 표시될 내용
 }
 
 /**
@@ -19,7 +19,7 @@ export const Modal = ({ isOpen, onClose, children }: ModalProps) => {
   return (
     <ModalPortal>
       {/* 모달 오버레이: 배경을 어둡게 하고 모달을 중앙에 배치 */}
-      <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50" onClick={onClose}>
+      <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 font-TJ" onClick={onClose}>
         {/* 모달 컨텐츠: 흰색 배경의 실제 모달 내용 */}
         {children}
       </div>

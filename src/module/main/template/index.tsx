@@ -31,11 +31,7 @@ interface MainTemplateProps {
   isAnimating: boolean;
   targetPosition: { top: string; left: string };
   direction: "left" | "right";
-  handleIslandClick: (
-    island: keyof typeof ISLAND_POSITIONS,
-    path: string,
-    direction?: "left" | "right"
-  ) => void;
+  handleIslandClick: (island: keyof typeof ISLAND_POSITIONS, path: string, direction?: "left" | "right") => void;
   handleAnimationComplete: () => void;
 }
 
@@ -61,11 +57,7 @@ export default function MainTemplate({
       {/* 퀴즈, 출석, 포인트 */}
       <Link to="/quiz">
         <div className="absolute top-2 right-38 w-7 h-7 flex flex-wrap justify-center active:scale-95 transition-all duration-100">
-          <img
-            src={quizImage}
-            alt="quiz"
-            className="w-full h-full object-contain"
-          />
+          <img src={quizImage} alt="quiz" className="w-full h-full object-contain" />
           <TextWithStroke
             text="퀴즈"
             textClassName="text-main-yellow-800 text-[0.9rem]"
@@ -75,11 +67,7 @@ export default function MainTemplate({
       </Link>
       <Link to="/attandance">
         <div className="absolute top-2 right-29.5 w-7 h-7 flex flex-wrap justify-center active:scale-95 transition-all duration-100">
-          <img
-            src={attandanceImage}
-            alt="attandance"
-            className="w-full h-full object-contain"
-          />
+          <img src={attandanceImage} alt="attandance" className="w-full h-full object-contain" />
           <TextWithStroke
             text="출석"
             textClassName="text-main-blue-700 text-[0.9rem]"
@@ -88,11 +76,7 @@ export default function MainTemplate({
         </div>
       </Link>
       <div className="absolute top-1.5 right-3 w-23 min-h-0 flex flex-wrap active:scale-95 transition-all duration-100">
-        <img
-          src={nameImage}
-          alt="attandance"
-          className="w-full h-full object-contain"
-        />
+        <img src={nameImage} alt="attandance" className="w-full h-full object-contain" />
         <div className="absolute top-1.5 left-8">
           <TextWithStroke
             text="포크레인"
@@ -101,11 +85,7 @@ export default function MainTemplate({
           />
         </div>
         <div className="relative w-5.5 h-5.5 left-4 inline-flex items-center gap-0.5">
-          <img
-            src={coinImage}
-            alt="attandance"
-            className="w-full h-full object-contain"
-          />
+          <img src={coinImage} alt="attandance" className="w-full h-full object-contain" />
           <TextWithStroke
             text="2000냥"
             className="whitespace-nowrap"
@@ -115,91 +95,49 @@ export default function MainTemplate({
         </div>
       </div>
       {/* 섬 */}
-      <div
-        onClick={() => handleIslandClick("market", "/market")}
-        className="cursor-pointer"
-      >
+      <div onClick={() => handleIslandClick("market", "/market")} className="cursor-pointer">
         <div className="absolute top-17 left-13 w-28 h-28 active:scale-95 transition-all duration-100">
-          <img
-            src={marketImage}
-            alt="market"
-            className="w-full h-full object-contain"
-          />
+          <img src={marketImage} alt="market" className="w-full h-full object-contain" />
           <div className="absolute top-23 left-7  px-4 text-[0.6rem] py-[2px] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
             시장
           </div>
         </div>
       </div>
-      <div
-        onClick={() => handleIslandClick("emotionDiary", "/emotionDiary")}
-        className="cursor-pointer"
-      >
+      <div onClick={() => handleIslandClick("emotionDiary", "/emotionDiary")} className="cursor-pointer">
         <div className="absolute top-60 left-10 w-28 h-28 active:scale-95 transition-all duration-100">
-          <img
-            src={emotionsDiaryImage}
-            alt="emotionsDiary"
-            className="w-full h-full object-contain"
-          />
+          <img src={emotionsDiaryImage} alt="emotionsDiary" className="w-full h-full object-contain" />
           <div className="absolute top-23 left-5  px-3.5 text-[0.6rem] py-[2px] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
             감정일기
           </div>
         </div>
       </div>
-      <div
-        onClick={() => handleIslandClick("raising", "/raising")}
-        className="cursor-pointer"
-      >
+      <div onClick={() => handleIslandClick("raising", "/raising")} className="cursor-pointer">
         <div className="absolute top-72 left-38 w-28 h-28 active:scale-95 transition-all duration-100">
-          <img
-            src={raisingImage}
-            alt="raising"
-            className="w-full h-full object-contain"
-          />
+          <img src={raisingImage} alt="raising" className="w-full h-full object-contain" />
           <div className="absolute top-24.5 left-5  px-3 text-[0.6rem] py-[2px] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
             포포 키우기
           </div>
         </div>
       </div>
-      <div
-        onClick={() => handleIslandClick("savings", "/savings", "right")}
-        className="cursor-pointer"
-      >
+      <div onClick={() => handleIslandClick("savings", "/savings", "right")} className="cursor-pointer">
         <div className="absolute top-75 left-85 w-28 h-28 active:scale-95 transition-all duration-100">
-          <img
-            src={savingsImage}
-            alt="savings"
-            className="w-full h-full object-contain"
-          />
+          <img src={savingsImage} alt="savings" className="w-full h-full object-contain" />
           <div className="absolute top-22 left-8  px-4 text-[0.6rem] py-[2px] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
             적금
           </div>
         </div>
       </div>
-      <div
-        onClick={() => handleIslandClick("quest", "/quest", "right")}
-        className="cursor-pointer"
-      >
+      <div onClick={() => handleIslandClick("quest", "/quest", "right")} className="cursor-pointer">
         <div className="absolute top-54 left-117.5 w-28 h-28 active:scale-95 transition-all duration-100">
-          <img
-            src={questImage}
-            alt="quest"
-            className="w-full h-full object-contain"
-          />
+          <img src={questImage} alt="quest" className="w-full h-full object-contain" />
           <div className="absolute top-23.5 left-7  px-3.5 text-[0.6rem] py-[2px] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
             퀘스트
           </div>
         </div>
       </div>
-      <div
-        onClick={() => handleIslandClick("investing", "/investing", "right")}
-        className="cursor-pointer"
-      >
+      <div onClick={() => handleIslandClick("investing", "/investing", "right")} className="cursor-pointer">
         <div className="absolute top-24 left-116 w-27 h-27 active:scale-95 transition-all duration-100">
-          <img
-            src={investingImage}
-            alt="quiz"
-            className="w-full h-full object-contain"
-          />
+          <img src={investingImage} alt="quiz" className="w-full h-full object-contain" />
           <div className="absolute top-22 left-5.5  px-3.5 text-[0.6rem] py-[2px] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
             모의투자
           </div>
