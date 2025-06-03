@@ -41,7 +41,6 @@ function App() {
             <Route path="/auth/register" element={<RegisterPage />} />
           </Routes>
         </ModalProvider>
-
       </BrowserRouter>
     </>
   );
