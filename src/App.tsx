@@ -11,11 +11,15 @@ import Quiz from "@/page/quiz";
 import NotFound from "@/page/notfound";
 import InvestingGame from "@/page/investing/game";
 import { ModalProvider } from "@/lib/context/modal-context";
+import LoginPage from './page/auth/login';
+import RegisterPage from './page/auth/register';
+
 
 function App() {
   return (
     <>
       <BrowserRouter>
+
         <ModalProvider>
           <Routes>
             <Route path="/" element={<Main />} />
@@ -33,8 +37,11 @@ function App() {
             <Route path="/attandance" element={<Attandance />} />
             <Route path="/quiz" element={<Quiz />} />
             <Route path="*" element={<NotFound />} />
+            <Route path="/auth/login" element={<LoginPage />} />
+            <Route path="/auth/register" element={<RegisterPage />} />
           </Routes>
         </ModalProvider>
+
       </BrowserRouter>
     </>
   );
