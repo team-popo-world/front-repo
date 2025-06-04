@@ -10,8 +10,6 @@ import { YellowBorderModal } from "../../component/little-pig-component/yellow-b
 import littlePig1 from "@/assets/image/investing-game/little_pig/little_pig_1.webp";
 import littlePig2 from "@/assets/image/investing-game/little_pig/little_pig_2.webp";
 import littlePig3 from "@/assets/image/investing-game/little_pig/little_pig_3.webp";
-import chartPig from "@/assets/image/investing-game/little_pig/little_pig_chart.webp";
-import { Link } from "react-router-dom";
 
 // 각 돼지별 차트 색상 정의
 const COLORS = {
@@ -30,7 +28,17 @@ const formatData = () => {
   }));
 };
 
-export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: number; initialPoint: number }) => {
+// SVG 명령어
+// | 명령어     | 설명                 |
+// | ------- | ------------------ |
+// | `M x,y` | 이동 (MoveTo)        |
+// | `L x,y` | 선 (LineTo)         |
+// | `H x`   | 수평선                |
+// | `V y`   | 수직선                |
+// | `C ...` | 베지어 곡선             |
+// | `Z`     | 경로 닫기 (Close path) |
+
+export const LittlePigGameEnd = () => {
   const data = formatData();
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -173,14 +181,17 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
     }));
 
     // 첫째 돼지 라인 그리기
-    // rc는 rough.js의 인스턴스
     for (let i = 0; i < firstPigPoints.length - 1; i++) {
       const line = rc.line(firstPigPoints[i].x, firstPigPoints[i].y, firstPigPoints[i + 1].x, firstPigPoints[i + 1].y, {
         roughness: 1.5,
         stroke: COLORS.first,
         strokeWidth: 3,
       });
-      g.node()?.appendChild(line);
+      const lineElement = g.node()?.appendChild(line);
+      if (lineElement) {
+        lineElement.style.opacity = "0";
+        lineElement.style.animation = `fadeIn 0.5s ease-out ${i * 0.2}s forwards`;
+      }
     }
 
     // 둘째 돼지 데이터 라인
@@ -202,7 +213,11 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
           strokeWidth: 3,
         }
       );
-      g.node()?.appendChild(line);
+      const lineElement = g.node()?.appendChild(line);
+      if (lineElement) {
+        lineElement.style.opacity = "0";
+        lineElement.style.animation = `fadeIn 0.5s ease-out ${i * 0.2}s forwards`;
+      }
     }
 
     // 셋째 돼지 데이터 라인
@@ -218,31 +233,27 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
         stroke: COLORS.third,
         strokeWidth: 3,
       });
-      g.node()?.appendChild(line);
+      const lineElement = g.node()?.appendChild(line);
+      if (lineElement) {
+        lineElement.style.opacity = "0";
+        lineElement.style.animation = `fadeIn 0.5s ease-out ${i * 0.2}s forwards`;
+      }
     }
 
     // 데이터 포인트 그리기
-    // const x = d3.scaleLinear().domain([1, data.length]).range([0, width]);
-    // x(i + 1) 는 데이터의 인덱스를 화면 좌표로 변환 => x(), y() 로 x,y 좌표 얻기
-    // circle()은 x,y 좌표와 반지름을 받아서 원을 그림
     data.forEach((d, i) => {
       // 첫째 돼지 포인트
       const firstPigPoint = rc.circle(x(i + 1), y(d["첫째 돼지"]), 10, {
         roughness: 1,
         fill: COLORS.first,
         fillStyle: "solid",
-        stroke: "#7b5025", // --color-main-brown-575
+        stroke: "#7b5025",
         strokeWidth: 3,
       });
-      g.node()?.appendChild(firstPigPoint);
-      // 마지막 데이터 포인트에 첫째 돼지 이미지 추가
-      if (i === data.length - 1) {
-        g.append("image")
-          .attr("xlink:href", littlePig1) // 이미지 경로
-          .attr("x", x(i + 1) - 20) // 이미지의 좌측 위치 (중앙 정렬을 위해 -15)
-          .attr("y", y(d["첫째 돼지"]) - 20) // 이미지의 위쪽 위치 (중앙 정렬을 위해 -15)
-          .attr("width", 40)
-          .attr("height", 40);
+      const firstPointElement = g.node()?.appendChild(firstPigPoint);
+      if (firstPointElement) {
+        firstPointElement.style.opacity = "0";
+        firstPointElement.style.animation = `fadeIn 0.5s ease-out ${i * 0.2}s forwards`;
       }
 
       // 둘째 돼지 포인트
@@ -250,18 +261,13 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
         roughness: 1,
         fill: COLORS.second,
         fillStyle: "solid",
-        stroke: "#7b5025", // --color-main-brown-575
+        stroke: "#7b5025",
         strokeWidth: 3,
       });
-      g.node()?.appendChild(secondPigPoint);
-      // 마지막 데이터 포인트에 둘째 돼지 이미지 추가
-      if (i === data.length - 1) {
-        g.append("image")
-          .attr("xlink:href", littlePig2) // 이미지 경로
-          .attr("x", x(i + 1) - 20) // 이미지의 좌측 위치 (중앙 정렬을 위해 -15)
-          .attr("y", y(d["둘째 돼지"]) - 20) // 이미지의 위쪽 위치 (중앙 정렬을 위해 -15)
-          .attr("width", 40)
-          .attr("height", 40);
+      const secondPointElement = g.node()?.appendChild(secondPigPoint);
+      if (secondPointElement) {
+        secondPointElement.style.opacity = "0";
+        secondPointElement.style.animation = `fadeIn 0.5s ease-out ${i * 0.2}s forwards`;
       }
 
       // 셋째 돼지 포인트
@@ -269,25 +275,56 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
         roughness: 1,
         fill: COLORS.third,
         fillStyle: "solid",
-        stroke: "#7b5025", // --color-main-brown-575
+        stroke: "#7b5025",
         strokeWidth: 3,
       });
-      g.node()?.appendChild(thirdPigPoint);
-      // 마지막 데이터 포인트에 셋째 돼지 이미지 추가
+      const thirdPointElement = g.node()?.appendChild(thirdPigPoint);
+      if (thirdPointElement) {
+        thirdPointElement.style.opacity = "0";
+        thirdPointElement.style.animation = `fadeIn 0.5s ease-out ${i * 0.2}s forwards`;
+      }
+
+      // 마지막 데이터 포인트에 돼지 이미지 추가
       if (i === data.length - 1) {
-        g.append("image")
-          .attr("xlink:href", littlePig3) // 이미지 경로
-          .attr("x", x(i + 1) - 20) // 이미지의 좌측 위치 (중앙 정렬을 위해 -15)
-          .attr("y", y(d["셋째 돼지"]) - 20) // 이미지의 위쪽 위치 (중앙 정렬을 위해 -15)
+        // 첫째 돼지 이미지
+        const firstPigImage = g
+          .append("image")
+          .attr("xlink:href", littlePig1)
+          .attr("x", x(i + 1) - 20)
+          .attr("y", y(d["첫째 돼지"]) - 20)
           .attr("width", 40)
-          .attr("height", 40);
+          .attr("height", 40)
+          .style("opacity", "0")
+          .style("animation", `fadeIn 0.5s ease-out ${i * 0.2}s forwards`);
+
+        // 둘째 돼지 이미지
+        const secondPigImage = g
+          .append("image")
+          .attr("xlink:href", littlePig2)
+          .attr("x", x(i + 1) - 20)
+          .attr("y", y(d["둘째 돼지"]) - 20)
+          .attr("width", 40)
+          .attr("height", 40)
+          .style("opacity", "0")
+          .style("animation", `fadeIn 0.5s ease-out ${i * 0.2}s forwards`);
+
+        // 셋째 돼지 이미지
+        const thirdPigImage = g
+          .append("image")
+          .attr("xlink:href", littlePig3)
+          .attr("x", x(i + 1) - 20)
+          .attr("y", y(d["셋째 돼지"]) - 20)
+          .attr("width", 40)
+          .attr("height", 40)
+          .style("opacity", "0")
+          .style("animation", `fadeIn 0.5s ease-out ${i * 0.2}s forwards`);
       }
     });
 
     // 범례 그리기
     const legend = g
       .append("g")
-      .attr("transform", `translate(${width - 270}, -40)`)
+      .attr("transform", `translate(${width - 270}, -30)`)
       .attr("class", "legend")
       .attr("fill", "#7b5025") // --color-main-brown-575
       .attr("font-size", "0.6rem") // 폰트 크기
@@ -326,53 +363,35 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
 
   return (
     <Background backgroundImage={backgroundImage} backgroundClassName="flex flex-col items-center justify-center">
-      <YellowBorderModal className="flex flex-col items-center">
+      <style>
+        {`
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+            }
+            to {
+              opacity: 1;
+            }
+          }
+        `}
+      </style>
+      <YellowBorderModal className="flex flex-col items-start">
         {/* 제목 */}
         <TextWithStroke
           text="투자 결과!"
-          className=" mt-2.5 mb-1"
+          className="self-center mt-2.5 mb-1"
           textClassName="text-main-yellow-200 text-[1.75rem] font-bold"
           strokeClassName="text-main-brown-700 text-[1.75rem] font-bold text-stroke-width-[0.25rem] text-stroke-color-main-brown-700"
         />
         {/* 그래프 */}
-        <div className="relative flex flex-col items-start">
-          {/* 차트 돼지  */}
-          <img src={chartPig} alt="차트돼지" className="absolute -top-3 -left-3 w-11 h-11 object-contain z-100" />
-
-          <div className="bg-[#FFFDFA] p-3 mb-2 rounded-lg shadow-lg w-[23.5rem] h-[11.875rem] relative mx-auto">
-            <svg ref={svgRef} width="100%" height="100%" viewBox="0 0 600 350" preserveAspectRatio="xMidYMid meet" />
-          </div>
-          {/* 결과  */}
-          <div className="flex items-center justify-center gap-x-1">
-            <img src={coin} alt="코인" className="w-5.5 h-5.5" />
-            <div className="text-main-brown-850 text-sm font-bold">총 포인트: {lastPoint}냥</div>
-            <img src={coin} alt="코인" className="w-5.5 h-5.5 ml-2" />
-            {lastPoint - initialPoint > 0 ? (
-              <div className="text-sm font-bold">
-                총 수익:&nbsp;
-                <span className="text-main-red-600">
-                  +{lastPoint - initialPoint}냥{""}
-                </span>
-              </div>
-            ) : lastPoint - initialPoint < 0 ? (
-              <div className=" text-sm font-bold">
-                총 수익: &nbsp;
-                <span className="text-main-blue-600">-{Math.abs(lastPoint - initialPoint)}냥</span>
-              </div>
-            ) : (
-              <div className="text-sm font-bold">총 수익: 0냥</div>
-            )}
-          </div>
-
-          {/* 버튼 */}
+        <div className="bg-[#FFFDFA] p-3 rounded-lg shadow-lg w-[600px] h-[350px] relative mx-auto">
+          <svg ref={svgRef} width="100%" height="100%" viewBox="0 0 600 350" preserveAspectRatio="xMidYMid meet" />
         </div>
-        <Link to="/" className="self-end mr-3">
-          <div className="flex items-center justify-center gap-x-2">
-            <div className="bg-main-yellow-500 text-main-brown-900 text-sm font-bold px-2 py-1 rounded-lg">
-              메인으로!
-            </div>
-          </div>
-        </Link>
+        {/* 결과  */}
+        <div className="flex items-center gap-x-2">
+          <img src={coin} alt="코인" className="w-8 h-8" />
+          <div className="text-main-brown-850 font-bold">총 수익: 1800냥</div>
+        </div>
       </YellowBorderModal>
     </Background>
   );

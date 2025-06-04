@@ -1,11 +1,9 @@
 import { clsx } from "clsx";
-
 interface BackgroundProps {
   backgroundImage: string;
   children?: React.ReactNode;
   backgroundClassName?: string;
 }
-
 
 export function Background({ backgroundImage, children, backgroundClassName }: BackgroundProps) {
   return (
