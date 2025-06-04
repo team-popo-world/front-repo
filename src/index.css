@@ -5,8 +5,10 @@
 /* 폰트 설정 */
 @font-face {
   font-family: "TJJoyofsinging";
-  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingL_WOFF2.woff2") format("woff2"),
-    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingL_TTF.ttf") format("truetype");
+  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingL_WOFF2.woff2")
+      format("woff2"),
+    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingL_TTF.ttf")
+      format("truetype");
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -14,8 +16,10 @@
 
 @font-face {
   font-family: "TJJoyofsinging";
-  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingM_WOFF2.woff2") format("woff2"),
-    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingM_TTF.ttf") format("truetype");
+  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingM_WOFF2.woff2")
+      format("woff2"),
+    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingM_TTF.ttf")
+      format("truetype");
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -23,8 +27,10 @@
 
 @font-face {
   font-family: "TJJoyofsinging";
-  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingB_WOFF2.woff2") format("woff2"),
-    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingB_TTF.ttf") format("truetype");
+  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingB_WOFF2.woff2")
+      format("woff2"),
+    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingB_TTF.ttf")
+      format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -32,8 +38,10 @@
 
 @font-face {
   font-family: "TJJoyofsinging";
-  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingEB_WOFF2.woff2") format("woff2"),
-    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingEB_TTF.ttf") format("truetype");
+  src: url("/src/assets/font/TJJoyofsinging_WOFF2/TJJoyofsingingEB_WOFF2.woff2")
+      format("woff2"),
+    url("/src/assets/font/TJJoyofsinging_TTF/TJJoyofsingingEB_TTF.ttf")
+      format("truetype");
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -82,6 +90,12 @@
   /* 핑크색 계열 */
   --color-main-pink-500: #ff9d9d;
   --color-main-pink-600: #c55e5e;
+
+  /* 모의투자 페이지 */
+  --color-investing-purple-100: #9757a1;
+  --color-investing-yellow-100: #fcbc00;
+  --color-investing-orange-100: #f07f0a;
+  --color-investing-blue-100: #156b59;
 }
 
 @utility text-stroke-width-* {
