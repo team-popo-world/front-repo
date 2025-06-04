@@ -10,14 +10,12 @@ import quizImage from "../../../assets/image/main/main_quiz.webp";
 import attandanceImage from "../../../assets/image/main/main_attendance.webp";
 import coinImage from "../../../assets/image/common/common_coin.webp";
 import nameImage from "../../../assets/image/common/common_name.webp";
-
 import { TextWithStroke } from "../../../components/text/TextWithStroke";
 import { Link } from "react-router-dom";
 import { Background } from "../../../components/layout/Background";
 import { Poni } from "../components/Poni";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 const ISLAND_POSITIONS = {
   market: { top: "4.25rem", left: "3.25rem" },
   emotionDiary: { top: "11rem", left: "3rem" },
@@ -26,7 +24,6 @@ const ISLAND_POSITIONS = {
   quest: { top: "12rem", left: "26rem" },
   investing: { top: "5rem", left: "26rem" },
 } as const;
-
 interface MainTemplateProps {
   isAnimating: boolean;
   targetPosition: { top: string; left: string };
@@ -34,7 +31,6 @@ interface MainTemplateProps {
   handleIslandClick: (island: keyof typeof ISLAND_POSITIONS, path: string, direction?: "left" | "right") => void;
   handleAnimationComplete: () => void;
 }
-
 export default function MainTemplate({
   isAnimating,
   targetPosition,

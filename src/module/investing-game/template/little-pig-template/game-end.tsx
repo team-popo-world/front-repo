@@ -339,7 +339,7 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
           {/* 차트 돼지  */}
           <img src={chartPig} alt="차트돼지" className="absolute -top-3 -left-3 w-11 h-11 object-contain z-100" />
 
-          <div className="bg-[#FFFDFA] p-3 mb-2 rounded-lg shadow-lg w-[600px] h-[350px] relative mx-auto">
+          <div className="bg-[#FFFDFA] p-3 mb-2 rounded-lg shadow-lg w-[23.5rem] h-[11.875rem] relative mx-auto">
             <svg ref={svgRef} width="100%" height="100%" viewBox="0 0 600 350" preserveAspectRatio="xMidYMid meet" />
           </div>
           {/* 결과  */}
