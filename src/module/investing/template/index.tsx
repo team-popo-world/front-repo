@@ -93,7 +93,7 @@ export const InvestingTemplate = ({
       <div
         aria-label="아기돼지 삼형제"
         className="w-[12.1rem] h-[12rem] absolute left-[1.5rem] top-[1.9rem] cursor-pointer"
-        onClick={() => onClickChapter?.("chapter1")}
+        onClick={() => onClickChapter?.("little-pig")}
       ></div>
       <div
         aria-label="푸드트럭 왕국"
