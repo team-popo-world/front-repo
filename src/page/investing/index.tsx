@@ -5,7 +5,7 @@ export default function InvestingPage() {
   const navigate = useNavigate();
 
   const onClickChapter = (chapter: string) => {
-    navigate(`/investing/game/${chapter}`);
+    navigate(`/investing/game/${chapter}?stage=game-start`);
   };
   return <InvestingTemplate onClickChapter={onClickChapter} />;
 }

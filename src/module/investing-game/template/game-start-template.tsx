@@ -6,7 +6,7 @@ interface GameStartTemplateProps {
 
 export const GameStartTemplate = ({ gameType }: GameStartTemplateProps) => {
   switch (gameType) {
-    case "little_pig":
+    case "little-pig":
       return <LittlePigGameStart />;
     default:
       return null;

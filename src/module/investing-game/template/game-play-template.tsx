@@ -22,10 +22,21 @@ interface GamePlayTemplateProps {
   handleTurnFinish: () => void;
 }
 
-export const GamePlayTemplate = ({ gameType, gameState, updateGameState, handleTurnFinish }: GamePlayTemplateProps) => {
+export const GamePlayTemplate = ({
+  gameType,
+  gameState,
+  updateGameState,
+  handleTurnFinish,
+}: GamePlayTemplateProps) => {
   switch (gameType) {
-    case "little_pig":
-      return <GamePlay gameState={gameState} updateGameState={updateGameState} handleTurnFinish={handleTurnFinish} />;
+    case "little-pig":
+      return (
+        <GamePlay
+          gameState={gameState}
+          updateGameState={updateGameState}
+          handleTurnFinish={handleTurnFinish}
+        />
+      );
     default:
       return null;
   }
