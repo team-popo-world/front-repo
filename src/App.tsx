@@ -23,11 +23,15 @@ const queryClient = new QueryClient({
     },
   },
 });
+import LoginPage from './page/auth/login';
+import RegisterPage from './page/auth/register';
+
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+
         <ModalProvider>
           <Routes>
             <Route path="/" element={<Main />} />
@@ -46,8 +50,11 @@ function App() {
             <Route path="/quiz" element={<Quiz />} />
             <Route path="/test" element={<TestPage />} />
             <Route path="*" element={<NotFound />} />
+            <Route path="/auth/login" element={<LoginPage />} />
+            <Route path="/auth/register" element={<RegisterPage />} />
           </Routes>
         </ModalProvider>
+
       </BrowserRouter>
     </QueryClientProvider>
   );

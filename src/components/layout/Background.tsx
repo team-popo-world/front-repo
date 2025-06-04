@@ -1,5 +1,4 @@
 import { clsx } from "clsx";
-
 interface BackgroundProps {
   backgroundImage: string;
   children?: React.ReactNode;
