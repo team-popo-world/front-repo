@@ -102,7 +102,7 @@ export default function InvestingGame() {
   // 시나리오 데이터 로드
   useEffect(() => {
     if (gameStage === "game-play") {
-      fetch("http://localhost:8080/api/invest/chapter?chapterId=a1111111-2222-3333-4444-555555555555")
+      fetch("http://52.79.44.255:8080/api/invest/chapter?chapterId=a1111111-2222-3333-4444-555555555555")
         .then((response) => {
           if (!response.ok) {
             throw new Error("Network error");

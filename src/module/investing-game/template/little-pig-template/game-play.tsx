@@ -11,6 +11,7 @@ import { GamePlayTurnFinish } from "./game-play-turn-finish";
 import { Modal } from "@/components/modal/Modal";
 import { useModal } from "@/lib/context/modal-context";
 import type { GameState } from "@/page/investing/game/index";
+import { useState, useEffect } from "react";
 
 interface GamePlayProps {
   gameState: GameState;
@@ -28,6 +29,21 @@ interface PigData {
 
 export const GamePlay = ({ gameState, updateGameState, handleTurnFinish }: GamePlayProps) => {
   const { isOpen, openModal, closeModal } = useModal();
+  const [totalIncome, setTotalIncome] = useState(0);
+
+  // totalIncome 계산을 useEffect로 이동
+  useEffect(() => {
+    const calculatedIncome =
+      gameState.currentScenario?.stocks.reduce((acc, stock, index) => {
+        // 이전 개수가 현재 개수보다 많으면 판매 이익 계산
+        const soldCount = gameState.beforeCount[index] - gameState.count[index];
+        const profit = soldCount > 0 ? soldCount * (gameState.price[index] - gameState.avgBuyPrice[index]) : 0;
+
+        return acc + profit;
+      }, 0) || 0;
+
+    setTotalIncome(calculatedIncome);
+  }, [gameState.currentScenario, gameState.beforeCount, gameState.count, gameState.price, gameState.avgBuyPrice]);
 
   const getPigData = (index: number, image: string): PigData | undefined => {
     if (gameState.currentScenario) {
@@ -39,7 +55,7 @@ export const GamePlay = ({ gameState, updateGameState, handleTurnFinish }: GameP
         image,
         name: stock?.name,
         description: stock?.description,
-        priceChange: gameState.price[index] - stock?.before_value,
+        priceChange: gameState.nextPrice[index] - stock?.current_value,
         countChange: curr - prev,
       };
     }
@@ -61,6 +77,7 @@ export const GamePlay = ({ gameState, updateGameState, handleTurnFinish }: GameP
             (data): data is NonNullable<typeof data> => data !== null
           )}
           result={gameState.result}
+          totalIncome={totalIncome}
         />
       </Modal>
 
