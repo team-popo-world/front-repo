@@ -12,7 +12,8 @@ import NotFound from "@/page/notfound";
 import InvestingGame from "@/page/investing/game";
 import { ModalProvider } from "@/lib/context/modal-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import TestPage from "@/page/test";
+import { ReatQueryTestPage } from "@/page/test/reatQueryText";
+import { ZustandTest } from "@/page/test/zustandtest";
 // QueryClient 인스턴스 생성
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -23,15 +24,13 @@ const queryClient = new QueryClient({
     },
   },
 });
-import LoginPage from './page/auth/login';
-import RegisterPage from './page/auth/register';
-
+import LoginPage from "./page/auth/login";
+import RegisterPage from "./page/auth/register";
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-
         <ModalProvider>
           <Routes>
             <Route path="/" element={<Main />} />
@@ -48,10 +47,14 @@ function App() {
             <Route path="/emotionDiary" element={<EmotionDiary />} />
             <Route path="/attandance" element={<Attandance />} />
             <Route path="/quiz" element={<Quiz />} />
-            <Route path="/test" element={<TestPage />} />
             <Route path="*" element={<NotFound />} />
             <Route path="/auth/login" element={<LoginPage />} />
             <Route path="/auth/register" element={<RegisterPage />} />
+
+            <Route path="/test">
+              <Route path="reatQueryText" element={<ReatQueryTestPage />} />
+              <Route path="zustand" element={<ZustandTest />} />
+            </Route>
           </Routes>
         </ModalProvider>
       </BrowserRouter>
