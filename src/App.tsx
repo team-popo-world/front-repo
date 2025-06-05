@@ -4,6 +4,7 @@ import Investing from "@/page/investing";
 import Market from "@/page/market";
 import Savings from "@/page/savings";
 import Quest from "@/page/quest";
+import QuestDetail from "@/page/quest/detail";
 import Raising from "@/page/raising";
 import EmotionDiary from "@/page/emotionDiary";
 import Attandance from "@/page/attandance";
@@ -23,15 +24,13 @@ const queryClient = new QueryClient({
     },
   },
 });
-import LoginPage from './page/auth/login';
-import RegisterPage from './page/auth/register';
-
+import LoginPage from "./page/auth/login";
+import RegisterPage from "./page/auth/register";
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-
         <ModalProvider>
           <Routes>
             <Route path="/" element={<Main />} />
@@ -43,7 +42,11 @@ function App() {
 
             <Route path="/market" element={<Market />} />
             <Route path="/savings" element={<Savings />} />
-            <Route path="/quest" element={<Quest />} />
+
+            <Route path="/quest">
+              <Route index element={<Quest />} />
+              <Route path="detail/:questType" element={<QuestDetail />} />
+            </Route>
             <Route path="/raising" element={<Raising />} />
             <Route path="/emotionDiary" element={<EmotionDiary />} />
             <Route path="/attandance" element={<Attandance />} />
