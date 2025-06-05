@@ -7,25 +7,22 @@ interface PigData {
   image: string;
   name: string;
   description: string;
-  currentPrice: number;
-  previousPrice: number;
   priceChange: number;
-  soldQuantity: number;
-  buyQuantity: number;
-  profit: number;
-  buyPrice: number;
+  countChange: number;
 }
 
 interface GamePlayTurnFinishProps {
   onNextTurn: () => void;
   turn: number;
   pigData: PigData[];
+  result: string;
 }
 
-export const GamePlayTurnFinish = ({ onNextTurn, turn, pigData }: GamePlayTurnFinishProps) => {
+export const GamePlayTurnFinish = ({ onNextTurn, turn, pigData, result }: GamePlayTurnFinishProps) => {
   return (
     <PinkBorderModal className="flex flex-col items-start">
       <h1 className="self-center mt-3 mb-4 text-main-pink-600 text-[1.65rem] font-extrabold">{turn}턴 결과!</h1>
+      <div className="text-main-brown-575 text-[0.7rem] font-bold">{result}</div>
       <div className="grid grid-cols-3 mb-2 gap-x-2 w-full">
         {pigData.map((pig, index) => (
           <TurnFinishPigCard key={index} {...pig} />
