@@ -70,10 +70,20 @@ export default function RaisingPage() {
             {feedList.map((feed) => (
               <div
                 key={feed.name}
-                className={`flex items-center bg-white rounded-xl px-4 py-2 shadow cursor-pointer ${
-                  selected.includes(feed.name) ? "ring-4 ring-yellow-300" : ""
-                }`}
-                onClick={() => toggleFeed(feed.name)}
+                className={`flex items-center bg-white rounded-xl px-4 py-2 shadow
+                  ${
+                    feed.count === 0
+                      ? "opacity-50 cursor-not-allowed"
+                      : "cursor-pointer"
+                  }
+                  ${
+                    selected.includes(feed.name) ? "ring-4 ring-yellow-300" : ""
+                  }
+                `}
+                onClick={() => {
+                  if (feed.count === 0) return;
+                  toggleFeed(feed.name);
+                }}
               >
                 <img src={feed.img} alt={feed.name} className="w-8 h-8 mr-2" />
                 <span className="font-bold ml-5 text-lg text-[#6F4223]">
@@ -192,7 +202,7 @@ export default function RaisingPage() {
         )}
         {levelUp && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/30">
-            <div className="bg-white rounded-2xl px-8 py-6 shadow text-center flex flex-col items-center">
+            <div className="bg-[#FFF6D1] rounded-2xl px-8 py-6 shadow text-center flex flex-col items-center">
               <div className="text-3xl font-extrabold text-yellow-500 mb-2">
                 레벨업!
               </div>
