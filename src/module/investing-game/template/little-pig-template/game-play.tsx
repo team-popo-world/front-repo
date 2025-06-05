@@ -10,67 +10,37 @@ import { NewsBox } from "../../component/little-pig-component/news-box";
 import { GamePlayTurnFinish } from "./game-play-turn-finish";
 import { Modal } from "@/components/modal/Modal";
 import { useModal } from "@/lib/context/modal-context";
-
-// 시나리오 데이터 타입 정의
-interface Stock {
-  name: string;
-  risk_level: string;
-  description: string;
-  before_value: number;
-  current_value: number;
-  expectation: string;
-}
-
-interface Scenario {
-  turn_number: number;
-  result: string;
-  news: string;
-  news_hint: string;
-  stocks: Stock[];
-}
+import type { GameState } from "@/page/investing/game/index";
 
 interface GamePlayProps {
-  gameState: {
-    point: number;
-    turn: number;
-    turnMax: number;
-    price: number[];
-    buyPrice: number[];
-    count: number[];
-    beforeCount: number[];
-    scenario: Scenario[];
-    currentScenario: Scenario | null;
-    isGameOver: boolean;
-    isGameStart: boolean;
-    turnFinish: boolean;
-    plusClickCount: number[];
-    minusClickCount: number[];
-  };
+  gameState: GameState;
   updateGameState: (updates: any) => void;
   handleTurnFinish: () => void;
+}
+
+interface PigData {
+  image: string;
+  name: string;
+  description: string;
+  priceChange: number;
+  countChange: number;
 }
 
 export const GamePlay = ({ gameState, updateGameState, handleTurnFinish }: GamePlayProps) => {
   const { isOpen, openModal, closeModal } = useModal();
 
-  const getPigData = (index: number, image: string) => {
+  const getPigData = (index: number, image: string): PigData | undefined => {
     if (gameState.currentScenario) {
       const stock = gameState.currentScenario.stocks[index];
       const prev = gameState.beforeCount[index];
       const curr = gameState.count[index];
-      const diff = curr - prev;
 
       return {
         image,
         name: stock?.name,
         description: stock?.description,
-        currentPrice: gameState.price[index],
-        previousPrice: gameState.turn === 1 ? stock?.before_value : stock?.before_value,
-        priceChange: Math.floor(((gameState.price[index] - stock?.before_value) / stock?.before_value) * 100),
-        soldQuantity: Math.max(0, prev - curr),
-        buyPrice: Math.floor((gameState.buyPrice[index] + gameState.price[index] * diff) / gameState.count[index] || 0),
-        buyQuantity: Math.max(0, diff),
-        profit: Math.max(0, (prev - curr) * stock?.before_value),
+        priceChange: gameState.price[index] - stock?.before_value,
+        countChange: curr - prev,
       };
     }
   };
@@ -90,6 +60,7 @@ export const GamePlay = ({ gameState, updateGameState, handleTurnFinish }: GameP
           pigData={[getPigData(0, littlePig1), getPigData(1, littlePig2), getPigData(2, littlePig3)].filter(
             (data): data is NonNullable<typeof data> => data !== null
           )}
+          result={gameState.result}
         />
       </Modal>
 
@@ -117,9 +88,9 @@ export const GamePlay = ({ gameState, updateGameState, handleTurnFinish }: GameP
             key={stock.name}
             pigImage={index === 0 ? littlePig1 : index === 1 ? littlePig2 : littlePig3}
             name={stock.name}
-            description={stock.description}
+            expectation={stock.expectation}
             currentPrice={gameState.price[index]}
-            buyPrice={gameState.buyPrice[index]}
+            priceChange={gameState.price[index] - stock.before_value}
             quantity={gameState.beforeCount[index]}
             riskType={stock.risk_level}
             count={gameState.count[index]}
