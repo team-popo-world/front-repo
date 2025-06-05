@@ -10,7 +10,7 @@ import { NewsBox } from "../../component/little-pig-component/news-box";
 import { GamePlayTurnFinish } from "./game-play-turn-finish";
 import { Modal } from "@/components/modal/Modal";
 import { useModal } from "@/lib/context/modal-context";
-import { GameState } from "@/page/investing/game/index";
+import type { GameState } from "@/page/investing/game/index";
 
 interface GamePlayProps {
   gameState: GameState;

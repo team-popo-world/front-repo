@@ -1,5 +1,5 @@
 import { GamePlay } from "./little-pig-template/game-play";
-import { GameState } from "@/page/investing/game/index";
+import type { GameState } from "@/page/investing/game/index";
 
 interface GamePlayTemplateProps {
   gameType: string;
