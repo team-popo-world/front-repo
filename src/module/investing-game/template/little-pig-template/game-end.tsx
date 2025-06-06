@@ -30,15 +30,7 @@ const formatData = () => {
   }));
 };
 
-export const LittlePigGameEnd = ({
-  lastPoint,
-  initialPoint,
-  sessionId,
-}: {
-  lastPoint: number;
-  initialPoint: number;
-  sessionId: string;
-}) => {
+export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: number; initialPoint: number }) => {
   const data = formatData();
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -56,9 +48,7 @@ export const LittlePigGameEnd = ({
 
     // SVG 그룹 생성
     // 차트가 있는 전체 영역
-    const g = svg
-      .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
+    const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
     // X축 스케일 설정
     // scaleLinear()는 입력값(데이터)을 출력값(화면 좌표)로 선형(linear) 변환
@@ -69,12 +59,7 @@ export const LittlePigGameEnd = ({
     // Y축 스케일 설정
     const y = d3
       .scaleLinear()
-      .domain([
-        0,
-        d3.max(data, (d) =>
-          Math.max(d["첫째 돼지"], d["둘째 돼지"], d["셋째 돼지"])
-        ) as number,
-      ])
+      .domain([0, d3.max(data, (d) => Math.max(d["첫째 돼지"], d["둘째 돼지"], d["셋째 돼지"])) as number])
       .range([height, 0]) // 차트 높이
       .nice();
 
@@ -83,11 +68,7 @@ export const LittlePigGameEnd = ({
 
     // y축 그리드 그리기
     // 차트 높이를 4개로 나누어 그리드 선을 그리고 g 태그에 추가
-    const yGridLines = g
-      .selectAll(".grid-line")
-      .data(y.ticks(4))
-      .enter()
-      .append("g");
+    const yGridLines = g.selectAll(".grid-line").data(y.ticks(4)).enter().append("g");
 
     yGridLines
       .append("path")
@@ -100,11 +81,7 @@ export const LittlePigGameEnd = ({
       .attr("stroke-width", 1);
 
     // x축 그리드 그리기
-    const xGridLines = g
-      .selectAll(".grid-line")
-      .data(x.ticks(7))
-      .enter()
-      .append("g");
+    const xGridLines = g.selectAll(".grid-line").data(x.ticks(7)).enter().append("g");
 
     xGridLines
       .append("path")
@@ -198,17 +175,11 @@ export const LittlePigGameEnd = ({
     // 첫째 돼지 라인 그리기
     // rc는 rough.js의 인스턴스
     for (let i = 0; i < firstPigPoints.length - 1; i++) {
-      const line = rc.line(
-        firstPigPoints[i].x,
-        firstPigPoints[i].y,
-        firstPigPoints[i + 1].x,
-        firstPigPoints[i + 1].y,
-        {
-          roughness: 1.5,
-          stroke: COLORS.first,
-          strokeWidth: 3,
-        }
-      );
+      const line = rc.line(firstPigPoints[i].x, firstPigPoints[i].y, firstPigPoints[i + 1].x, firstPigPoints[i + 1].y, {
+        roughness: 1.5,
+        stroke: COLORS.first,
+        strokeWidth: 3,
+      });
       g.node()?.appendChild(line);
     }
 
@@ -242,17 +213,11 @@ export const LittlePigGameEnd = ({
 
     // 셋째 돼지 라인 그리기
     for (let i = 0; i < thirdPigPoints.length - 1; i++) {
-      const line = rc.line(
-        thirdPigPoints[i].x,
-        thirdPigPoints[i].y,
-        thirdPigPoints[i + 1].x,
-        thirdPigPoints[i + 1].y,
-        {
-          roughness: 1.5,
-          stroke: COLORS.third,
-          strokeWidth: 3,
-        }
-      );
+      const line = rc.line(thirdPigPoints[i].x, thirdPigPoints[i].y, thirdPigPoints[i + 1].x, thirdPigPoints[i + 1].y, {
+        roughness: 1.5,
+        stroke: COLORS.third,
+        strokeWidth: 3,
+      });
       g.node()?.appendChild(line);
     }
 
@@ -335,9 +300,7 @@ export const LittlePigGameEnd = ({
     ];
 
     legendItems.forEach((item, i) => {
-      const legendItem = legend
-        .append("g")
-        .attr("transform", `translate(${i * 100}, 0)`);
+      const legendItem = legend.append("g").attr("transform", `translate(${i * 100}, 0)`);
 
       const circle = rc.circle(0, 0, 10, {
         roughness: 1,
@@ -362,10 +325,7 @@ export const LittlePigGameEnd = ({
   }, [data]);
 
   return (
-    <Background
-      backgroundImage={backgroundImage}
-      backgroundClassName="flex flex-col items-center justify-center"
-    >
+    <Background backgroundImage={backgroundImage} backgroundClassName="flex flex-col items-center justify-center">
       <YellowBorderModal className="flex flex-col items-center">
         {/* 제목 */}
         <TextWithStroke
@@ -377,27 +337,15 @@ export const LittlePigGameEnd = ({
         {/* 그래프 */}
         <div className="relative flex flex-col items-start">
           {/* 차트 돼지  */}
-          <img
-            src={chartPig}
-            alt="차트돼지"
-            className="absolute -top-3 -left-3 w-11 h-11 object-contain z-100"
-          />
+          <img src={chartPig} alt="차트돼지" className="absolute -top-3 -left-3 w-11 h-11 object-contain z-100" />
 
           <div className="bg-[#FFFDFA] p-3 mb-2 rounded-lg shadow-lg w-[23.5rem] h-[11.875rem] relative mx-auto">
-            <svg
-              ref={svgRef}
-              width="100%"
-              height="100%"
-              viewBox="0 0 600 350"
-              preserveAspectRatio="xMidYMid meet"
-            />
+            <svg ref={svgRef} width="100%" height="100%" viewBox="0 0 600 350" preserveAspectRatio="xMidYMid meet" />
           </div>
           {/* 결과  */}
           <div className="flex items-center justify-center gap-x-1">
             <img src={coin} alt="코인" className="w-5.5 h-5.5" />
-            <div className="text-main-brown-850 text-sm font-bold">
-              총 포인트: {lastPoint}냥
-            </div>
+            <div className="text-main-brown-850 text-sm font-bold">총 포인트: {lastPoint}냥</div>
             <img src={coin} alt="코인" className="w-5.5 h-5.5 ml-2" />
             {lastPoint - initialPoint > 0 ? (
               <div className="text-sm font-bold">
@@ -409,9 +357,7 @@ export const LittlePigGameEnd = ({
             ) : lastPoint - initialPoint < 0 ? (
               <div className=" text-sm font-bold">
                 총 수익: &nbsp;
-                <span className="text-main-blue-600">
-                  -{Math.abs(lastPoint - initialPoint)}냥
-                </span>
+                <span className="text-main-blue-600">-{Math.abs(lastPoint - initialPoint)}냥</span>
               </div>
             ) : (
               <div className="text-sm font-bold">총 수익: 0냥</div>

@@ -19,8 +19,9 @@ export class ApiError extends Error {
  * - withCredentials: true (CORS 요청에서 쿠키 전송 허용)
  * - 기본 헤더: Content-Type: application/json
  */
-const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:8080",
+const API_URL = "http://52.79.44.255:8080";
+const apiClient = axios.create({
+  baseURL: API_URL,
   timeout: 5000,
   headers: {
     "Content-Type": "application/json",
@@ -35,7 +36,7 @@ const instance = axios.create({
  * 1. 인증 토큰 처리
  * 2. Content-Type 헤더 동적 설정
  */
-instance.interceptors.request.use(
+apiClient.interceptors.request.use(
   (config) => {
     // 1. 인증 토큰 처리
     // localStorage와 쿠키에서 토큰을 확인하고 Authorization 헤더에 추가
@@ -71,7 +72,7 @@ instance.interceptors.request.use(
  * 2. HTTP 상태 코드별 에러 처리
  * 3. 인증 에러 시 자동 로그아웃
  */
-instance.interceptors.response.use(
+apiClient.interceptors.response.use(
   (response) => {
     // 성공적인 응답은 그대로 반환
     return response;
@@ -113,4 +114,4 @@ instance.interceptors.response.use(
   }
 );
 
-export default instance;
+export default apiClient;
