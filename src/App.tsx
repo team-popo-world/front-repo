@@ -4,6 +4,7 @@ import Investing from "@/page/investing";
 import Market from "@/page/market";
 import Savings from "@/page/savings";
 import Quest from "@/page/quest";
+import QuestDetail from "@/page/quest/detail";
 import Raising from "@/page/raising";
 import EmotionDiary from "@/page/emotionDiary";
 import Attandance from "@/page/attandance";
@@ -11,7 +12,8 @@ import Quiz from "@/page/quiz";
 import NotFound from "@/page/notfound";
 import InvestingGame from "@/page/investing/game";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import TestPage from "@/page/test";
+import { ReatQueryTestPage } from "@/page/test/reatQueryText";
+import { ZustandTest } from "@/page/test/zustandtest";
 // QueryClient 인스턴스 생성
 const queryClient = new QueryClient({
   defaultOptions: {

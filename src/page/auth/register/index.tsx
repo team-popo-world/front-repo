@@ -14,7 +14,7 @@ export default function RegisterPage() {
     age: "",
     parentCode: "",
   });
-
+  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
     setForm((prev) => ({
@@ -25,7 +25,14 @@ export default function RegisterPage() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!form.email || !form.password || !form.passwordCheck || !form.name || !form.gender || !form.age) {
+    if (
+      !form.email ||
+      !form.password ||
+      !form.passwordCheck ||
+      !form.name ||
+      !form.gender ||
+      !form.age
+    ) {
       alert("모든 항목을 입력해주세요.");
       return;
     }
@@ -81,10 +88,26 @@ export default function RegisterPage() {
         <div className="mt-1 rounded-full bg-white px-3 py-1 w-70 flex">
           <span className="text-[#48BBD3] font-bold mr-4">성별</span>
           <label className="flex items-center mr-4">
-            <input type="radio" name="gender" value="male" checked={form.gender === "male"} onChange={handleChange} className="ml-10" />남자
+            <input
+              type="radio"
+              name="gender"
+              value="male"
+              checked={form.gender === "male"}
+              onChange={handleChange}
+              className="ml-10"
+            />
+            남자
           </label>
           <label className="flex items-center">
-            <input type="radio" name="gender" value="female" checked={form.gender === "female"} onChange={handleChange} className="mr-1" />여자
+            <input
+              type="radio"
+              name="gender"
+              value="female"
+              checked={form.gender === "female"}
+              onChange={handleChange}
+              className="mr-1"
+            />
+            여자
           </label>
         </div>
         <input

@@ -53,7 +53,10 @@ export default function LoginPage() {
         >
           로그인
         </button>
-        <Link to="/auth/register" className="mt-2 text-white text-center text-[0.8rem] ">
+        <Link
+          to="/auth/register"
+          className="mt-2 text-white text-center text-[0.8rem] "
+        >
           회원가입
         </Link>
         <div className="w-13 h-[1px] bg-white rounded-full" />

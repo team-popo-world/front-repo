@@ -1,6 +1,6 @@
 import { usePosts } from "@/lib/react-query/use-data-query";
 
-const TestPage = () => {
+export const ReatQueryTestPage = () => {
   // 포스트 목록 조회
   const { data: posts, isLoading, error } = usePosts();
 
@@ -23,5 +23,3 @@ const TestPage = () => {
     </div>
   );
 };
-
-export default TestPage;
