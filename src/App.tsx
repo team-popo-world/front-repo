@@ -46,7 +46,6 @@ function App() {
           <Route path="/emotionDiary" element={<EmotionDiary />} />
           <Route path="/attandance" element={<Attandance />} />
           <Route path="/quiz" element={<Quiz />} />
-          <Route path="/test" element={<TestPage />} />
           <Route path="*" element={<NotFound />} />
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/auth/register" element={<RegisterPage />} />
