@@ -16,3 +16,9 @@ const BACKGROUND_SIZE = {
     height: 820,
   },
 };
+
+const INVESTING_GAME_INITIAL_POINT = {
+  LITTLE_PIG: 700,
+};
+
+export { BACKGROUND_SIZE, INVESTING_GAME_INITIAL_POINT };

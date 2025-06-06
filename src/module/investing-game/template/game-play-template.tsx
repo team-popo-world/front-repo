@@ -1,31 +1,33 @@
 import { GamePlay } from "./little-pig-template/game-play";
+import type { GameState } from "@/page/investing/game/index";
+
+// http://localhost:5173/investing/game/little-pig?stage=game-play
 
 interface GamePlayTemplateProps {
   gameType: string;
-  gameState: {
-    point: number;
-    turn: number;
-    turnMax: number;
-    price: number[];
-    buyPrice: number[];
-    count: number[];
-    beforeCount: number[];
-    scenario: any[];
-    currentScenario: any;
-    isGameOver: boolean;
-    isGameStart: boolean;
-    turnFinish: boolean;
-    plusClickCount: number[];
-    minusClickCount: number[];
-  };
+  gameState: GameState;
   updateGameState: (updates: any) => void;
   handleTurnFinish: () => void;
+  handleGameOut: () => void;
 }
 
-export const GamePlayTemplate = ({ gameType, gameState, updateGameState, handleTurnFinish }: GamePlayTemplateProps) => {
+export const GamePlayTemplate = ({
+  gameType,
+  gameState,
+  updateGameState,
+  handleTurnFinish,
+  handleGameOut,
+}: GamePlayTemplateProps) => {
   switch (gameType) {
-    case "little_pig":
-      return <GamePlay gameState={gameState} updateGameState={updateGameState} handleTurnFinish={handleTurnFinish} />;
+    case "little-pig":
+      return (
+        <GamePlay
+          gameState={gameState}
+          updateGameState={updateGameState}
+          handleTurnFinish={handleTurnFinish}
+          handleGameOut={handleGameOut}
+        />
+      );
     default:
       return null;
   }

@@ -9,92 +9,104 @@ import { GamePlayPigCard } from "../../component/little-pig-component/game-play-
 import { NewsBox } from "../../component/little-pig-component/news-box";
 import { GamePlayTurnFinish } from "./game-play-turn-finish";
 import { Modal } from "@/components/modal/Modal";
-import { useModal } from "@/lib/context/modal-context";
-
-// 시나리오 데이터 타입 정의
-interface Stock {
-  name: string;
-  risk_level: string;
-  description: string;
-  before_value: number;
-  current_value: number;
-  expectation: string;
-}
-
-interface Scenario {
-  turn_number: number;
-  result: string;
-  news: string;
-  news_hint: string;
-  stocks: Stock[];
-}
+import type { GameState } from "@/page/investing/game/index";
+import { useState, memo } from "react";
+import { BackArrow } from "@/components/button/BackArrow";
+import { GameOutModal } from "../../component/little-pig-component/game-out-modal";
+import { useNavigate } from "react-router-dom";
 
 interface GamePlayProps {
-  gameState: {
-    point: number;
-    turn: number;
-    turnMax: number;
-    price: number[];
-    buyPrice: number[];
-    count: number[];
-    beforeCount: number[];
-    scenario: Scenario[];
-    currentScenario: Scenario | null;
-    isGameOver: boolean;
-    isGameStart: boolean;
-    turnFinish: boolean;
-    plusClickCount: number[];
-    minusClickCount: number[];
-  };
+  gameState: GameState;
   updateGameState: (updates: any) => void;
   handleTurnFinish: () => void;
+  handleGameOut: () => void;
 }
 
-export const GamePlay = ({ gameState, updateGameState, handleTurnFinish }: GamePlayProps) => {
-  const { isOpen, openModal, closeModal } = useModal();
+interface PigData {
+  image: string;
+  name: string;
+  priceChange: number;
+  countChange: number;
+}
 
-  const getPigData = (index: number, image: string) => {
+const MemoizedTextWithStroke = memo(TextWithStroke);
+
+export const GamePlay = ({ gameState, updateGameState, handleTurnFinish, handleGameOut }: GamePlayProps) => {
+  // 턴 종료시 결과창 모달
+  const [isTurnFinishModalOpen, setIsTurnFinishModalOpen] = useState(false);
+  // 뒤로가기 클릭시 게임 나가기 모달
+  const [isGameOutModalOpen, setIsGameOutModalOpen] = useState(false);
+
+  const navigate = useNavigate();
+
+  const calculatedPoint = () => {
+    // 실제 판매하지는 않았지만 현재 가지고 있는 물건 개수가
+    // 다음 턴 가격으로 판매되었다고 가정하고 총 자산에 반영함
+    const calculatedPoint = gameState.nextPrice.reduce((acc, nextTurnPrice, index) => {
+      const soldCount = gameState.count[index]; // 총 자산은 현재 가지고 있는 모든 물건 판것을 추가함
+      const soldPrice = nextTurnPrice * soldCount; // 다음턴에 반영된 가격이 총 자산에 반영됨
+      return acc + soldPrice;
+    }, 0);
+
+    return gameState.point + calculatedPoint;
+  };
+
+  const getPigData = (index: number, image: string): PigData | undefined => {
     if (gameState.currentScenario) {
       const stock = gameState.currentScenario.stocks[index];
       const prev = gameState.beforeCount[index];
       const curr = gameState.count[index];
-      const diff = curr - prev;
 
       return {
-        image,
-        name: stock?.name,
-        description: stock?.description,
-        currentPrice: gameState.price[index],
-        previousPrice: gameState.turn === 1 ? stock?.before_value : stock?.before_value,
-        priceChange: Math.floor(((gameState.price[index] - stock?.before_value) / stock?.before_value) * 100),
-        soldQuantity: Math.max(0, prev - curr),
-        buyPrice: Math.floor((gameState.buyPrice[index] + gameState.price[index] * diff) / gameState.count[index] || 0),
-        buyQuantity: Math.max(0, diff),
-        profit: Math.max(0, (prev - curr) * stock?.before_value),
+        image, // 첫째, 둘째, 셋째 돼지 이미지
+        name: stock?.name, // 종목명 (첫째돼지, 둘째돼지, 셋째돼지)
+        priceChange: gameState.nextPrice[index] - stock?.current_value, // 다음 턴 가격 - 현재 가격
+        countChange: curr - prev, // 현재 가지고 있는 물건 개수 - 이전 턴 가지고 있는 물건 개수
       };
     }
   };
 
-  // TODO: 시나리오가 없을 때 처리
   if (!gameState.currentScenario) return null;
 
   return (
     <Background backgroundImage={backgroundImage} backgroundClassName="flex flex-col items-center">
-      <Modal isOpen={isOpen}>
+      <Modal isOpen={isTurnFinishModalOpen}>
         <GamePlayTurnFinish
           onNextTurn={() => {
-            closeModal();
+            setIsTurnFinishModalOpen(false);
             handleTurnFinish();
           }}
           turn={gameState.turn}
           pigData={[getPigData(0, littlePig1), getPigData(1, littlePig2), getPigData(2, littlePig3)].filter(
             (data): data is NonNullable<typeof data> => data !== null
           )}
+          result={gameState.result}
+          totalPoint={calculatedPoint()}
+        />
+      </Modal>
+      <Modal isOpen={isGameOutModalOpen}>
+        <GameOutModal
+          onConfirm={() => {
+            setIsGameOutModalOpen(false);
+            handleGameOut();
+            navigate("/investing");
+          }}
+          onCancel={() => {
+            setIsGameOutModalOpen(false);
+          }}
         />
       </Modal>
 
+      <BackArrow
+        onClick={() => {
+          // 턴 종료 모달이 열려있으면 아무 효과 없음
+          if (isTurnFinishModalOpen) return;
+          setIsGameOutModalOpen(true);
+        }}
+      />
+
       <div className="self-end mt-4 mr-6 mb-1">
-        <TextWithStroke
+        <MemoizedTextWithStroke
           text={`${gameState.turn}턴 / ${gameState.turnMax}턴`}
           textClassName="text-main-yellow-200 text-[1rem] font-bold"
           strokeClassName="text-main-brown-700 text-[1rem] font-bold text-stroke-width-[0.2rem] text-stroke-color-main-brown-700"
@@ -111,15 +123,15 @@ export const GamePlay = ({ gameState, updateGameState, handleTurnFinish }: GameP
 
       <NewsBox title={gameState.currentScenario.news} hint={gameState.currentScenario.news_hint} />
 
-      <div className="relative flex items-center justify-center gap-x-2.5">
+      <section className="relative flex items-center justify-center gap-x-2.5">
         {gameState.currentScenario.stocks.map((stock, index) => (
           <GamePlayPigCard
             key={stock.name}
             pigImage={index === 0 ? littlePig1 : index === 1 ? littlePig2 : littlePig3}
             name={stock.name}
-            description={stock.description}
+            expectation={stock.expectation}
             currentPrice={gameState.price[index]}
-            buyPrice={gameState.buyPrice[index]}
+            priceChange={gameState.price[index] - stock.before_value}
             quantity={gameState.beforeCount[index]}
             riskType={stock.risk_level}
             count={gameState.count[index]}
@@ -143,16 +155,16 @@ export const GamePlay = ({ gameState, updateGameState, handleTurnFinish }: GameP
             }}
           />
         ))}
-      </div>
+      </section>
 
-      <div
+      <button
         onClick={() => {
-          openModal();
+          setIsTurnFinishModalOpen(true);
         }}
         className="self-end mx-2 my-1 px-4 py-0.5 font-bold bg-main-yellow-350 border-2 xl:border-5 border-main-brown-400 rounded-lg"
       >
         턴 종료!
-      </div>
+      </button>
     </Background>
   );
 };

@@ -12,9 +12,9 @@ import Attandance from "@/page/attandance";
 import Quiz from "@/page/quiz";
 import NotFound from "@/page/notfound";
 import InvestingGame from "@/page/investing/game";
-import { ModalProvider } from "@/lib/context/modal-context";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import TestPage from "@/page/test";
+import { ReatQueryTestPage } from "@/page/test/reatQueryText";
+import { ZustandTest } from "@/page/test/zustandtest";
 // QueryClient 인스턴스 생성
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,14 +32,13 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <ModalProvider>
-          <Routes>
-            <Route path="/" element={<Main />} />
+        <Routes>
+          <Route path="/" element={<Main />} />
 
-            <Route path="/investing">
-              <Route index element={<Investing />} />
-              <Route path="game/:gametype" element={<InvestingGame />} />
-            </Route>
+          <Route path="/investing">
+            <Route index element={<Investing />} />
+            <Route path="game/:gametype" element={<InvestingGame />} />
+          </Route>
 
             <Route path="/market" element={<Market />} />
             <Route path="/savings" element={<Savings />} />
