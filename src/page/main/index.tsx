@@ -1,18 +1,7 @@
 // src/page/main/index.tsx
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import MainTemplate from "../../module/main/template";
 import { useNavigate } from "react-router-dom";
-import { lazyLoad } from "../../lib/utils/lazy-load";
-// Lazy loaded pages
-
-const MarketPage = lazyLoad(() => import("../market"));
-const EmotionDiaryPage = lazyLoad(() => import("../emotionDiary"));
-const RaisingPage = lazyLoad(() => import("../raising"));
-const SavingsPage = lazyLoad(() => import("../savings"));
-const QuestPage = lazyLoad(() => import("../quest"));
-const InvestingPage = lazyLoad(() => import("../investing"));
-const QuizPage = lazyLoad(() => import("../quiz"));
-const AttendancePage = lazyLoad(() => import("../attandance"));
 
 // 섬별 위치 정보
 const ISLAND_POSITIONS = {
@@ -33,19 +22,6 @@ export default function Main() {
   const [targetPath, setTargetPath] = useState<string>("");
   const [direction, setDirection] = useState<"left" | "right">("left");
   const navigate = useNavigate();
-
-  // 페이지 로드 시 모든 페이지 프리로드
-  useEffect(() => {
-    // 모든 페이지 프리로드
-    MarketPage.preload();
-    EmotionDiaryPage.preload();
-    RaisingPage.preload();
-    SavingsPage.preload();
-    QuestPage.preload();
-    InvestingPage.preload();
-    QuizPage.preload();
-    AttendancePage.preload();
-  }, []);
 
   const handleIslandClick = (
     island: keyof typeof ISLAND_POSITIONS,
