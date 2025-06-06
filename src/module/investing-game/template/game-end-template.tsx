@@ -7,25 +7,11 @@ interface GameEndTemplateProps {
   sessionId: string;
 }
 // http://localhost:5173/investing/game/little_pig?stage=game-end
-export const GameEndTemplate = ({
-  gameType,
-  lastPoint,
-  initialPoint,
-  sessionId,
-}: GameEndTemplateProps) => {
+export const GameEndTemplate = ({ gameType, lastPoint, initialPoint }: GameEndTemplateProps) => {
   switch (gameType) {
     case "little-pig":
-      return (
-        <LittlePigGameEnd
-          lastPoint={lastPoint}
-          initialPoint={initialPoint}
-          sessionId={sessionId}
-        />
-      );
+      return <LittlePigGameEnd lastPoint={lastPoint} initialPoint={initialPoint} />;
     default:
       return null;
   }
 };
-
-//http://localhost:5173/investing/game/little_pig?stage=game-end
-//http://localhost:5173/investing/game/little-pig?stage=game-end
