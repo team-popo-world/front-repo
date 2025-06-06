@@ -1,12 +1,13 @@
 import { useParams, useSearchParams } from "react-router-dom";
-import { GameStartTemplate } from "../../../module/investing-game/template/game-start-template";
-import { GamePlayTemplate } from "../../../module/investing-game/template/game-play-template";
-import { GameEndTemplate } from "../../../module/investing-game/template/game-end-template";
+import { GameStartTemplate } from "@/module/investing-game/template/game-start-template";
+import { GamePlayTemplate } from "@/module/investing-game/template/game-play-template";
+import { GameEndTemplate } from "@/module/investing-game/template/game-end-template";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { endGame } from "@/lib/api/investClearAPi";
+import { endGame } from "@/lib/api/invest-game/investClearAPi";
 import { getKSTDateTime } from "@/lib/utils/getKSTDateTime";
-import { sendTurnData } from "@/lib/api/investTurnUpdate";
+import { sendTurnData } from "@/lib/api/invest-game/investTurnUpdate";
+import { getChapterData } from "@/lib/api/invest-game/investChapterApi";
 
 // 게임 관련 타입 정의
 export interface Stock {
@@ -88,11 +89,11 @@ export default function InvestingGame() {
   // 쿼리 파라미터 가져오기
   const [searchParams] = useSearchParams();
   const gameStage = searchParams.get("stage") || "";
+  // 게임 상태 초기화
   const [gameState, setGameState] = useState<GameState>(INITIAL_GAME_STATE);
-  const navigate = useNavigate();
   const [sessionId, setSessionId] = useState("");
   const [startedAt, setStartAt] = useState("");
-  const [endedAt, setEndedAt] = useState("");
+  const navigate = useNavigate();
 
   // 게임 상태 업데이트 헬퍼 함수
   const updateGameState = (updates: Partial<GameState>) => {
@@ -102,14 +103,10 @@ export default function InvestingGame() {
   // 시나리오 데이터 로드
   useEffect(() => {
     if (gameStage === "game-play") {
-      fetch("http://52.79.44.255:8080/api/invest/chapter?chapterId=a1111111-2222-3333-4444-555555555555")
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network error");
-          }
-          return response.json();
-        })
-        .then((data) => {
+      const fetchChapterData = async () => {
+        const result = await getChapterData("a1111111-2222-3333-4444-555555555555");
+        if (result.success && result.data) {
+          const data = result.data;
           const sessionId = data.sessionId; // 게임 세션 id 추출
           setSessionId(sessionId); // 게임 세션 id 저장
           const story = JSON.parse(data.story); // 게임 시나리오 추출
@@ -117,7 +114,7 @@ export default function InvestingGame() {
             ...prev,
             scenario: story, // 게임 시나리오 저장
             currentScenario: story[0], // 첫번째 시나리오 저장
-            result: story[1].result, // 게임 결과 초기화
+            result: story[1].result, // 뉴스에 대한 결과 초기화 (이번턴 뉴스에 대한 결과는 다음턴 시나리오에 있음)
             price: story[0].stocks.map((stock: Stock) => stock.current_value), // 첫번째 시나리오의 주식 가격 저장
             nextPrice: story[1].stocks.map((stock: Stock) => stock.current_value), // 다음 턴 주식 가격 저장
             turnMax: story.length, // 게임 시나리오 길이 저장
@@ -125,26 +122,30 @@ export default function InvestingGame() {
 
           const nowKST = getKSTDateTime();
           setStartAt(nowKST);
-        })
-        .catch((error) => {
-          console.error("Fetch error:", error);
-        });
+        } else {
+          console.error("챕터 데이터 조회 실패:", result.message);
+        }
+      };
+
+      fetchChapterData();
     }
   }, [gameStage]);
+
+  // 거래 타입 결정 헬퍼 함수
+  const determineTransactionType = (beforeCount: number, currentCount: number): string => {
+    if (currentCount > beforeCount) {
+      return "BUY";
+    } else if (currentCount < beforeCount) {
+      return "SELL";
+    } else {
+      return "KEEP";
+    }
+  };
 
   const handleTurnFinish = () => {
     // TurnData 생성
     const nowKST = getKSTDateTime();
-    // 거래 타입 결정 헬퍼 함수
-    const determineTransactionType = (beforeCount: number, currentCount: number): string => {
-      if (currentCount > beforeCount) {
-        return "BUY";
-      } else if (currentCount < beforeCount) {
-        return "SELL";
-      } else {
-        return "KEEP";
-      }
-    };
+
     // 각 주식별로 TurnData 생성하고 전송
     gameState.currentScenario?.stocks.forEach((stock, index) => {
       const income =
@@ -164,14 +165,13 @@ export default function InvestingGame() {
         current_value: gameState.price[index], // 현재 주식 가격
         initial_value: 100, // 또는 stock.initial_value가 있다면 사용
         number_of_shares: gameState.count[index], // 해당 주식의 보유 수량
-        income: income,
+        income: income, // 시세 차익
         transaction_type: determineTransactionType(gameState.beforeCount[index], gameState.count[index]),
-        plus_click: gameState.plusClickCount[index],
-        minus_click: gameState.minusClickCount[index],
+        plus_click: gameState.plusClickCount[index], // 플러스 클릭 수
+        minus_click: gameState.minusClickCount[index], // 마이너스 클릭 수
       };
 
       // 각 주식별로 턴 데이터 전송
-      console.log(turnData);
       sendTurnData(sessionId, "a1111111-2222-3333-4444-555555555555", gameState.turn, turnData);
     });
 
@@ -191,10 +191,16 @@ export default function InvestingGame() {
     const nextTurn = gameState.turn + 1;
     const nextScenario = gameState.scenario[nextTurn - 1];
     const nextPrices = nextScenario.stocks.map((stock) => stock.current_value);
+
     // 다 다음턴 주식 가격 계산
-    const nextNextTurn = nextTurn + 2;
-    const nextNextScenario = gameState.scenario[nextNextTurn - 1];
-    const nextNextPrices = nextNextScenario.stocks.map((stock) => stock.current_value);
+    let nextNextPrices: number[] = [0, 0, 0];
+    if (gameState.turn + 2 <= gameState.turnMax) {
+      const nextNextTurn = gameState.turn + 2;
+      const nextNextScenario = gameState.scenario[nextNextTurn - 1];
+      nextNextPrices = nextNextScenario.stocks.map((stock) => stock.current_value);
+    } else {
+      nextNextPrices = nextPrices;
+    }
 
     updateGameState({
       turn: nextTurn,
@@ -220,18 +226,20 @@ export default function InvestingGame() {
           return prevAvg;
         }
       }),
-      plusClickCount: [0, 0, 0],
-      minusClickCount: [0, 0, 0],
+      plusClickCount: [0, 0, 0], // 플러스 클릭 수 초기화
+      minusClickCount: [0, 0, 0], // 마이너스 클릭 수 초기화
     });
+  };
+
+  const handleGameOut = () => {
+    navigate("/investing");
+    endGame(sessionId, "a1111111-2222-3333-4444-555555555555", false, 0);
   };
 
   // 예시
   // http://localhost:5173/investing/game/little-pig?stage=game-start
   // http://localhost:5173/investing/game/little-pig?stage=game-start
-  // gametype => little_pig
-  // stage => game-start
-  // console.log(gameState.plusClickCount);
-  // console.log(gameState.minusClickCount);
+
   // 게임 타입에 따라 템플릿 렌더링
   switch (gameStage) {
     case "game-start":
@@ -243,6 +251,7 @@ export default function InvestingGame() {
           gameState={gameState}
           updateGameState={updateGameState}
           handleTurnFinish={handleTurnFinish}
+          handleGameOut={handleGameOut}
         />
       );
     case "game-end":

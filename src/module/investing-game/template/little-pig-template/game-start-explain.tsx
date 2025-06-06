@@ -22,7 +22,7 @@ export const GameStartExplain = ({ onClose }: { onClose: () => void }) => {
         어떤 돼지가 더 많은 돈을 벌 수 있을까요?
       </p>
       {/* 모의투자에서 돼지들 설명 영역 */}
-      <div className="flex flex-col gap-y-3">
+      <section className="flex flex-col gap-y-3">
         <PigDescription image={littlePig1} label="첫째 돼지">
           <li>무엇이든 빠르게 해요.</li>
           <li>집을 뚝딱 짓고, 빠르게 돈을 벌고 싶어해요.</li>
@@ -40,7 +40,7 @@ export const GameStartExplain = ({ onClose }: { onClose: () => void }) => {
           <li>안전이 가장 중요하다고 생각해서, 집을 가장 튼튼하게 만들어요.</li>
           <li>나중을 미리 생각하며 힘든 일도 참을 수 있어요.</li>
         </PigDescription>
-      </div>
+      </section>
       {/* 게임 시작 버튼 */}
       <Link to="/investing/game/little-pig?stage=game-play">
         <div className="absolute bottom-3 right-13 px-3 py-1.5 text-white text-[0.7rem] bg-main-pink-600 rounded-lg active:scale-95 transition-all duration-100">

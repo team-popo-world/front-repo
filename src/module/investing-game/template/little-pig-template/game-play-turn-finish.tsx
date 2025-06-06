@@ -7,7 +7,6 @@ import coin from "@/assets/image/common/common_coin.webp";
 interface PigData {
   image: string;
   name: string;
-  description: string;
   priceChange: number;
   countChange: number;
 }
@@ -17,35 +16,35 @@ interface GamePlayTurnFinishProps {
   turn: number;
   pigData: PigData[];
   result: string;
-  totalIncome: number;
+  totalPoint: number;
 }
 
-export const GamePlayTurnFinish = ({ onNextTurn, turn, pigData, result, totalIncome }: GamePlayTurnFinishProps) => {
+export const GamePlayTurnFinish = ({ onNextTurn, turn, pigData, result, totalPoint }: GamePlayTurnFinishProps) => {
   return (
     <PinkBorderModal className="flex flex-col items-start">
       <h1 className="self-center mt-2.5 mb-1.5 text-main-pink-600 text-[1.65rem] font-extrabold">
-        {turn + 1 < 7 ? turn + 1 : turn}
-        {turn + 1 < 7 ? "턴 시작!" : "7턴 종료!"}
+        {turn + 1 <= 7 ? turn + 1 : turn}
+        {turn + 1 <= 7 ? "턴 시작!" : "턴 종료!"}
       </h1>
-      <div className="mb-4 text-main-brown-575 text-[0.75rem] font-bold ">{result}</div>
-      <div className="mb-4 grid grid-cols-3 gap-x-2 w-full">
+      <p className="mb-4 text-main-brown-575 text-[0.75rem] font-bold ">{result}</p>
+
+      <section className="mb-4 grid grid-cols-3 gap-x-2 w-full">
         {pigData.map((pig, index) => (
           <TurnFinishPigCard key={index} {...pig} />
         ))}
-      </div>
+      </section>
+
       <div className="flex items-center gap-x-1 self-center">
         <img src={coin} alt="코인" className="w-8 h-8 object-contain" />
-        <div className="text-main-brown-575 text-lg font-bold">총수익: {totalIncome}냥</div>
+        <p className="text-main-brown-575 text-lg font-bold">총 자산: {totalPoint}냥</p>
       </div>
 
-      <div
+      <button
         className="absolute bottom-2 right-13 px-3 py-1.5 text-white text-[0.7rem] font-bold bg-main-pink-600 rounded-lg active:scale-95 transition-all duration-100"
-        onClick={() => {
-          onNextTurn();
-        }}
+        onClick={onNextTurn}
       >
-        다음 턴!
-      </div>
+        Let's 투자!
+      </button>
     </PinkBorderModal>
   );
 };
