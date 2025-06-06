@@ -5,6 +5,7 @@ import Market from "@/page/market";
 import Savings from "@/page/savings";
 import Quest from "@/page/quest";
 import QuestDetail from "@/page/quest/detail";
+import QuestComplete from "./page/quest/complete/QuestComplete";
 import Raising from "@/page/raising";
 import EmotionDiary from "@/page/emotionDiary";
 import Attandance from "@/page/attandance";
@@ -46,6 +47,7 @@ function App() {
             <Route path="/quest">
               <Route index element={<Quest />} />
               <Route path="detail/:questType" element={<QuestDetail />} />
+              <Route path="detail/complete" element={<QuestComplete />} />
             </Route>
             <Route path="/raising" element={<Raising />} />
             <Route path="/emotionDiary" element={<EmotionDiary />} />
