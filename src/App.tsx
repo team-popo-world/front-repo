@@ -5,6 +5,7 @@ import Market from "@/page/market";
 import Savings from "@/page/savings";
 import Quest from "@/page/quest";
 import QuestDetail from "@/page/quest/detail";
+import QuestComplete from "./page/quest/complete/QuestComplete";
 import Raising from "@/page/raising";
 import EmotionDiary from "@/page/emotionDiary";
 import Attandance from "@/page/attandance";
@@ -39,18 +40,24 @@ function App() {
             <Route path="game/:gametype" element={<InvestingGame />} />
           </Route>
 
-          <Route path="/market" element={<Market />} />
-          <Route path="/savings" element={<Savings />} />
-          <Route path="/quest" element={<Quest />} />
-          <Route path="/raising" element={<Raising />} />
-          <Route path="/emotionDiary" element={<EmotionDiary />} />
-          <Route path="/attandance" element={<Attandance />} />
-          <Route path="/quiz" element={<Quiz />} />
-          <Route path="/test" element={<TestPage />} />
-          <Route path="*" element={<NotFound />} />
-          <Route path="/auth/login" element={<LoginPage />} />
-          <Route path="/auth/register" element={<RegisterPage />} />
-        </Routes>
+            <Route path="/market" element={<Market />} />
+            <Route path="/savings" element={<Savings />} />
+
+            <Route path="/quest">
+              <Route index element={<Quest />} />
+              <Route path="detail/:questType" element={<QuestDetail />} />
+              <Route path="detail/complete" element={<QuestComplete />} />
+            </Route>
+            <Route path="/raising" element={<Raising />} />
+            <Route path="/emotionDiary" element={<EmotionDiary />} />
+            <Route path="/attandance" element={<Attandance />} />
+            <Route path="/quiz" element={<Quiz />} />
+            <Route path="/test" element={<TestPage />} />
+            <Route path="*" element={<NotFound />} />
+            <Route path="/auth/login" element={<LoginPage />} />
+            <Route path="/auth/register" element={<RegisterPage />} />
+          </Routes>
+        </ModalProvider>
       </BrowserRouter>
     </QueryClientProvider>
   );
