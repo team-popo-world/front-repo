@@ -47,14 +47,17 @@ export default function SavingsPage() {
     <>
       <Background backgroundImage={background_img}>
         <div className="w-full flex flex-col items-center mt-8">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white drop-shadow mb-6 text-center">
+          <h1
+            className="text-[2.3rem] font-extrabold text-white mb-2 text-center"
+            // style={{ WebkitTextStroke: "2px #457E9E" }}
+          >
             반짝반짝 <br />
-            ~~~의 저축 통장
+            포포의 저축 통장
           </h1>
         </div>
-        <div className="flex flex-row justify-between items-end w-full max-w-3xl mx-auto mt-2">
-          <div className="bg-[#FFF6D1] rounded-3xl ml-10 px-7 py-6 min-w-[420px] shadow-lg overflow-visible">
-            <div className="grid grid-cols-2 gap-x-8 gap-y-2">
+        <div className="flex flex-row justify-between items-end w-full mx-auto mt-2">
+          <div className="bg-[#FFF6D1] rounded-[3rem] ml-10 pl-9 py-6 w-90">
+            <div className="grid grid-cols-2 gap-x-1 gap-y-1">
               {/* 1열 */}
               <div>
                 <div className="font-bold text-lg text-[#BBA14F]">
@@ -62,7 +65,7 @@ export default function SavingsPage() {
                 </div>
                 <div
                   onClick={() => setOpenPicker("start")}
-                  className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer min-h-[32px] flex items-center"
+                  className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8"
                 >
                   {startDate
                     ? new Date(startDate).toLocaleDateString("ko-KR", {
@@ -80,7 +83,7 @@ export default function SavingsPage() {
                 </div>
                 <div
                   onClick={() => setOpenPicker("end")}
-                  className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer min-h-[32px] flex items-center"
+                  className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8"
                 >
                   {endDate
                     ? new Date(endDate).toLocaleDateString("ko-KR", {
@@ -98,7 +101,7 @@ export default function SavingsPage() {
                 </div>
                 <div
                   onClick={() => handleOpenInput("current")}
-                  className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer min-h-[32px] flex items-center"
+                  className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8"
                 >
                   {currentAmount ? currentAmount + "냥" : "입력"}
                 </div>
@@ -110,7 +113,7 @@ export default function SavingsPage() {
                 </div>
                 <div
                   onClick={() => handleOpenInput("goal")}
-                  className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer min-h-[32px] flex items-center"
+                  className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8"
                 >
                   {goalAmount ? goalAmount + "냥" : "입력"}
                 </div>
@@ -122,7 +125,7 @@ export default function SavingsPage() {
                 </div>
                 <div
                   onClick={() => handleOpenInput("deposit")}
-                  className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer min-h-[32px] flex items-center"
+                  className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8"
                 >
                   {depositAmount ? depositAmount + "냥" : "입력"}
                 </div>
@@ -138,18 +141,12 @@ export default function SavingsPage() {
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-center justify-end flex-1">
-            <img
-              src={character_img}
-              alt="character"
-              className="w-50 h-50 object-contain select-none"
-            />
+          <div className="flex flex-col items-center justify-start mt-[-15rem]">
+            <img src={character_img} alt="character" className="w-65" />
+            <button className="bg-[#FDF0B7] text-[#573924] font-bold text-[1.2rem] rounded-4xl py-3 w-45 cursor-pointer">
+              저축 통장 개설
+            </button>
           </div>
-        </div>
-        <div className="flex justify-center mt-8">
-          <button className="bg-[#FFF6D1] text-[#6F4223] font-bold text-2xl rounded-2xl px-12 py-3 shadow-md hover:bg-yellow-200 transition">
-            저축 통장 개설
-          </button>
         </div>
       </Background>
       {/* 달력 모달 */}
@@ -184,7 +181,7 @@ export default function SavingsPage() {
             onClick={handleOverlayClick}
           ></div>
           <div className="fixed inset-0 flex items-center justify-center z-50">
-            <div className="bg-[#FFF6D5] rounded-2xl p-8 shadow-xl flex flex-col items-center min-w-[260px]">
+            <div className="bg-[#FFF6D5] rounded-2xl p-8 shadow-xl flex flex-col items-center w-[16rem]">
               <div className="text-xl font-bold mb-4 text-[#6F4223]">
                 {openInput === "current" && "현재 금액"}
                 {openInput === "goal" && "목표 저축 금액"}
@@ -193,7 +190,7 @@ export default function SavingsPage() {
               <input
                 type="number"
                 style={{ appearance: "textfield", MozAppearance: "textfield" }}
-                className="bg-white border-4 border-[#BBA14F] rounded-lg px-4 py-2 text-lg text-center mb-4 focus:outline-none"
+                className="bg-white border-4 border-[#BBA14F] rounded-lg px-4 py-2 text-lg text-center mb-4 focus:outline-none w-full"
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder="금액을 입력하세요"
