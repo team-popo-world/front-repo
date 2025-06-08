@@ -38,8 +38,13 @@ export default function Main() {
   const handleAnimationComplete = () => {
     setIsAnimating(false);
     setDirection("left");
+
+    if (targetPath === "/market") {
+      return navigate("/market", { state: { from: "main" } });
+    }
+
     if (targetPath) {
-      navigate(targetPath);
+      return navigate(targetPath);
     }
   };
 
