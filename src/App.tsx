@@ -13,8 +13,10 @@ import Quiz from "@/page/quiz";
 import NotFound from "@/page/notfound";
 import InvestingGame from "@/page/investing/game";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReatQueryTestPage } from "@/page/test/reatQueryText";
-import { ZustandTest } from "@/page/test/zustandtest";
+import ParentShop from "./page/market/parent-shop";
+import NpcShop from "./page/market/npc-shop";
+import Inventory from "./page/market/inventory";
+
 // QueryClient 인스턴스 생성
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,8 +41,12 @@ function App() {
             <Route index element={<Investing />} />
             <Route path="game/:gametype" element={<InvestingGame />} />
           </Route>
-
-          <Route path="/market" element={<Market />} />
+          <Route path="/market">
+            <Route index element={<Market />} />
+            <Route path="parent" element={<ParentShop />} />
+            <Route path="npc" element={<NpcShop />} />
+            <Route path="inventory" element={<Inventory />} />
+          </Route>
           <Route path="/savings" element={<Savings />} />
           <Route path="/quest">
             <Route index element={<Quest />} />
