@@ -30,6 +30,8 @@ const queryClient = new QueryClient({
 import LoginPage from "./page/auth/login";
 import RegisterPage from "./page/auth/register";
 
+console.log("테스트");
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
