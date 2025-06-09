@@ -46,6 +46,8 @@
   --breakpoint-xl: 1180px;
 
   /* 기본 커스텀텀 컬러 */
+  /* 검정 계열  */
+  --color-main-black-500: #4b1f00;
   /* 오렌지계열 */
   --color-main-orange-400: #ffac2a;
   --color-main-orange-500: #e45628;
@@ -55,6 +57,7 @@
   --color-main-yellow-300: #ffe6b7;
   --color-main-yellow-350: #f9d24c;
   --color-main-yellow-400: #c47d00;
+  --color-main-yellow-450: #ffcb00;
   --color-main-yellow-500: #fed855;
   --color-main-yellow-700: #ffd640;
   --color-main-yellow-800: #fcc53b;
