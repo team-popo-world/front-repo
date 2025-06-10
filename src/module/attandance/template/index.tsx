@@ -1,3 +1,4 @@
+import { BackArrow } from "@/components/button/BackArrow";
 import { IMAGE_URLS } from "@/lib/constants/constants";
 
 // text F48A00
@@ -13,6 +14,7 @@ export function AttandanceTemplate() {
           "bg-[#FFF4BF] px-28 relative w-[360px] h-[258px] sm:w-[430px] sm:h-[300px] md:w-[615px] md:h-[430px] xl:w-[1180px] xl:h-[820px] bg-contain bg-center bg-no-repeat"
         }
       >
+        <BackArrow />
         {/* 왼쪽 제목 */}
         <div className="ml-6 flex flex-col w-fit mb-6">
           <h3 className="mt-20 mb-2 text-[#F48A00] text-2xl font-bold text-center">
