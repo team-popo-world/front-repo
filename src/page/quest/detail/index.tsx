@@ -29,12 +29,20 @@ const nextStateMap: Record<Quest["state"], Quest["state"] | undefined> = {
   "완료!": undefined,
   "만료!": undefined,
 };
+
 export default function QuestDetail() {
   const { questType } = useParams() as { questType: string };
   const navigate = useNavigate();
+
   const [questData, setQuestData] = useState<Quest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedState, setSelectedState] = useState<Quest["state"] | null>(
+    null
+  );
+  const total = questData.length;
+  const completed = questData.filter((q) => q.state === "완료!").length;
+  const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,17 +50,15 @@ export default function QuestDetail() {
       setError(null);
       try {
         const response = await fetch(
-          `http://54.180.8.187:8080/api/quest?type=${questType}`
+          `http://52.78.53.247:8080/api/quest?type=${questType}`
         );
-        if (!response.ok) {
-          throw new Error("서버 응답 실패");
-        }
+        if (!response.ok) throw new Error("서버 응답 실패");
+
         const data = await response.json();
         const mapped = data.map((item: any) => ({
           ...item,
           state: questStateMap[item.state],
         }));
-
         setQuestData(mapped);
       } catch (err: any) {
         setError(err.message || "알 수 없는 오류 발생");
@@ -63,12 +69,6 @@ export default function QuestDetail() {
 
     fetchData();
   }, [questType]);
-
-  useEffect(() => {
-    if (!loading && questData.length > 0) {
-      console.log("퀘스트 데이터:", questData);
-    }
-  }, [questData, loading]);
 
   const handleComplete = useCallback(() => {
     navigate("/quest/detail/complete", { state: { questType } });
@@ -84,33 +84,23 @@ export default function QuestDetail() {
     state: Quest["state"]
   ) => {
     const serverState = serverQuestStateMap[state];
-    const body = {
-      questId,
-      childId,
-      state: serverState,
-    };
+    if (!serverState) return;
 
+    const body = { questId, childId, state: serverState };
     console.log("상태 변경 요청 body:", body);
+
     try {
-      const response = await fetch("http://54.180.8.187:8080/api/quest/state", {
+      const response = await fetch("http://52.78.53.247:8080/api/quest/state", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          questId,
-          childId,
-          state: serverState,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
       });
 
-      if (!response.ok) {
-        throw new Error("상태 변경 실패");
-      }
-      console.log("상태 변경 성공");
+      if (!response.ok) throw new Error("상태 변경 실패");
 
       const nextState = nextStateMap[state];
       if (!nextState) return;
+
       setQuestData((prev) =>
         prev.map((quest) =>
           quest.quest_id === questId ? { ...quest, state: nextState } : quest
@@ -121,15 +111,26 @@ export default function QuestDetail() {
     }
   };
 
+  const filteredQuestData = selectedState
+    ? questData.filter((q) => q.state === selectedState)
+    : questData;
+
   return (
     <div>
       {!loading && !error && (
         <QuestDetailTemplate
           questType={questType}
-          questData={questData}
+          questData={filteredQuestData}
+          selectedState={selectedState}
+          onSelectState={(state) =>
+            setSelectedState((prev) => (prev === state ? null : state))
+          }
           onComplete={handleComplete}
           onBack={handleBack}
           onChangeState={handleChangeState}
+          total={total}
+          completed={completed}
+          percentage={percentage}
         />
       )}
     </div>
