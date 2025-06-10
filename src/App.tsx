@@ -5,6 +5,7 @@ import Market from "@/page/market";
 import Savings from "@/page/savings";
 import Quest from "@/page/quest";
 import QuestDetail from "@/page/quest/detail";
+import QuestComplete from "./page/quest/complete/QuestComplete";
 import Raising from "@/page/raising";
 import EmotionDiary from "@/page/emotionDiary";
 import Attandance from "@/page/attandance";
@@ -12,8 +13,10 @@ import Quiz from "@/page/quiz";
 import NotFound from "@/page/notfound";
 import InvestingGame from "@/page/investing/game";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReatQueryTestPage } from "@/page/test/reatQueryText";
-import { ZustandTest } from "@/page/test/zustandtest";
+import ParentShop from "./page/market/parent-shop";
+import NpcShop from "./page/market/npc-shop";
+import Inventory from "./page/market/inventory";
+
 // QueryClient 인스턴스 생성
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,6 +30,8 @@ const queryClient = new QueryClient({
 import LoginPage from "./page/auth/login";
 import RegisterPage from "./page/auth/register";
 
+console.log("테스트");
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -38,18 +43,26 @@ function App() {
             <Route index element={<Investing />} />
             <Route path="game/:gametype" element={<InvestingGame />} />
           </Route>
-
-          <Route path="/market" element={<Market />} />
+          <Route path="/market">
+            <Route index element={<Market />} />
+            <Route path="parent" element={<ParentShop />} />
+            <Route path="npc" element={<NpcShop />} />
+            <Route path="inventory" element={<Inventory />} />
+          </Route>
           <Route path="/savings" element={<Savings />} />
-          <Route path="/quest" element={<Quest />} />
+          <Route path="/quest">
+            <Route index element={<Quest />} />
+            <Route path="detail/:questType" element={<QuestDetail />} />
+            <Route path="detail/complete" element={<QuestComplete />} />
+          </Route>
           <Route path="/raising" element={<Raising />} />
           <Route path="/emotionDiary" element={<EmotionDiary />} />
           <Route path="/attandance" element={<Attandance />} />
           <Route path="/quiz" element={<Quiz />} />
+          {/* <Route path="/test" element={<TestPage />} /> */}
           <Route path="*" element={<NotFound />} />
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/auth/register" element={<RegisterPage />} />
-          
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>

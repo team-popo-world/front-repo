@@ -7,5 +7,9 @@ export default function QuestPage() {
   const onClickQuest = (questType: string) => {
     navigate(`/quest/detail/${questType}`);
   };
-  return <QuestTemplate onClickQuest={onClickQuest} />;
+
+  const handleBack = () => {
+    navigate("/");
+  };
+  return <QuestTemplate onClickQuest={onClickQuest} onBack={handleBack} />;
 }

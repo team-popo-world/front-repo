@@ -104,7 +104,7 @@ export default function InvestingGame() {
   useEffect(() => {
     if (gameStage === "game-play") {
       const fetchChapterData = async () => {
-        const result = await getChapterData("a1111111-2222-3333-4444-555555555555");
+        const result = await getChapterData("1111");
         if (result.success && result.data) {
           const data = result.data;
           const sessionId = data.sessionId; // 게임 세션 id 추출
