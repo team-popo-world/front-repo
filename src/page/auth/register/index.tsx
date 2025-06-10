@@ -14,7 +14,7 @@ export default function RegisterPage() {
     age: "",
     parentCode: "",
   });
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
     setForm((prev) => ({
