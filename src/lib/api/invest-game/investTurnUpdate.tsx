@@ -27,7 +27,7 @@ export async function sendTurnData(
   turnData: TurnData
 ): Promise<SendTurnResult> {
   try {
-    const response = await apiClient.post(`/api/invest/chapter`, {
+    const response = await apiClient.post(`/api/invest/chapter/turn`, {
       chapterId: chapterId,
       turn: turnNumber,
       sessionId: sessionId,

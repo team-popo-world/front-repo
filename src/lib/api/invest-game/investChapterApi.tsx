@@ -13,13 +13,10 @@ interface ChapterResult {
 
 export async function getChapterData(chapterId: string): Promise<ChapterResult> {
   try {
-    const response = await apiClient.get("/api/invest/chapter", {
-      params: {
-        chapterId: chapterId,
-      },
+    const response = await apiClient.post("/api/invest/chapter", {
+      chapterId: chapterId,
     });
 
-    console.log("챕터 데이터 조회 성공:", response.data);
     return {
       success: true,
       message: "챕터 데이터 조회 성공",
