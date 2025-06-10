@@ -57,6 +57,10 @@ const IMAGE_URLS = {
     strawberry: "https://res.cloudinary.com/djmcg7zgu/image/upload/v1749382424/strawberry_kkh2sv.webp",
     dish: "https://res.cloudinary.com/djmcg7zgu/image/upload/v1749382424/dish_pnmiis.webp",
   },
+  attandance: {
+    circle_popo: "https://res.cloudinary.com/djmcg7zgu/image/upload/v1749515991/circle_popo_weqpf5.webp",
+    masic_popo: "https://res.cloudinary.com/djmcg7zgu/image/upload/v1749515991/masic_popo_sgclsk",
+  },
 };
 
 export { BACKGROUND_SIZE, INVESTING_GAME_INITIAL_POINT, IMAGE_URLS };
