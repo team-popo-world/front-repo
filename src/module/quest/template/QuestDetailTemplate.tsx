@@ -1,18 +1,26 @@
 import { Background } from "@/components/layout/Background";
 import { TextWithStroke } from "@/components/text/TextWithStroke";
-import { dailyQuests } from "../dummy/dailyDummy";
 import { QuestCard } from "../components/QuestCard";
 import { BackArrow } from "@/components/button/BackArrow";
+import type { Quest } from "../types/quest";
 
 interface QuestDetailTemplateProps {
   questType: string;
+  questData: Quest[];
   onComplete: () => void;
   onBack: () => void;
+  onChangeState: (
+    questId: string,
+    childId: string,
+    uiState: Quest["state"]
+  ) => void;
 }
 export const QuestDetailTemplate = ({
   questType,
+  questData,
   onBack,
   onComplete,
+  onChangeState,
 }: QuestDetailTemplateProps) => {
   return (
     // 배경 이미지
@@ -55,12 +63,15 @@ export const QuestDetailTemplate = ({
 
       {/* 리스트 */}
       <div className="flex justify-center ">
-        <div className="mt-[2.4rem] z-[10] w-[17rem] h-[11rem] ml-[0.5rem] overflow-scroll  ">
-          {dailyQuests.map((quest) => (
+        <div className="mt-[2.4rem] z-[10] w-[18rem] h-[11rem] ml-[0.5rem] overflow-scroll  ">
+          {questData.map((quest) => (
             <QuestCard
               key={quest.quest_id}
               quest={quest}
               onComplete={onComplete}
+              onChangeState={() =>
+                onChangeState(quest.quest_id, quest.child_id, quest.state)
+              }
             />
           ))}
         </div>
