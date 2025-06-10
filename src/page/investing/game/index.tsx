@@ -145,7 +145,7 @@ export default function InvestingGame() {
   const handleTurnFinish = () => {
     // TurnData 생성
     const nowKST = getKSTDateTime();
-
+    setStartAt(nowKST); // 현재시간 업데이트 다음턴 시작시간
     // 각 주식별로 TurnData 생성하고 전송
     gameState.currentScenario?.stocks.forEach((stock, index) => {
       const income =
@@ -172,7 +172,7 @@ export default function InvestingGame() {
       };
 
       // 각 주식별로 턴 데이터 전송
-      sendTurnData(sessionId, "a1111111-2222-3333-4444-555555555555", gameState.turn, turnData);
+      sendTurnData(sessionId, "1111", gameState.turn, turnData);
     });
 
     // 턴 끝남
@@ -183,7 +183,7 @@ export default function InvestingGame() {
       updateGameState({ isGameOver: true });
       // 게임 결과 페이지로 이동
       navigate(`/investing/game/little-pig?stage=game-end`);
-      endGame(sessionId, "a1111111-2222-3333-4444-555555555555", true, lastPoint - INITIAL_POINT);
+      endGame(sessionId, "1111", true, lastPoint - INITIAL_POINT);
       return;
     }
 
@@ -233,7 +233,7 @@ export default function InvestingGame() {
 
   const handleGameOut = () => {
     navigate("/investing");
-    endGame(sessionId, "a1111111-2222-3333-4444-555555555555", false, 0);
+    endGame(sessionId, "1111", false, 0);
   };
 
   // 예시

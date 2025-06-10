@@ -12,7 +12,8 @@ export async function endGame(
   profitValue: number
 ): Promise<EndGameResult> {
   try {
-    const response = await apiClient.post(`/api/invest/clear/chapter?chapterId=${chapterId}`, {
+    const response = await apiClient.post(`/api/invest/clear/chapter`, {
+      chapterId: chapterId,
       sessionId: sessionId,
       success: isSuccess,
       profit: profitValue,
