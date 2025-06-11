@@ -3,6 +3,9 @@ import backgroundImage from "../../../assets/image/login/login_background.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import apiClient from "../../../lib/api/axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../../../styles/toast.css";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -16,8 +19,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!form.email || !form.password) {
-      e;
-      alert("이메일과 비밀번호를 모두 입력해주세요.");
+      toast.error("이메일과 비밀번호를 모두 입력해주세요.");
       return;
     }
 
@@ -31,15 +33,27 @@ export default function LoginPage() {
       // 응답에서 토큰 등 정보 추출
       const { accessToken, refreshToken, name, role } = response.data;
 
-      // 토큰을 localStorage 등에 저장 (필요에 따라)
+      // Child 역할만 허용
+      if (role !== "Child") {
+        toast.error("어린이 계정으로만 로그인이 가능합니다.");
+        return;
+      }
+
+      // 토큰을 localStorage에 저장
       localStorage.setItem("accessToken", accessToken);
       localStorage.setItem("refreshToken", refreshToken);
 
       // 로그인 성공 시 메인 페이지로 이동
-      alert("로그인 성공!");
-      navigate("/"); // 원하는 경로로 이동
-    } catch (error) {
-      alert(error.message || "로그인에 실패했습니다.");
+      toast.success("로그인 성공!");
+      navigate("/");
+    } catch (error: any) {
+      console.error("로그인 에러:", error);
+      if (error.response) {
+        console.error("에러 응답:", error.response.data);
+        toast.error(error.response.data.message || "로그인에 실패했습니다.");
+      } else {
+        toast.error("서버 연결에 실패했습니다.");
+      }
     }
   };
 
@@ -88,6 +102,16 @@ export default function LoginPage() {
         </Link>
         <div className="w-13 h-[1px] bg-white rounded-full" />
       </form>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        style={{ position: "absolute", top: "1rem", right: "1rem" }}
+        className="w-60"
+      />
     </Background>
   );
 }

@@ -5,6 +5,7 @@ import { useState } from "react";
 import apiClient from "../../../lib/api/axios";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "../../../styles/toast.css";
 import { toast } from "react-toastify";
 
 export default function RegisterPage() {
@@ -18,6 +19,7 @@ export default function RegisterPage() {
     age: "",
     parentCode: "",
   });
+  const [isValidAge, setIsValidAge] = useState(true);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target;
@@ -25,10 +27,27 @@ export default function RegisterPage() {
       ...prev,
       [name]: type === "radio" ? value : value,
     }));
+
+    // 나이 입력 시 유효성 상태 초기화
+    if (name === "age") {
+      setIsValidAge(true);
+    }
+  };
+
+  const handleAgeBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    if (value !== "" && Number(value) < 5) {
+      toast.error("5세 이상부터 회원가입이 가능합니다.");
+      setIsValidAge(false);
+    } else {
+      setIsValidAge(true);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // 먼저 모든 필드가 입력되었는지 확인
     if (
       !form.email ||
       !form.password ||
@@ -41,14 +60,23 @@ export default function RegisterPage() {
       toast.error("모든 항목을 입력해주세요.");
       return;
     }
+
+    // 나이 유효성 검사
+    if (!isValidAge || Number(form.age) < 5) {
+      toast.error("5세 이상부터 회원가입이 가능합니다.");
+      return;
+    }
+
     if (form.password !== form.passwordCheck) {
       toast.error("비밀번호가 일치하지 않습니다.");
       return;
     }
+
     if (form.password.length < 8) {
       toast.error("비밀번호는 8자리 이상이어야 합니다.");
       return;
     }
+
     const passwordRule =
       /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/;
     if (!passwordRule.test(form.password)) {
@@ -75,7 +103,7 @@ export default function RegisterPage() {
         sex: form.gender === "male" ? "M" : "F",
         age: Number(form.age),
         role: "Child",
-        parentCode: form.parentCode,
+        parentCode: form.parentCode || "DEFAULT_CODE",
       });
       toast.success("회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.");
       navigate("/auth/login");
@@ -155,6 +183,7 @@ export default function RegisterPage() {
           name="age"
           value={form.age}
           onChange={handleChange}
+          onBlur={handleAgeBlur}
           placeholder="나이"
           className="mt-1 rounded-full bg-white px-3 py-1 placeholder-[#48BBD3] font-bold w-70 focus:outline-none focus:ring-0"
         />
@@ -175,7 +204,13 @@ export default function RegisterPage() {
       </form>
       <ToastContainer
         position="top-right"
-        style={{ top: "3.3rem", right: "9rem" }}
+        autoClose={3000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        style={{ position: "absolute", top: "1rem", right: "1rem" }}
+        className="w-60"
       />
     </Background>
   );
