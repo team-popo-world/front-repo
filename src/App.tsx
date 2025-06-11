@@ -8,6 +8,7 @@ import QuestDetail from "@/page/quest/detail";
 import QuestComplete from "./page/quest/complete/QuestComplete";
 import Raising from "@/page/raising";
 import EmotionDiary from "@/page/emotionDiary";
+import DiaryWrite from "@/page/emotionDiary/write";
 import Attandance from "@/page/attandance";
 import Quiz from "@/page/quiz";
 import NotFound from "@/page/notfound";
@@ -56,7 +57,10 @@ function App() {
             <Route path="detail/complete" element={<QuestComplete />} />
           </Route>
           <Route path="/raising" element={<Raising />} />
-          <Route path="/emotionDiary" element={<EmotionDiary />} />
+          <Route path="/emotionDiary">
+            <Route index element={<EmotionDiary />} />
+            <Route path="write" element={<DiaryWrite />}></Route>
+          </Route>
           <Route path="/attandance" element={<Attandance />} />
           <Route path="/quiz" element={<Quiz />} />
           {/* <Route path="/test" element={<TestPage />} /> */}

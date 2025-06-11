@@ -23,7 +23,9 @@ export class ApiError extends Error {
  * - withCredentials: true (CORS 요청에서 쿠키 전송 허용)
  * - 기본 헤더: Content-Type: application/json
  */
+
 const API_URL = "http://52.78.53.247:8080";
+
 const apiClient = axios.create({
   baseURL: API_URL,
   timeout: 5000,
