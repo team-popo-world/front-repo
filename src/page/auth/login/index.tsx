@@ -2,6 +2,10 @@ import { Background } from "../../../components/layout/Background";
 import backgroundImage from "../../../assets/image/login/login_background.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import apiClient from "../../../lib/api/axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../../../styles/toast.css";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -12,19 +16,54 @@ export default function LoginPage() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!form.email || !form.password) {
-      alert("이메일과 비밀번호를 모두 입력해주세요.");
+      toast.error("이메일과 비밀번호를 모두 입력해주세요.");
       return;
     }
 
-    navigate("/");
+    try {
+      // 로그인 요청
+      const response = await apiClient.post("/auth/login", {
+        email: form.email,
+        password: form.password,
+      });
+
+      // 응답에서 토큰 등 정보 추출
+      const { accessToken, refreshToken, name, role } = response.data;
+
+      // Child 역할만 허용
+      if (role !== "Child") {
+        toast.error("어린이 계정으로만 로그인이 가능합니다.");
+        return;
+      }
+
+      // 토큰을 localStorage에 저장
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+
+      // 로그인 성공 시 메인 페이지로 이동
+      toast.success("로그인 성공!");
+      navigate("/");
+    } catch (error: any) {
+      console.error("로그인 에러:", error);
+      if (error.response) {
+        console.error("에러 응답:", error.response.data);
+        toast.error(error.response.data.message || "로그인에 실패했습니다.");
+      } else {
+        toast.error("서버 연결에 실패했습니다.");
+      }
+    }
   };
 
   return (
     <Background backgroundImage={backgroundImage}>
-      <form onSubmit={handleSubmit} className="flex flex-col items-center">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col items-center"
+        autoComplete="off"
+      >
         <h1
           className="text-[4rem] font-extrabold text-[#BBEB4B] text-center mt-6"
           style={{ WebkitTextStroke: "3px #457E9E" }}
@@ -34,6 +73,7 @@ export default function LoginPage() {
         <input
           type="email"
           name="email"
+          autoComplete="off"
           value={form.email}
           onChange={handleChange}
           placeholder="이메일"
@@ -42,6 +82,7 @@ export default function LoginPage() {
         <input
           type="password"
           name="password"
+          autoComplete="off"
           value={form.password}
           onChange={handleChange}
           placeholder="비밀번호"
@@ -49,7 +90,7 @@ export default function LoginPage() {
         />
         <button
           type="submit"
-          className="mt-3 rounded-full bg-[#EB864B] px-4 py-3 text-white font-bold w-80 text-[1.2rem]"
+          className="mt-3 rounded-full bg-[#EB864B] px-4 py-3 text-white font-bold w-80 text-[1.2rem] cursor-pointer"
         >
           로그인
         </button>
@@ -61,6 +102,16 @@ export default function LoginPage() {
         </Link>
         <div className="w-13 h-[1px] bg-white rounded-full" />
       </form>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        style={{ position: "absolute", top: "1rem", right: "1rem" }}
+        className="w-60"
+      />
     </Background>
   );
 }
