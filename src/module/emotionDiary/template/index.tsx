@@ -1,15 +1,87 @@
-import { TextWithStroke } from "../../../components/text/TextWithStroke";
+import { Background } from "@/components/layout/Background";
+import { dummyDiaries } from "../dummy/diaryDummy";
+import { DiaryCard } from "../components/DiaryCard";
+import { BackArrow } from "@/components/button/BackArrow";
 
-export const EmotionDiaryTemplate = () => {
+interface EmotionDiaryTemplateProps {
+  onClickWrite: () => void;
+  onBack: () => void;
+}
+
+export const EmotionDiaryTemplate = ({
+  onClickWrite,
+  onBack,
+}: EmotionDiaryTemplateProps) => {
+  // const formatDateToKorean = (dateStr: string): string => {
+  //   const date = new Date(dateStr);
+  //   const year = date.getFullYear();
+  //   const month = date.getMonth() + 1;
+  //   return `${year}년 ${month}월 `;
+  // };
+
   return (
-    <div className="w-screen h-screen bg-black font-TJ overflow-hidden flex justify-center items-center">
-      <div className="relative w-[360px] h-[258px] sm:w-[430px] sm:h-[300px] md:w-[615px] md:h-[430px] xl:w-[1180px] xl:h-[820px]">
-        <TextWithStroke
-          text="감정일기"
-          textClassName="text-main-yellow-800 text-[3.5rem]"
-          strokeClassName="text-main-brown-800 text-[3.5rem] text-stroke-width-[0.4rem] text-stroke-color-main-brown-800"
+    <Background backgroundImage="https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749237608/ChatGPT_Image_2025%E1%84%82%E1%85%A7%E1%86%AB_6%E1%84%8B%E1%85%AF%E1%86%AF_7%E1%84%8B%E1%85%B5%E1%86%AF_%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB_04_17_24_1_yzgzkl.webp">
+      {/* 뒤로가기 */}
+      <BackArrow onClick={onBack} />
+
+      {/* 제목 */}
+      <div
+        aria-label="제목: 감정일기"
+        className="flex justify-center items-center mt-[3.2rem] text-4xl font-bold text-[#df782d]"
+      >
+        감정일기
+      </div>
+
+      {/* 달력 버튼 */}
+      <div className="flex justify-center items-center gap-[0.25rem] mt-[0.5rem]">
+        {/* 왼쪽 화살표 버튼 */}
+        <img
+          src="https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749614463/Polygon_4_bejfpz.webp"
+          alt="왼쪽 화살표"
+          className="h-[0.8rem] scale-x-[-1] cursor-pointer"
+        />
+        {/* 월 표시 */}
+        <div
+          aria-label="달력 버튼"
+          className="flex items-center justify-center px-[1rem] py-[0.15rem] 
+             bg-[#93d088] text-[#fffde7] text-[0.7rem]  rounded-full w-[6rem]
+             shadow-md cursor-pointer"
+        >
+          2025년 6월
+        </div>
+        {/* 오른쪽 화살표 버튼 */}
+        <img
+          src="https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749614463/Polygon_4_bejfpz.webp"
+          alt="오른쪽 화살표"
+          className="h-[0.8rem] cursor-pointer"
         />
       </div>
-    </div>
+
+      {/* 일기 리스트 */}
+      <div className="flex justify-center items-center ml-[1rem] mt-[0.8rem] h-[12.5rem] px-[1rem] ">
+        <div className=" flex flex-col gap-[0.4rem] w-[27rem]  items-center overflow-scroll h-full px-[0.2rem]">
+          {dummyDiaries.map((diary, index) => (
+            <DiaryCard
+              key={diary.emotion_diary_id}
+              diary={diary}
+              order={index + 1}
+            />
+          ))}
+        </div>
+      </div>
+      {/* 일기 작성 버튼 */}
+
+      <div className="flex justify-center items-center mt-[0.4rem] ">
+        <div
+          aria-label="오늘의 일기 쓰기"
+          className="w-[8rem] px-[1rem] py-[0.4rem] 
+             bg-[#93d088] text-[#fffde7] text-[0.85rem] font-semibold rounded-full 
+             shadow-md cursor-pointer"
+          onClick={onClickWrite}
+        >
+          오늘의 일기 쓰기
+        </div>
+      </div>
+    </Background>
   );
 };
