@@ -2,6 +2,10 @@ import { Background } from "../../../components/layout/Background";
 import backgroundImage from "../../../assets/image/register/register_background.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import apiClient from "../../../lib/api/axios";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -23,7 +27,7 @@ export default function RegisterPage() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (
       !form.email ||
@@ -31,17 +35,53 @@ export default function RegisterPage() {
       !form.passwordCheck ||
       !form.name ||
       !form.gender ||
-      !form.age
+      !form.age ||
+      !form.parentCode
     ) {
-      alert("모든 항목을 입력해주세요.");
+      toast.error("모든 항목을 입력해주세요.");
       return;
     }
     if (form.password !== form.passwordCheck) {
-      alert("비밀번호가 일치하지 않습니다.");
+      toast.error("비밀번호가 일치하지 않습니다.");
       return;
     }
-    alert("회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.");
-    navigate("/auth/login");
+    if (form.password.length < 8) {
+      toast.error("비밀번호는 8자리 이상이어야 합니다.");
+      return;
+    }
+    const passwordRule =
+      /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/;
+    if (!passwordRule.test(form.password)) {
+      toast.error(
+        "비밀번호에는 특수문자 1개, 대문자 1개, 숫자 1개 이상이 포함되어야 합니다."
+      );
+      return;
+    }
+
+    try {
+      console.log({
+        email: form.email,
+        password: form.password,
+        name: form.name,
+        sex: form.gender === "male" ? "M" : "F",
+        age: Number(form.age),
+        role: "Child",
+        parentCode: form.parentCode,
+      });
+      await apiClient.post("/auth/signup", {
+        email: form.email,
+        password: form.password,
+        name: form.name,
+        sex: form.gender === "male" ? "M" : "F",
+        age: Number(form.age),
+        role: "Child",
+        parentCode: form.parentCode,
+      });
+      toast.success("회원가입이 완료되었습니다! 로그인 페이지로 이동합니다.");
+      navigate("/auth/login");
+    } catch (error: any) {
+      toast.error(error.message || "회원가입 중 오류가 발생했습니다.");
+    }
   };
 
   return (
@@ -87,25 +127,25 @@ export default function RegisterPage() {
         />
         <div className="mt-1 rounded-full bg-white px-3 py-1 w-70 flex">
           <span className="text-[#48BBD3] font-bold mr-4">성별</span>
-          <label className="flex items-center mr-4">
+          <label className="flex items-center mr-4 ml-1 font-bold text-[0.8rem]">
             <input
               type="radio"
               name="gender"
               value="male"
               checked={form.gender === "male"}
               onChange={handleChange}
-              className="ml-10"
+              className="appearance-none w-3 h-3 border-2 border-[#48BBD3] rounded-full checked:bg-[#48BBD3] checked:border-[#48BBD3] mr-2 relative"
             />
             남자
           </label>
-          <label className="flex items-center">
+          <label className="flex items-center font-bold text-[0.8rem]">
             <input
               type="radio"
               name="gender"
               value="female"
               checked={form.gender === "female"}
               onChange={handleChange}
-              className="mr-1"
+              className="appearance-none w-3 h-3 border-2 border-[#48BBD3] rounded-full checked:bg-[#48BBD3] checked:border-[#48BBD3] mr-2 relative"
             />
             여자
           </label>
@@ -128,11 +168,15 @@ export default function RegisterPage() {
         />
         <button
           type="submit"
-          className="mt-5 rounded-full bg-[#EB864B] text-white font-bold w-70 py-2 shadow-lg focus:outline-none focus:ring-0"
+          className="mt-5 rounded-full bg-[#EB864B] text-white font-bold w-70 py-2 shadow-lg focus:outline-none focus:ring-0 cursor-pointer"
         >
           회원가입 완료
         </button>
       </form>
+      <ToastContainer
+        position="top-right"
+        style={{ top: "3.3rem", right: "9rem" }}
+      />
     </Background>
   );
 }

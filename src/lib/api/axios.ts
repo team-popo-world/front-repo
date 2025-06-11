@@ -5,7 +5,11 @@ import Cookies from "js-cookie";
  * API 에러를 처리하기 위한 커스텀 에러 클래스
  */
 export class ApiError extends Error {
-  constructor(public status: number, public message: string, public data?: any) {
+  constructor(
+    public status: number,
+    public message: string,
+    public data?: any
+  ) {
     super(message);
     this.name = "ApiError";
   }
@@ -19,7 +23,7 @@ export class ApiError extends Error {
  * - withCredentials: true (CORS 요청에서 쿠키 전송 허용)
  * - 기본 헤더: Content-Type: application/json
  */
-const API_URL = "http://52.79.44.255:8080";
+const API_URL = "http://52.78.53.247:8080";
 const apiClient = axios.create({
   baseURL: API_URL,
   timeout: 5000,
@@ -103,13 +107,19 @@ apiClient.interceptors.response.use(
         return Promise.reject(new ApiError(status, "접근 권한이 없습니다."));
       case 404:
         // 리소스를 찾을 수 없음
-        return Promise.reject(new ApiError(status, "요청한 리소스를 찾을 수 없습니다."));
+        return Promise.reject(
+          new ApiError(status, "요청한 리소스를 찾을 수 없습니다.")
+        );
       case 500:
         // 서버 에러
-        return Promise.reject(new ApiError(status, "서버 에러가 발생했습니다."));
+        return Promise.reject(
+          new ApiError(status, "서버 에러가 발생했습니다.")
+        );
       default:
         // 기타 에러
-        return Promise.reject(new ApiError(status, "알 수 없는 에러가 발생했습니다."));
+        return Promise.reject(
+          new ApiError(status, "알 수 없는 에러가 발생했습니다.")
+        );
     }
   }
 );
