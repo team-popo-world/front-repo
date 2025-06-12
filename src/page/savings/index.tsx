@@ -506,7 +506,7 @@ export default function SavingsPage() {
 
               {/* 확인 버튼 */}
               <button
-                className="cursor-pointer bg-[#78CA7F] text-[#6F4223] font-bold rounded-xl px-6 py-2 mt-2 transition"
+                className="cursor-pointer bg-[#BBA14F] text-[#6F4223] font-bold rounded-xl px-6 py-2 mt-2 transition"
                 onClick={handleSaveInput}
               >
                 확인
@@ -544,7 +544,7 @@ export default function SavingsPage() {
 
               {/* 입금하기 버튼 */}
               <button
-                className="cursor-pointer bg-[#78CA7F] text-[#6F4223] font-bold rounded-xl px-6 py-2 mt-2 transition"
+                className="cursor-pointer bg-[#BBA14F] text-white font-bold rounded-xl px-6 py-2 mt-2 transition"
                 onClick={handleDepositConfirm}
               >
                 입금하기
@@ -580,7 +580,7 @@ export default function SavingsPage() {
 
               {/* 확인 버튼 */}
               <button
-                className="cursor-pointer bg-[#78CA7F] text-[#6F4223] font-bold rounded-xl px-6 py-2 mt-2 transition"
+                className="cursor-pointer bg-[#BBA14F] text-white font-bold rounded-xl px-6 py-2 mt-2 transition"
                 onClick={() => setIsBonusModalOpen(false)}
               >
                 확인
