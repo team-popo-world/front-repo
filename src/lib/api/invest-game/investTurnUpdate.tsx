@@ -13,6 +13,7 @@ interface TurnData {
   transaction_type: string;
   plus_click: number;
   minus_click: number;
+  news_tag: string;
 }
 
 interface SendTurnResult {
@@ -43,6 +44,7 @@ export async function sendTurnData(
       transaction_type: turnData.transaction_type,
       plus_click: turnData.plus_click,
       minus_click: turnData.minus_click,
+      news_tag: turnData.news_tag,
     });
 
     console.log("턴 데이터 전송 성공:", response.data);

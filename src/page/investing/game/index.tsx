@@ -23,6 +23,7 @@ export interface Scenario {
   turn_number: number;
   result: string;
   news: string;
+  news_tag: string;
   news_hint: string;
   stocks: Stock[];
 }
@@ -45,6 +46,7 @@ export interface GameState {
   turnFinish: boolean; // 턴 종료 여부
   plusClickCount: number[]; // 플러스 클릭 수
   minusClickCount: number[]; // 마이너스 클릭 수
+  news_tag: string;
 }
 
 export interface TurnData {
@@ -60,6 +62,7 @@ export interface TurnData {
   transaction_type: string; // 예: "buy" 또는 "sell"
   plus_click: number;
   minus_click: number;
+  news_tag: string;
 }
 
 const INITIAL_POINT = 2000;
@@ -81,6 +84,7 @@ const INITIAL_GAME_STATE: GameState = {
   turnFinish: false,
   plusClickCount: [0, 0, 0],
   minusClickCount: [0, 0, 0],
+  news_tag: "",
 };
 
 export default function InvestingGame() {
@@ -105,11 +109,14 @@ export default function InvestingGame() {
     if (gameStage === "game-play") {
       const fetchChapterData = async () => {
         const result = await getChapterData("1111");
+
         if (result.success && result.data) {
           const data = result.data;
           const sessionId = data.sessionId; // 게임 세션 id 추출
           setSessionId(sessionId); // 게임 세션 id 저장
           const story = JSON.parse(data.story); // 게임 시나리오 추출
+          console.log(story);
+
           setGameState((prev) => ({
             ...prev,
             scenario: story, // 게임 시나리오 저장
@@ -118,6 +125,7 @@ export default function InvestingGame() {
             price: story[0].stocks.map((stock: Stock) => stock.current_value), // 첫번째 시나리오의 주식 가격 저장
             nextPrice: story[1].stocks.map((stock: Stock) => stock.current_value), // 다음 턴 주식 가격 저장
             turnMax: story.length, // 게임 시나리오 길이 저장
+            news_tag: story[0].newtag, // 뭔지 모르겠음
           }));
 
           const nowKST = getKSTDateTime();
@@ -143,6 +151,7 @@ export default function InvestingGame() {
   };
 
   const handleTurnFinish = () => {
+    console.log("턴 종료");
     // TurnData 생성
     const nowKST = getKSTDateTime();
     setStartAt(nowKST); // 현재시간 업데이트 다음턴 시작시간
@@ -169,6 +178,7 @@ export default function InvestingGame() {
         transaction_type: determineTransactionType(gameState.beforeCount[index], gameState.count[index]),
         plus_click: gameState.plusClickCount[index], // 플러스 클릭 수
         minus_click: gameState.minusClickCount[index], // 마이너스 클릭 수
+        news_tag: gameState.news_tag,
       };
 
       // 각 주식별로 턴 데이터 전송
@@ -228,6 +238,7 @@ export default function InvestingGame() {
       }),
       plusClickCount: [0, 0, 0], // 플러스 클릭 수 초기화
       minusClickCount: [0, 0, 0], // 마이너스 클릭 수 초기화
+      news_tag: nextScenario.news_tag,
     });
   };
 
