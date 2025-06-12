@@ -1,4 +1,3 @@
-
 # macOS
 .DS_Store
 
@@ -25,6 +24,7 @@ logs
 # Editor settings
 .vscode/
 .idea/
+.cursor/
 
 # OS generated files
 Thumbs.db

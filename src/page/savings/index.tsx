@@ -6,45 +6,49 @@ import { useState, useRef } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { BackArrow } from "../../components/button/BackArrow";
+import { ko } from "date-fns/locale";
 
 export default function SavingsPage() {
   // ========== 상태 관리 변수들 ==========
-  
+
   // 날짜 관련 상태
   const [startDate, setStartDate] = useState<Date | null>(null); // 저축 시작 날짜
   const [endDate, setEndDate] = useState<Date | null>(null); // 저축 종료 날짜
   const [openPicker, setOpenPicker] = useState<"start" | "end" | null>(null); // 현재 열린 날짜 선택기
-  
+
   // 금액 관련 상태
   const [currentAmount, setCurrentAmount] = useState<string>(""); // 현재 저축된 금액
   const [goalAmount, setGoalAmount] = useState<string>(""); // 목표 저축 금액
   const [depositAmount, setDepositAmount] = useState<string>(""); // 초기 입금 금액 (통장 개설시)
-  
+
   // 입력 모달 관련 상태
-  const [openInput, setOpenInput] = useState<"current" | "goal" | "deposit" | null>(null); // 현재 열린 입력 모달 타입
+  const [openInput, setOpenInput] = useState<
+    "current" | "goal" | "deposit" | null
+  >(null); // 현재 열린 입력 모달 타입
   const [inputValue, setInputValue] = useState<string>(""); // 입력 모달의 임시 입력값
-  
+
   // 날짜 선택기 참조
   const startPickerRef = useRef<any>(null);
   const endPickerRef = useRef<any>(null);
-  
+
   // 저축 통장 상태 관리
   const [isCreated, setIsCreated] = useState(false); // 저축 통장 개설 여부
-  
+
   // 입금 모달 관련 상태
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false); // 입금 모달 열림 상태
   const [depositInput, setDepositInput] = useState(""); // 입금 모달의 입력값
-  
+
   // 보상 및 결과 모달 관련 상태
   const [isBonusModalOpen, setIsBonusModalOpen] = useState(false); // 목표 달성 보너스 모달
-  const [isDepositResultModalOpen, setIsDepositResultModalOpen] = useState(false); // 입금 결과 모달
+  const [isDepositResultModalOpen, setIsDepositResultModalOpen] =
+    useState(false); // 입금 결과 모달
   const [lastDepositAmount, setLastDepositAmount] = useState(""); // 마지막 입금 금액 (결과 모달에서 표시용)
 
   // ========== 이벤트 핸들러 함수들 ==========
-  
+
   /**
    * 오버레이 클릭 시 열린 모달들을 닫는 함수
-   */  
+   */
   const handleOverlayClick = () => {
     setOpenPicker(null); // 날짜 선택기 닫기
     setOpenInput(null); // 입력 모달 닫기
@@ -104,6 +108,55 @@ export default function SavingsPage() {
       {/* 숫자 입력 필드의 스핀 버튼 제거를 위한 CSS */}
       <style>
         {`
+        /* 달력 전체 배경색 */
+        .react-datepicker {
+          background: #FFF6D1 !important;
+          font-family: 'TJJoyofsinging';
+          border: 8px solid #BBA14F;
+          border-radius: 1.2rem !important;
+          overflow: hidden;
+        }
+        /* 달력 헤더(월/연도) 폰트, 색상 */
+        .react-datepicker__current-month {
+          font-size: 1.2rem;
+          font-weight: bold;
+          color: #6F4223;
+          font-family: inherit;
+        }
+        /* 요일(일~토) 폰트, 색상 */
+        .react-datepicker__day-name {
+          color: #BBA14F;
+          font-weight: bold;
+          font-size: 1rem;
+          font-family: inherit;
+          
+        }
+        /* 날짜(숫자) 폰트, 색상 */
+        .react-datepicker__day {
+          color: #573924;
+          font-size: 1.1rem;
+          font-family: inherit;
+        }
+        /* 오늘 날짜 배경 */
+        .react-datepicker__day--today {
+          background: #FDF0B7;
+          color: #573924;
+        }
+        /* 선택된 날짜 배경 */
+        .react-datepicker__day--selected, .react-datepicker__day--keyboard-selected {
+          background: #78CA7F !important;
+          color: #fff !important;
+        }
+        /* hover 효과 */
+        .react-datepicker__day:hover {
+          background: #BBA14F;
+          color: #fff;
+        }
+        /* 네비게이션(화살표) 색상 */
+        .react-datepicker__navigation-icon::before {
+          border-color: #6F4223 !important;
+        }
+
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
           -webkit-appearance: none;
@@ -112,9 +165,23 @@ export default function SavingsPage() {
         input[type="number"] {
           -moz-appearance: textfield;
         }
+        .react-datepicker__navigation-icon {
+          width: 0.4rem;   /* 원하는 크기로 조절 */
+          height: 0.2rem;
+        }
+
+        .react-datepicker__day,
+        .react-datepicker__day--selected,
+        .react-datepicker__day--keyboard-selected,
+        .react-datepicker__day--today {
+          border-radius: 50% !important;
+        }
+      
+}
+        
       `}
       </style>
-      
+
       {/* 메인 컨테이너 */}
       <Background backgroundImage={background_img}>
         <BackArrow />
@@ -126,7 +193,7 @@ export default function SavingsPage() {
             포포의 저축 통장
           </h1>
         </div>
-        
+
         {/* 메인 콘텐츠 영역 */}
         <div className="flex flex-row justify-between items-end w-full mx-auto mt-2">
           {/* 저축 정보 카드 */}
@@ -152,7 +219,7 @@ export default function SavingsPage() {
                       : "날짜 선택"}
                   </div>
                 </div>
-                
+
                 {/* 종료 날짜 입력 */}
                 <div>
                   <div className="font-bold text-lg text-[#BBA14F]">
@@ -171,7 +238,7 @@ export default function SavingsPage() {
                       : "날짜 선택"}
                   </div>
                 </div>
-                
+
                 {/* 현재 금액 (초기값 0) */}
                 <div>
                   <div className="font-bold text-lg text-[#BBA14F]">
@@ -181,7 +248,7 @@ export default function SavingsPage() {
                     0냥
                   </div>
                 </div>
-                
+
                 {/* 목표 저축 금액 입력 */}
                 <div>
                   <div className="font-bold text-lg text-[#BBA14F]">
@@ -194,7 +261,7 @@ export default function SavingsPage() {
                     {goalAmount ? goalAmount + "냥" : "입력"}
                   </div>
                 </div>
-                
+
                 {/* 초기 입금 금액 입력 */}
                 <div>
                   <div className="font-bold text-lg text-[#BBA14F]">
@@ -207,7 +274,7 @@ export default function SavingsPage() {
                     {depositAmount ? depositAmount + "냥" : "입력"}
                   </div>
                 </div>
-                
+
                 {/* 목표 달성 보상 안내 */}
                 <div>
                   <div className="font-bold text-lg text-[#BBA14F]">
@@ -237,7 +304,7 @@ export default function SavingsPage() {
                         : "-"}
                     </span>
                   </div>
-                  
+
                   {/* 종료 날짜 표시 */}
                   <div>
                     <span className="font-bold text-[#BBA14F]">
@@ -253,7 +320,7 @@ export default function SavingsPage() {
                         : "-"}
                     </span>
                   </div>
-                  
+
                   {/* 현재 금액 표시 */}
                   <div>
                     <span className="font-bold text-[#BBA14F]">
@@ -263,7 +330,7 @@ export default function SavingsPage() {
                       {currentAmount ? currentAmount + "냥" : "-"}
                     </span>
                   </div>
-                  
+
                   {/* 목표 저축 금액 표시 */}
                   <div>
                     <span className="font-bold text-[#BBA14F]">
@@ -276,14 +343,14 @@ export default function SavingsPage() {
                 </div>
               </div>
             )}
-            
+
             {/* 저축 진행 상황 바 (통장 개설 후에만 표시) */}
             {isCreated && (
               <div className="w-full flex flex-col items-center mt-4 ml-[-0.5rem]">
                 <div className="w-4/5 h-6 relative flex items-center">
                   {/* 전체 진행 바 배경 */}
                   <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-3 bg-[#E6E6E6] rounded-full"></div>
-                  
+
                   {/* 채워진 진행 바 */}
                   <div
                     className="absolute left-0 top-1/2 -translate-y-1/2 h-3 bg-[#78CA7F] rounded-full transition-all duration-500"
@@ -298,7 +365,7 @@ export default function SavingsPage() {
                           : "0%",
                     }}
                   ></div>
-                  
+
                   {/* 진행 상황을 나타내는 별 아이콘 */}
                   <img
                     src={star_img}
@@ -319,7 +386,7 @@ export default function SavingsPage() {
                     }}
                   />
                 </div>
-                
+
                 {/* 현재 금액 / 목표 금액 텍스트 */}
                 <div className="mt-0 text-m font-bold text-[#573924]">
                   {currentAmount ? currentAmount : 0} /{" "}
@@ -328,11 +395,11 @@ export default function SavingsPage() {
               </div>
             )}
           </div>
-          
+
           {/* 캐릭터 이미지와 버튼 영역 */}
           <div className="flex flex-col items-center justify-start mt-[-15rem]">
             <img src={character_img} alt="character" className="w-65" />
-            
+
             {/* 메인 액션 버튼 (통장 개설 또는 입금하기) */}
             <button
               className="bg-[#FDF0B7] text-[#573924] font-bold text-[1.2rem] rounded-4xl py-3 w-45 cursor-pointer"
@@ -352,9 +419,9 @@ export default function SavingsPage() {
           </div>
         </div>
       </Background>
-      
+
       {/* ========== 모달들 ========== */}
-      
+
       {/* 날짜 선택 모달 */}
       {openPicker && (
         <>
@@ -363,7 +430,7 @@ export default function SavingsPage() {
             className="fixed inset-0 bg-black/40 z-50"
             onClick={handleOverlayClick}
           ></div>
-          
+
           {/* 날짜 선택기 */}
           <div className="fixed inset-0 flex items-center justify-center z-50">
             <DatePicker
@@ -379,11 +446,12 @@ export default function SavingsPage() {
               onClickOutside={handleOverlayClick}
               dateFormat="yyyy년 MM월 dd일"
               inline
+              locale={ko}
             />
           </div>
         </>
       )}
-      
+
       {/* 금액 입력 모달 */}
       {openInput && (
         <>
@@ -392,7 +460,7 @@ export default function SavingsPage() {
             className="fixed inset-0 bg-black/40 z-50"
             onClick={handleOverlayClick}
           ></div>
-          
+
           {/* 입력 폼 */}
           <div className="fixed inset-0 flex items-center justify-center z-50 font-TJ">
             <div className="bg-[#FFF6D5] rounded-2xl p-8 shadow-xl flex flex-col items-center w-[16rem]">
@@ -401,7 +469,7 @@ export default function SavingsPage() {
                 {openInput === "goal" && "목표 저축 금액"}
                 {openInput === "deposit" && "입금 금액"}
               </div>
-              
+
               {/* 금액 입력 필드 */}
               <input
                 type="number"
@@ -411,7 +479,7 @@ export default function SavingsPage() {
                 placeholder="금액을 입력하세요"
                 autoFocus
               />
-              
+
               {/* 확인 버튼 */}
               <button
                 className="cursor-pointer bg-[#78CA7F] text-[#6F4223] font-bold rounded-xl px-6 py-2 mt-2 transition"
@@ -423,7 +491,7 @@ export default function SavingsPage() {
           </div>
         </>
       )}
-      
+
       {/* 추가 입금 모달 */}
       {isDepositModalOpen && (
         <>
@@ -432,14 +500,14 @@ export default function SavingsPage() {
             className="fixed inset-0 bg-black/40 z-50"
             onClick={() => setIsDepositModalOpen(false)}
           ></div>
-          
+
           {/* 입금 폼 */}
           <div className="fixed inset-0 flex items-center justify-center z-50 font-TJ">
             <div className="bg-[#FFF6D5] rounded-2xl p-8 shadow-xl flex flex-col items-center w-[16rem]">
               <div className="text-xl font-bold mb-4 text-[#6F4223]">
                 입금 금액
               </div>
-              
+
               {/* 입금 금액 입력 필드 */}
               <input
                 type="number"
@@ -449,7 +517,7 @@ export default function SavingsPage() {
                 placeholder="금액을 입력하세요"
                 autoFocus
               />
-              
+
               {/* 입금하기 버튼 */}
               <button
                 className="cursor-pointer bg-[#78CA7F] text-[#6F4223] font-bold rounded-xl px-6 py-2 mt-2 transition"
@@ -461,7 +529,7 @@ export default function SavingsPage() {
           </div>
         </>
       )}
-      
+
       {/* 목표 달성 보너스 모달 */}
       {isBonusModalOpen && (
         <>
@@ -470,7 +538,7 @@ export default function SavingsPage() {
             className="fixed inset-0 bg-black/40 z-50"
             onClick={() => setIsBonusModalOpen(false)}
           ></div>
-          
+
           {/* 축하 메시지 */}
           <div className="fixed inset-0 flex items-center justify-center z-50">
             <div className="bg-[#FFF6D5] rounded-2xl p-8 shadow-xl flex flex-col items-center w-[18rem]">
@@ -485,7 +553,7 @@ export default function SavingsPage() {
                 </span>
                 을 받았습니다!
               </div>
-              
+
               {/* 확인 버튼 */}
               <button
                 className="cursor-pointer bg-[#78CA7F] text-[#6F4223] font-bold rounded-xl px-6 py-2 mt-2 transition"
@@ -497,7 +565,7 @@ export default function SavingsPage() {
           </div>
         </>
       )}
-      
+
       {/* 입금 완료 결과 모달 */}
       {isDepositResultModalOpen && (
         <>
@@ -506,14 +574,14 @@ export default function SavingsPage() {
             className="fixed inset-0 bg-black/40 z-50"
             onClick={() => setIsDepositResultModalOpen(false)}
           ></div>
-          
+
           {/* 입금 결과 표시 */}
           <div className="fixed inset-0 flex items-center justify-center z-50 font-TJ">
             <div className="bg-[#FFF6D5] rounded-2xl p-8 shadow-xl flex flex-col items-center w-[22rem] border-8 border-[#BBA14F]">
               <div className="text-2xl font-bold mb-4 text-[#BBA14F]">
                 적금!
               </div>
-              
+
               {/* 입금 정보와 확인 버튼 */}
               <div className="flex flex-row items-center justify-between w-full mb-4">
                 <div className="text-lg font-bold text-[#573924] text-left">
@@ -527,13 +595,13 @@ export default function SavingsPage() {
                   확인
                 </button>
               </div>
-              
+
               {/* 업데이트된 진행 상황 바 */}
               <div className="w-full flex flex-col items-center mt-2">
                 <div className="w-4/5 h-8 relative flex items-center">
                   {/* 전체 바 */}
                   <div className="absolute left-0 top-1/2 -translate-y-1/2 w-full h-6 bg-[#E6E6E6] rounded-full"></div>
-                  
+
                   {/* 채워진 바 */}
                   <div
                     className="absolute left-0 top-1/2 -translate-y-1/2 h-6 bg-[#78CA7F] rounded-full transition-all duration-500"
@@ -548,7 +616,7 @@ export default function SavingsPage() {
                           : "0%",
                     }}
                   ></div>
-                  
+
                   {/* 별 아이콘 */}
                   <img
                     src={star_img}
@@ -569,7 +637,7 @@ export default function SavingsPage() {
                     }}
                   />
                 </div>
-                
+
                 {/* 달성률 퍼센트 표시 */}
                 <div className="mt-2 text-xl font-bold text-[#573924]">
                   {goalAmount && currentAmount
