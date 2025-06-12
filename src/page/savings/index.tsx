@@ -20,6 +20,7 @@ export default function SavingsPage() {
   const [currentAmount, setCurrentAmount] = useState<string>(""); // 현재 저축된 금액
   const [goalAmount, setGoalAmount] = useState<string>(""); // 목표 저축 금액
   const [depositAmount, setDepositAmount] = useState<string>(""); // 초기 입금 금액 (통장 개설시)
+  const [bonusAmount, setBonusAmount] = useState<string>(""); // 보너스 금액 상태 추가
 
   // 입력 모달 관련 상태
   const [openInput, setOpenInput] = useState<
@@ -72,7 +73,12 @@ export default function SavingsPage() {
   const handleSaveInput = () => {
     // 현재 열린 입력 모달의 타입에 따라 해당 상태 업데이트
     if (openInput === "current") setCurrentAmount(inputValue);
-    if (openInput === "goal") setGoalAmount(inputValue);
+    if (openInput === "goal") {
+      setGoalAmount(inputValue);
+      // 목표 금액 입력 시 보너스 금액도 계산 (10%)
+      const bonus = Math.floor(Number(inputValue) * 0.1);
+      setBonusAmount(bonus ? String(bonus) : "");
+    }
     if (openInput === "deposit") setDepositAmount(inputValue);
     setOpenInput(null); // 입력 모달 닫기
   };
@@ -299,7 +305,7 @@ export default function SavingsPage() {
                     목표 달성시 보상
                   </div>
                   <div className="font-bold text-lg text-[#6F4223]">
-                    보너스 300냥
+                    {bonusAmount ? `보너스 ${bonusAmount}냥` : "-"}
                   </div>
                 </div>
               </div>
@@ -558,7 +564,7 @@ export default function SavingsPage() {
           ></div>
 
           {/* 축하 메시지 */}
-          <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="fixed inset-0 flex items-center justify-center z-50 font-TJ">
             <div className="bg-[#FFF6D5] rounded-2xl p-8 shadow-xl flex flex-col items-center w-[18rem]">
               <div className="text-2xl font-bold mb-4 text-[#6F4223]">
                 축하합니다!
@@ -567,7 +573,7 @@ export default function SavingsPage() {
                 목표를 달성해서
                 <br />
                 <span className="font-extrabold text-[#BBA14F]">
-                  보너스 300냥
+                  보너스 {bonusAmount}냥
                 </span>
                 을 받았습니다!
               </div>
