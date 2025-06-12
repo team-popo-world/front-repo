@@ -110,6 +110,7 @@ export default function SavingsPage() {
         {`
         /* 달력 전체 배경색 */
         .react-datepicker {
+        
           background: #FFF6D1 !important;
           font-family: 'TJJoyofsinging';
           border: 8px solid #BBA14F;
@@ -123,19 +124,27 @@ export default function SavingsPage() {
           color: #6F4223;
           font-family: inherit;
         }
+        .react-datepicker__header {
+          // padding: 1rem 2rem 0.5rem 2rem;
+          min-height: 0.1rem;
+          height: auto;
+          box-sizing: border-box;
+          padding-top: 1rem;
+        }
         /* 요일(일~토) 폰트, 색상 */
         .react-datepicker__day-name {
           color: #BBA14F;
           font-weight: bold;
           font-size: 1rem;
           font-family: inherit;
-          
+          margin: 0.6rem;          
         }
         /* 날짜(숫자) 폰트, 색상 */
         .react-datepicker__day {
           color: #573924;
           font-size: 1.1rem;
           font-family: inherit;
+          margin: 0.6rem;
         }
         /* 오늘 날짜 배경 */
         .react-datepicker__day--today {
@@ -155,8 +164,14 @@ export default function SavingsPage() {
         /* 네비게이션(화살표) 색상 */
         .react-datepicker__navigation-icon::before {
           border-color: #6F4223 !important;
+          border-width: 0.28rem 0.28rem 0 0 !important;
+          width: 0.7rem;
+          height: 0.7rem;
         }
-
+        .react-datepicker__navigation-icon {
+          width: 0.7rem;   /* 원하는 크기로 조절 */
+          height: 0.9rem;
+        }
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
           -webkit-appearance: none;
@@ -165,9 +180,8 @@ export default function SavingsPage() {
         input[type="number"] {
           -moz-appearance: textfield;
         }
-        .react-datepicker__navigation-icon {
-          width: 0.4rem;   /* 원하는 크기로 조절 */
-          height: 0.2rem;
+        .react-datepicker__navigation {
+          top: 1rem !important;  /* 기본값보다 더 아래로 */
         }
 
         .react-datepicker__day,
@@ -175,6 +189,10 @@ export default function SavingsPage() {
         .react-datepicker__day--keyboard-selected,
         .react-datepicker__day--today {
           border-radius: 50% !important;
+        }
+
+        .react-datepicker__day--outside-month {
+          opacity: 0.4 !important; /* 투명도 조정, 필요시 값 변경 */
         }
       
 }
