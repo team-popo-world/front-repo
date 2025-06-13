@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { EmotionDiaryTemplate } from "../../module/emotionDiary/template";
 import { useEffect, useState } from "react";
+import apiClient, { ApiError } from "@/lib/api/axios";
 import type { Diary } from "@/module/emotionDiary/types/diary";
 
-const API_URL = "http://52.78.53.247:8080/api/diary";
+const API_URL = "/api/diary";
 
 export default function EmotionDiaryPage() {
   const navigate = useNavigate();
@@ -21,16 +22,18 @@ export default function EmotionDiaryPage() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(API_URL);
-        if (!response.ok) throw new Error("서버 응답 실패");
-
-        const data = await response.json();
+        const response = await apiClient.get(API_URL);
+        const data = response.data;
 
         setDiaryData(data);
         setIsWrittenToday(isTodayDiaryExists(data));
         console.log(data);
       } catch (err: any) {
-        setError(err.message || "알 수 없는 오류 발생");
+        if (err instanceof ApiError) {
+          setError(err.message);
+        } else {
+          setError("알 수 없는 오류 발생");
+        }
       } finally {
         setLoading(false);
       }

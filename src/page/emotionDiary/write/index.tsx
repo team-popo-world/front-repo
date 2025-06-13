@@ -1,6 +1,7 @@
 import { DiaryWriteTemplate } from "@/module/emotionDiary/template/diaryWrite";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import apiClient, { ApiError } from "@/lib/api/axios";
 
 const API_URL = "http://52.78.53.247:8080/api/diary";
 
@@ -23,15 +24,9 @@ export default function EmotionDiaryWritePage() {
     }
 
     try {
-      const response = await fetch(API_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          emotion: emotion,
-          description: description || "",
-        }),
+      await apiClient.post(API_URL, {
+        emotion: emotion,
+        description: description || "",
       });
 
       console.log("POST 데이터 확인:", {
@@ -39,18 +34,17 @@ export default function EmotionDiaryWritePage() {
         description,
       });
 
-      if (!response.ok) {
-        throw new Error("서버 오류 발생");
-      }
-
-      alert("일기가 성공적으로 ㅓ!");
       navigate("/emotionDiary");
     } catch (error) {
       console.error("submit error:", error);
-      alert("일기 저장에 실패했어요.");
+      if (error instanceof ApiError) {
+        const errorMessage = error.data?.message || error.message;
+        alert(`일기 저장 실패: ${errorMessage}`);
+      } else {
+        alert("알 수 없는 오류로 일기 저장에 실패했어요.");
+      }
     }
   };
-
   return (
     <DiaryWriteTemplate
       onBack={handleBack}

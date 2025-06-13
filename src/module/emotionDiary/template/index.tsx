@@ -1,5 +1,5 @@
 import { Background } from "@/components/layout/Background";
-import { DiaryCard } from "../components/diaryCard";
+import { DiaryCard } from "../components/DiaryCard";
 import { BackArrow } from "@/components/button/BackArrow";
 import type { Diary } from "../types/diary";
 import { WriteLimitModal } from "../components/writeLimitModal";
