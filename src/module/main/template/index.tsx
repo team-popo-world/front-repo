@@ -16,6 +16,7 @@ import { Background } from "../../../components/layout/Background";
 import { Poni } from "../components/Poni";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "@/lib/zustand/store";
 const ISLAND_POSITIONS = {
   market: { top: "4.25rem", left: "3.25rem" },
   emotionDiary: { top: "11rem", left: "3rem" },
@@ -38,8 +39,17 @@ export default function MainTemplate({
   handleIslandClick,
   handleAnimationComplete,
 }: MainTemplateProps) {
+  const { logout } = useAuthStore();
+
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <Background backgroundImage={backgroundImage}>
+      <div className="absolute top-2 right-60 text-2xl text-main-brown-800" onClick={handleLogout}>
+        로그아웃
+      </div>
       {/* 여백 */}
       <div className="h-7"></div>
       {/* 제목 */}
