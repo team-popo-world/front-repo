@@ -1,37 +1,21 @@
 import { BackArrow } from "@/components/button/BackArrow";
 import { Background } from "@/components/layout/Background";
-
-const emotionList = [
-  {
-    url: "https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749623811/emotion-happy_b57kwc.webp",
-    label: "기쁨",
-  },
-  {
-    url: "https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749623428/emotion-angry_yrpv3l.webp",
-    label: "화남",
-  },
-  {
-    url: "https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749623512/emotion-sad_ahoplf.webp",
-    label: "슬픔",
-  },
-  {
-    url: "https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749623755/emotion-soso_n5tczw.webp",
-    label: "평온",
-  },
-  {
-    url: "https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749623669/emotion-love_zljlxe.webp",
-    label: "사랑",
-  },
-  {
-    url: "https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749623606/emotion-embarrassed_npzyuk.webp",
-    label: "당황",
-  },
-];
+import { emotionList } from "../constants/emotionList";
 
 interface DiaryWriteTemplateProps {
   onBack: () => void;
+  onSelectEmotion: (emotion: string) => void;
+  onChangeDescription: (desc: string) => void;
+  onSubmit: () => void;
+  selectedEmotion: string | null;
 }
-export const DiaryWriteTemplate = ({ onBack }: DiaryWriteTemplateProps) => {
+export const DiaryWriteTemplate = ({
+  onBack,
+  onSelectEmotion,
+  onChangeDescription,
+  onSubmit,
+  selectedEmotion,
+}: DiaryWriteTemplateProps) => {
   return (
     <Background backgroundImage="https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749622517/diary-write-bg_bld452.webp">
       {/* 뒤로가기 */}
@@ -50,12 +34,21 @@ export const DiaryWriteTemplate = ({ onBack }: DiaryWriteTemplateProps) => {
         aria-label="감정 목록"
         className="grid grid-cols-3 mr-[15rem] ml-[4rem] px-[1rem] mt-[1rem] gap-y-[0.3rem]"
       >
-        {emotionList.map((emotion, index) => (
+        {emotionList.map((emotion) => (
           <div
-            key={index}
-            className="flex flex-col justify-center items-center"
+            key={emotion.server}
+            className="flex flex-col justify-center items-center cursor-pointer transition-all duration-200"
+            onClick={() => onSelectEmotion(emotion.server)}
           >
-            <img src={emotion.url} alt="감정 이미지" className="w-[5rem]" />
+            <img
+              src={emotion.url}
+              alt="감정 이미지"
+              className={`w-[5rem] ${
+                selectedEmotion === emotion.server
+                  ? "border-[0.2rem] border-[#ffbecff7] rounded-full"
+                  : ""
+              }`}
+            />
             <span className="text-[0.7rem]">{emotion.label}</span>
           </div>
         ))}
@@ -78,15 +71,20 @@ export const DiaryWriteTemplate = ({ onBack }: DiaryWriteTemplateProps) => {
           <input
             type="text"
             placeholder="여기에 한 줄 일기를 적어줘!"
+            onChange={(e) => onChangeDescription(e.target.value)}
             className="w-full h-full bg-transparent border-none outline-none text-[0.75rem] text-[#5e4632] font-medium placeholder-[#b2b2b2]"
           />
         </div>
       </div>
 
-      {/* 일기 작성 완료 버튼 */}
       <div
         aria-label="완료 버튼"
-        className="absolute right-[4.5rem] bottom-[3rem] border-[0.18rem] text-[#5a471e] text-[1rem] rounded-3xl border-[#aee466] bg-[#fff3ac] px-[1rem] py-[0.3rem] cursor-pointer"
+        className="absolute right-[4.7rem] bottom-[3rem] 
+    border-[0.18rem] border-[#719062] 
+    bg-[#fff2b0] text-[#698d71] text-[1rem] 
+    rounded-3xl px-[1.1rem] py-[0.3rem] cursor-pointer 
+    shadow-md "
+        onClick={onSubmit}
       >
         기록하기
       </div>
