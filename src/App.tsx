@@ -17,6 +17,9 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ParentShop from "./page/market/parent-shop";
 import NpcShop from "./page/market/npc-shop";
 import Inventory from "./page/market/inventory";
+import ProtectedRouter from "@/components/auth/ProtectedRouter";
+import LoginPage from "./page/auth/login";
+import RegisterPage from "./page/auth/register";
 
 // QueryClient 인스턴스 생성
 const queryClient = new QueryClient({
@@ -28,8 +31,6 @@ const queryClient = new QueryClient({
     },
   },
 });
-import LoginPage from "./page/auth/login";
-import RegisterPage from "./page/auth/register";
 
 console.log("테스트");
 
@@ -38,35 +39,35 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Main />} />
-
-          <Route path="/investing">
-            <Route index element={<Investing />} />
-            <Route path="game/:gametype" element={<InvestingGame />} />
+          <Route path="/" element={<ProtectedRouter />}>
+            <Route index element={<Main />} />
+            <Route path="/investing">
+              <Route index element={<Investing />} />
+              <Route path="game/:gametype" element={<InvestingGame />} />
+            </Route>
+            <Route path="/market">
+              <Route index element={<Market />} />
+              <Route path="parent" element={<ParentShop />} />
+              <Route path="npc" element={<NpcShop />} />
+              <Route path="inventory" element={<Inventory />} />
+            </Route>
+            <Route path="/savings" element={<Savings />} />
+            <Route path="/quest">
+              <Route index element={<Quest />} />
+              <Route path="detail/:questType" element={<QuestDetail />} />
+              <Route path="detail/complete" element={<QuestComplete />} />
+            </Route>
+            <Route path="/raising" element={<Raising />} />
+            <Route path="/emotionDiary">
+              <Route index element={<EmotionDiary />} />
+              <Route path="write" element={<DiaryWrite />}></Route>
+            </Route>
+            <Route path="/attandance" element={<Attandance />} />
+            <Route path="/quiz" element={<Quiz />} />
           </Route>
-          <Route path="/market">
-            <Route index element={<Market />} />
-            <Route path="parent" element={<ParentShop />} />
-            <Route path="npc" element={<NpcShop />} />
-            <Route path="inventory" element={<Inventory />} />
-          </Route>
-          <Route path="/savings" element={<Savings />} />
-          <Route path="/quest">
-            <Route index element={<Quest />} />
-            <Route path="detail/:questType" element={<QuestDetail />} />
-            <Route path="detail/complete" element={<QuestComplete />} />
-          </Route>
-          <Route path="/raising" element={<Raising />} />
-          <Route path="/emotionDiary">
-            <Route index element={<EmotionDiary />} />
-            <Route path="write" element={<DiaryWrite />}></Route>
-          </Route>
-          <Route path="/attandance" element={<Attandance />} />
-          <Route path="/quiz" element={<Quiz />} />
-          {/* <Route path="/test" element={<TestPage />} /> */}
-          <Route path="*" element={<NotFound />} />
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/auth/register" element={<RegisterPage />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
