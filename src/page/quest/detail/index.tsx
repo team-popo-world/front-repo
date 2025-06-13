@@ -2,6 +2,7 @@ import { QuestDetailTemplate } from "@/module/quest/template/QuestDetailTemplate
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { Quest } from "@/module/quest/types/quest";
+import apiClient, { ApiError } from "@/lib/api/axios";
 
 const questStateMap: Record<string, Quest["state"]> = {
   PENDING_ACCEPT: "수락하기",
@@ -49,12 +50,11 @@ export default function QuestDetail() {
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(
+        const response = await apiClient.get(
           `http://52.78.53.247:8080/api/quest?type=${questType}`
         );
-        if (!response.ok) throw new Error("서버 응답 실패");
 
-        const data = await response.json();
+        const data = await response.data;
         const mapped = data.map((item: any) => ({
           ...item,
           state: questStateMap[item.state],
@@ -90,13 +90,7 @@ export default function QuestDetail() {
     console.log("상태 변경 요청 body:", body);
 
     try {
-      const response = await fetch("http://52.78.53.247:8080/api/quest/state", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
-
-      if (!response.ok) throw new Error("상태 변경 실패");
+      await apiClient.post("/api/quest/state", body);
 
       const nextState = nextStateMap[state];
       if (!nextState) return;
