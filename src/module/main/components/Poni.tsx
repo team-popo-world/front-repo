@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import poniImage from "../../../assets/image/main/main_poni.webp";
+import { IMAGE_URLS } from "@/lib/constants/constants";
 import clsx from "clsx";
 
 interface PoniProps {
@@ -30,7 +30,7 @@ export const Poni = ({
       onAnimationComplete={onAnimationComplete}
     >
       <motion.img
-        src={poniImage}
+        src={IMAGE_URLS.main.popo}
         alt="poni"
         className={clsx(
           "w-full h-full object-contain",
@@ -43,6 +43,8 @@ export const Poni = ({
                 rotate: [0, 5, -5, 5, 0],
                 // 위 아래로 살짝 움직이는 효과
                 y: [0, -5, 0, -5, 0],
+                // 작아지기
+                scale: 0.7,
               }
             : {}
         }
