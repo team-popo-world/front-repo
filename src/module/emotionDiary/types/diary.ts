@@ -1,7 +1,7 @@
 export interface Diary {
-  emotion_diary_id: string;
-  child_id: string;
+  emotionDiaryId: string;
+  childId: string;
   description: string;
   emotion: string;
-  created_at: string;
+  createdAt: string;
 }
