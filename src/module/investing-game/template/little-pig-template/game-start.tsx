@@ -1,78 +1,63 @@
-import { Background } from "@/components/layout/Background";
-import { TextWithStroke } from "@/components/text/TextWithStroke";
-
-import backgroundImage from "@/assets/image/investing-game/little_pig/little_pig_bg.webp";
-import littlePig1 from "@/assets/image/investing-game/little_pig/little_pig_1.webp";
-import littlePig2 from "@/assets/image/investing-game/little_pig/little_pig_2.webp";
-import littlePig3 from "@/assets/image/investing-game/little_pig/little_pig_3.webp";
-
-import { useState } from "react";
-import { GameStartExplain } from "./game-start-explain";
-import { BackArrow } from "@/components/button/BackArrow";
+import { GameStart } from "../game-template/game-start";
+import { IMAGE_URLS } from "@/lib/constants/constants";
 
 export const LittlePigGameStart = () => {
-  // 게임 설명 모달 상태
-  const [isGameStartModalOpen, setIsGameStartModalOpen] = useState(false);
-
-  // 맨 첫화면에서 게임 시작하기를 눌러 모달을 띄운다면 모달 화면을 보여준다.
-  if (isGameStartModalOpen) {
-    return (
-      <Background backgroundImage={backgroundImage} backgroundClassName="flex flex-col items-center justify-center">
-        <BackArrow />
-        <GameStartExplain onClose={() => setIsGameStartModalOpen(false)} />
-      </Background>
-    );
-  }
-
-  // 모달 뜬것이 없다면 게임 시작화면을 보여준다.
   return (
-    <Background backgroundImage={backgroundImage} backgroundClassName="flex flex-col items-center">
-      <BackArrow />
-      {/* 제목 */}
-      {/* leading-[1.2] 줄간격 조정 */}
-      <TextWithStroke
-        text="아기돼지 삼형제"
-        className="mt-12"
-        textClassName="text-main-yellow-200 text-[3.5rem] font-bold leading-[1.2]"
-        strokeClassName="text-main-brown-700 text-[3.5rem] font-bold text-stroke-width-[0.5rem] text-stroke-color-main-brown-700 leading-[1.2]"
-      />
-      <TextWithStroke
-        text="가장 부자 돼지는 누구?"
-        className="mb-9"
-        textClassName="text-main-orange-400 text-[1.75rem] font-bold"
-        strokeClassName="text-main-brown-700 text-[1.75rem] font-bold text-stroke-width-[0.3rem] text-stroke-color-main-brown-700"
-      />
-      {/* 돼지들 */}
-      <section className="flex justify-center items-center gap-x-8 mb-5">
-        {/* 돼지 한마리 */}
-        <div className="relative flex flex-col justify-center items-center gap-y-0.5">
-          <img src={littlePig1} alt="돼지1" className=" min-w-0 h-31 object-contain" />
-          <div className="px-5  ml-3 bg-main-brown-500 rounded-lg border-3 xl:border-5 border-main-brown-600 text-center">
-            <span className="text-white text-xs font-bold">고위험 고수익</span>
-          </div>
-        </div>
-        {/* 돼지 한마리 */}
-        <div className="relative flex flex-col justify-center items-center gap-y-0.5">
-          <img src={littlePig2} alt="돼지2" className=" min-w-0 h-31 object-contain" />
-          <div className="px-5  ml-3 bg-main-brown-500 rounded-lg border-3 xl:border-5 border-main-brown-600 text-center">
-            <span className="text-white text-xs font-bold">균형형</span>
-          </div>
-        </div>
-        {/* 돼지 한마리 */}
-        <div className="relative flex flex-col justify-center items-center gap-y-0.5">
-          <img src={littlePig3} alt="돼지3" className=" min-w-0 h-31 object-contain" />
-          <div className="px-5  ml-3 bg-main-brown-500 rounded-lg border-3 xl:border-5 border-main-brown-600 text-center">
-            <span className="text-white text-xs font-bold">장기 안정형</span>
-          </div>
-        </div>
-      </section>
-      {/* 버튼 */}
-      <button
-        className="px-6 py-2 bg-main-red-400 border-3 xl:border-5 border-main-orange-500 rounded-lg active:scale-95 transition-all duration-100"
-        onClick={() => setIsGameStartModalOpen(true)}
-      >
-        <span className="text-white text-xl font-bold">투자 게임 시작</span>
-      </button>
-    </Background>
+    <GameStart
+      backgroundImage={IMAGE_URLS.investing_game.little_pig.little_pig_bg}
+      title="아기돼지 삼형제"
+      subtitle="가장 부자 돼지는 누구?"
+      characters={[
+        {
+          image: IMAGE_URLS.investing_game.little_pig.little_pig_1,
+          alt: "첫째 돼지",
+          label: "고위험 고수익",
+        },
+        {
+          image: IMAGE_URLS.investing_game.little_pig.little_pig_2,
+          alt: "둘째 돼지",
+          label: "균형형",
+        },
+        {
+          image: IMAGE_URLS.investing_game.little_pig.little_pig_3,
+          alt: "셋째 돼지",
+          label: "장기 안정형",
+        },
+      ]}
+      gameTitle="게임 설명"
+      gameDescription={`오늘은 아기돼지 삼형제가 각자 집을 짓기 시작했어요!
+첫째 돼지는 지푸라기, 둘째 돼지는 나무, 셋째 돼지는 벽돌로 집을 지을거래요.
+어떤 돼지가 더 많은 돈을 벌 수 있을까요?`}
+      descriptions={[
+        {
+          image: IMAGE_URLS.investing_game.little_pig.little_pig_1,
+          label: "첫째 돼지",
+          descriptions: [
+            "무엇이든 빠르게 해요.",
+            "집을 뚝딱 짓고, 빠르게 돈을 벌고 싶어해요.",
+            "조금은 위험해도 괜찮다고 생각해요. 조금 망가져도 다시 빠르게 고치면 되니깐요!",
+          ],
+        },
+        {
+          image: IMAGE_URLS.investing_game.little_pig.little_pig_2,
+          label: "둘째 돼지",
+          descriptions: [
+            "이 정도면 괜찮아~ 하고 웃어요.",
+            "조금 빠르게, 조금 튼튼하게! 둘 다 하고 싶어요.",
+            "너무 오래 일하는건 싫어해요.",
+          ],
+        },
+        {
+          image: IMAGE_URLS.investing_game.little_pig.little_pig_3,
+          label: "셋째 돼지",
+          descriptions: [
+            "천천히 하지만 끝까지 잘해요.",
+            "안전이 가장 중요하다고 생각해서, 집을 가장 튼튼하게 만들어요.",
+            "나중을 미리 생각하며 힘든 일도 참을 수 있어요.",
+          ],
+        },
+      ]}
+      gamePlayPath="/investing/game/little-pig?stage=game-play"
+    />
   );
 };

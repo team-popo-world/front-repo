@@ -1,6 +1,6 @@
 // src/module/investing-game/component/little-pig-component/pig-card.tsx
 import coin from "@/assets/image/common/common_coin.webp";
-import box from "@/assets/image/investing-game/little_pig/little_pig_box.webp";
+import { IMAGE_URLS } from "@/lib/constants/constants";
 import clsx from "clsx";
 
 interface PigCardProps {
@@ -30,7 +30,11 @@ export const TurnFinishPigCard = ({ image, name, priceChange, countChange }: Pig
           </span>
         </div>
         <div className="flex items-center gap-x-0.5">
-          <img src={box} alt="물건" className="w-4 h-4 object-contain" />
+          <img
+            src={IMAGE_URLS.investing_game.little_pig.little_pig_box}
+            alt="물건"
+            className="w-4 h-4 object-contain"
+          />
           <span className="text-main-brown-575 text-[0.75rem] font-bold"> 수량 변동: </span>
           <span
             className={clsx("pl-1.5 text-[0.75rem] font-bold", {

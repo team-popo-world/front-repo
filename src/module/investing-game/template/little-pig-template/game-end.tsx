@@ -1,5 +1,4 @@
 import { Background } from "@/components/layout/Background";
-import backgroundImage from "@/assets/image/investing-game/little_pig/little_pig_bg.webp";
 import coin from "@/assets/image/common/common_coin.webp";
 import { TextWithStroke } from "@/components/text/TextWithStroke";
 import { useEffect, useRef } from "react";
@@ -7,11 +6,8 @@ import rough from "roughjs";
 import * as d3 from "d3";
 import scenarioData from "./scenario.json";
 import { YellowBorderModal } from "../../component/little-pig-component/yellow-border-modal";
-import littlePig1 from "@/assets/image/investing-game/little_pig/little_pig_1.webp";
-import littlePig2 from "@/assets/image/investing-game/little_pig/little_pig_2.webp";
-import littlePig3 from "@/assets/image/investing-game/little_pig/little_pig_3.webp";
-import chartPig from "@/assets/image/investing-game/little_pig/little_pig_chart.webp";
 import { Link } from "react-router-dom";
+import { IMAGE_URLS } from "@/lib/constants/constants";
 
 // 각 돼지별 차트 색상 정의
 const COLORS = {
@@ -238,7 +234,7 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
       // 마지막 데이터 포인트에 첫째 돼지 이미지 추가
       if (i === data.length - 1) {
         g.append("image")
-          .attr("xlink:href", littlePig1) // 이미지 경로
+          .attr("xlink:href", IMAGE_URLS.investing_game.little_pig.little_pig_1) // 이미지 경로
           .attr("x", x(i + 1) - 20) // 이미지의 좌측 위치 (중앙 정렬을 위해 -15)
           .attr("y", y(d["첫째 돼지"]) - 20) // 이미지의 위쪽 위치 (중앙 정렬을 위해 -15)
           .attr("width", 40)
@@ -257,7 +253,7 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
       // 마지막 데이터 포인트에 둘째 돼지 이미지 추가
       if (i === data.length - 1) {
         g.append("image")
-          .attr("xlink:href", littlePig2) // 이미지 경로
+          .attr("xlink:href", IMAGE_URLS.investing_game.little_pig.little_pig_2) // 이미지 경로
           .attr("x", x(i + 1) - 20) // 이미지의 좌측 위치 (중앙 정렬을 위해 -15)
           .attr("y", y(d["둘째 돼지"]) - 20) // 이미지의 위쪽 위치 (중앙 정렬을 위해 -15)
           .attr("width", 40)
@@ -276,7 +272,7 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
       // 마지막 데이터 포인트에 셋째 돼지 이미지 추가
       if (i === data.length - 1) {
         g.append("image")
-          .attr("xlink:href", littlePig3) // 이미지 경로
+          .attr("xlink:href", IMAGE_URLS.investing_game.little_pig.little_pig_3) // 이미지 경로
           .attr("x", x(i + 1) - 20) // 이미지의 좌측 위치 (중앙 정렬을 위해 -15)
           .attr("y", y(d["셋째 돼지"]) - 20) // 이미지의 위쪽 위치 (중앙 정렬을 위해 -15)
           .attr("width", 40)
@@ -325,7 +321,10 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
   }, [data]);
 
   return (
-    <Background backgroundImage={backgroundImage} backgroundClassName="flex flex-col items-center justify-center">
+    <Background
+      backgroundImage={IMAGE_URLS.investing_game.little_pig.little_pig_bg}
+      backgroundClassName="flex flex-col items-center justify-center"
+    >
       <YellowBorderModal className="flex flex-col items-center">
         {/* 제목 */}
         <TextWithStroke
@@ -337,7 +336,11 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
         {/* 그래프 */}
         <div className="relative flex flex-col items-start">
           {/* 차트 돼지  */}
-          <img src={chartPig} alt="차트돼지" className="absolute -top-3 -left-3 w-11 h-11 object-contain z-100" />
+          <img
+            src={IMAGE_URLS.investing_game.little_pig.little_pig_chart}
+            alt="차트돼지"
+            className="absolute -top-3 -left-3 w-11 h-11 object-contain z-100"
+          />
 
           <div className="bg-[#FFFDFA] p-3 mb-2 rounded-lg shadow-lg w-[23.5rem] h-[11.875rem] relative mx-auto">
             <svg ref={svgRef} width="100%" height="100%" viewBox="0 0 600 350" preserveAspectRatio="xMidYMid meet" />

@@ -1,6 +1,5 @@
-import box from "@/assets/image/investing-game/little_pig/little_pig_box.webp";
-import bulb from "@/assets/image/investing-game/little_pig/little_pig_bulb.webp";
 import coin from "@/assets/image/common/common_coin.webp";
+import { IMAGE_URLS } from "@/lib/constants/constants";
 import clsx from "clsx";
 
 interface PigCardProps {
@@ -79,7 +78,11 @@ export const GamePlayPigCard = ({
         </span>
       </div>
       <div className="flex items-center gap-x-0.5">
-        <img src={box} alt="물건" className="w-3.5 h-3.5 object-contain" />
+        <img
+          src={IMAGE_URLS.investing_game.little_pig.little_pig_box}
+          alt="물건"
+          className="w-3.5 h-3.5 object-contain"
+        />
         <span className="text-main-brown-575 text-[0.55rem] font-bold">보유수량: {quantity}개</span>
       </div>
       {/* 개수 선택, 구매 판매 */}
@@ -121,7 +124,7 @@ export const GamePlayPigCard = ({
         {riskType}
       </div>
       <div className="absolute top-6 right-3 flex items-center">
-        <img src={bulb} alt="전구" className="w-4 h-4 object-contain" />
+        <img src={IMAGE_URLS.investing_game.little_pig.little_pig_bulb} alt="전구" className="w-4 h-4 object-contain" />
         <span className="-ml-0.5 text-main-yellow-400 text-[0.4rem] font-bold">힌트</span>
       </div>
     </div>
