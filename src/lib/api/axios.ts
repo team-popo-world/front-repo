@@ -42,7 +42,6 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     const token = useAuthStore.getState().accessToken;
-    console.log("token", token);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -74,7 +73,6 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   (response) => {
     // 응답 헤더 로깅
-    console.log("응답 헤더:", JSON.stringify(response.headers, null, 2));
     return response;
   },
   async (error: AxiosError) => {

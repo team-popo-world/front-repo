@@ -8,6 +8,7 @@ import { Modal } from "@/components/modal/Modal";
 import { PurchaseModal } from "../components/PurchaseModal";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
+import NameAndPoint from "@/components/user/NameAndPoint";
 
 interface ParentShopTemplateProps {
   isOpen: boolean;
@@ -75,6 +76,7 @@ export const ParentShopTemplate = ({
           />
         </Modal>
         <BackArrow onClick={handleBack} />
+        <NameAndPoint />
         <DarkWoodTitle title="부모님 상점" />
         <SpeechBubble
           text={currentMessage.text}
