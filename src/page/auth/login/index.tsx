@@ -31,7 +31,16 @@ export default function LoginPage() {
       });
 
       // 응답에서 토큰 등 정보 추출
-      const { accessToken, refreshToken, name, role } = response.data;
+      let { accessToken, refreshToken, name, role } = response.data;
+
+      // 헤더에서 토큰 꺼내기 (바디에 없을 때)
+      if (!accessToken) {
+        // 헤더 이름은 소문자로 접근해야 함
+        accessToken = response.headers["authorization"]?.replace("Bearer ", "");
+      }
+      if (!refreshToken) {
+        refreshToken = response.headers["refresh-token"];
+      }
 
       // Child 역할만 허용
       if (role !== "Child") {

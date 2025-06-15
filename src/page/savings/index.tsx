@@ -10,12 +10,36 @@ import { ko } from "date-fns/locale";
 import { addDays, isAfter, isSameDay } from "date-fns";
 import coinImage from "../../assets/image/common/common_coin.webp";
 import { TextWithStroke } from "../../components/text/TextWithStroke";
+import apiClient from "../../lib/api/axios";
 
 const IS_TEST_MODE = true;
 
 // 상수 선언
 const MAX_DEPOSIT_RATE = 0.2; // 20%
 const BONUS_RATE = 0.1; // 10%
+
+// 저축통장 생성 API 호출 함수
+async function createSavingsAccount(
+  goalAmount,
+  createdAt,
+  endDate,
+  rewardPoint
+) {
+  try {
+    // apiClient로 POST 요청 (토큰/주소 자동)
+    const response = await apiClient.post("/api/saveAccount", {
+      goalAmount, // 목표 금액
+      createdAt, // 시작 날짜 (YYYY-MM-DD)
+      endDate, // 종료 날짜 (YYYY-MM-DD)
+      rewardPoint, // 보너스 금액
+    });
+    // 성공 시 메시지 반환
+    return { success: true, message: response.data };
+  } catch (error: any) {
+    // 에러 메시지 반환
+    return { success: false, message: error.message };
+  }
+}
 
 export default function SavingsPage() {
   // ========== 상태 관리 변수들 ==========
@@ -29,6 +53,8 @@ export default function SavingsPage() {
   const [currentAmount, setCurrentAmount] = useState<string>(""); // 현재 저축된 금액
   const [goalAmount, setGoalAmount] = useState<string>(""); // 목표 저축 금액
   const [bonusAmount, setBonusAmount] = useState<string>(""); // 보너스 금액 상태 추가
+  const [createMessage, setCreateMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   // 입력 모달 관련 상태
   const [openInput, setOpenInput] = useState<"goal" | null>(null); // 현재 열린 입력 모달 타입
@@ -211,6 +237,37 @@ export default function SavingsPage() {
       }
     }
   }, [isCreated, endDate, goalAmount, currentAmount, bonusAmount]);
+
+  const handleCreateAccount = async () => {
+    if (!goalAmount || !startDate || !endDate || !bonusAmount) {
+      setCreateMessage("모든 값을 입력해 주세요.");
+      return;
+    }
+    setIsLoading(true);
+    setCreateMessage("");
+    // 날짜를 "YYYY-MM-DD" 문자열로 변환
+    const start =
+      startDate instanceof Date
+        ? startDate.toISOString().slice(0, 10)
+        : String(startDate);
+    const end =
+      endDate instanceof Date
+        ? endDate.toISOString().slice(0, 10)
+        : String(endDate);
+
+    const result = await createSavingsAccount(
+      Number(goalAmount),
+      start,
+      end,
+      Number(bonusAmount)
+    );
+    setIsLoading(false);
+    setCreateMessage(result.message);
+    if (result.success) {
+      setCurrentAmount("0");
+      setIsCreated(true);
+    }
+  };
 
   return (
     <>
@@ -541,19 +598,16 @@ export default function SavingsPage() {
             {/* 메인 액션 버튼 (통장 개설 또는 입금하기) */}
             <button
               className="bg-[#FDF0B7] text-[#573924] font-bold text-[1.2rem] rounded-4xl py-3 w-45 cursor-pointer disabled:opacity-60"
-              onClick={() => {
-                if (!isCreated) {
-                  // 통장이 개설되지 않은 경우: 현재 금액을 0냥으로 초기화하고 통장 개설
-                  setCurrentAmount("0");
-                  setIsCreated(true);
-                } else {
-                  // 통장이 이미 개설된 경우: 추가 입금 모달 열기
-                  handleDepositClick();
-                }
-              }}
-              disabled={!isCreated && (!startDate || !endDate || !goalAmount)}
+              onClick={handleCreateAccount}
+              disabled={
+                isLoading ||
+                !goalAmount ||
+                !startDate ||
+                !endDate ||
+                !bonusAmount
+              }
             >
-              {isCreated ? "입금하기" : "저축 통장 개설"}
+              {isLoading ? "개설 중..." : "저축 통장 개설"}
             </button>
           </div>
         </div>
