@@ -4,10 +4,9 @@ import { TextWithStroke } from "@/components/text/TextWithStroke";
 import { useEffect, useRef } from "react";
 import rough from "roughjs";
 import * as d3 from "d3";
-import scenarioData from "./scenario.json";
-import { YellowBorderModal } from "../../component/little-pig-component/yellow-border-modal";
 import { Link } from "react-router-dom";
-import { IMAGE_URLS } from "@/lib/constants/constants";
+import { BorderModal } from "../../component/game-component/border-modal";
+import type { Scenario } from "@/page/investing/game";
 
 // 각 돼지별 차트 색상 정의
 const COLORS = {
@@ -17,16 +16,35 @@ const COLORS = {
 };
 
 // 시나리오 데이터를 차트에 맞는 형식으로 변환
-const formatData = () => {
-  return scenarioData.map((turn) => ({
-    turn: turn.turn_number,
-    "첫째 돼지": turn.stocks[0].current_value,
-    "둘째 돼지": turn.stocks[1].current_value,
-    "셋째 돼지": turn.stocks[2].current_value,
-  }));
-};
 
-export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: number; initialPoint: number }) => {
+interface GameEndProps {
+  lastPoint: number;
+  initialPoint: number;
+  backgroundImage: string;
+  characterImages: string[];
+  chartImage: string;
+  stockNames: string[];
+  scenario: Scenario[];
+}
+
+export const GameEnd = ({
+  lastPoint,
+  initialPoint,
+  backgroundImage,
+  characterImages,
+  chartImage,
+  stockNames,
+  scenario,
+}: GameEndProps) => {
+  const formatData = () => {
+    return scenario.map((turn) => ({
+      turn: turn.turn_number,
+      [stockNames[0]]: turn.stocks[0].current_value,
+      [stockNames[1]]: turn.stocks[1].current_value,
+      [stockNames[2]]: turn.stocks[2].current_value,
+    }));
+  };
+
   const data = formatData();
   const svgRef = useRef<SVGSVGElement>(null);
 
@@ -55,7 +73,16 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
     // Y축 스케일 설정
     const y = d3
       .scaleLinear()
-      .domain([0, d3.max(data, (d) => Math.max(d["첫째 돼지"], d["둘째 돼지"], d["셋째 돼지"])) as number])
+      .domain([
+        0,
+        d3.max(data, (d) =>
+          Math.max(
+            d[stockNames[0] as keyof typeof d],
+            d[stockNames[1] as keyof typeof d],
+            d[stockNames[2] as keyof typeof d]
+          )
+        ) as number,
+      ])
       .range([height, 0]) // 차트 높이
       .nice();
 
@@ -165,7 +192,7 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
     // 첫째 돼지 데이터 라인
     const firstPigPoints = data.map((d, i) => ({
       x: x(i + 1),
-      y: y(d["첫째 돼지"]),
+      y: y(d[stockNames[0] as keyof typeof d]),
     }));
 
     // 첫째 돼지 라인 그리기
@@ -182,7 +209,7 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
     // 둘째 돼지 데이터 라인
     const secondPigPoints = data.map((d, i) => ({
       x: x(i + 1),
-      y: y(d["둘째 돼지"]),
+      y: y(d[stockNames[1] as keyof typeof d]),
     }));
 
     // 둘째 돼지 라인 그리기
@@ -204,7 +231,7 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
     // 셋째 돼지 데이터 라인
     const thirdPigPoints = data.map((d, i) => ({
       x: x(i + 1),
-      y: y(d["셋째 돼지"]),
+      y: y(d[stockNames[2] as keyof typeof d]),
     }));
 
     // 셋째 돼지 라인 그리기
@@ -223,7 +250,7 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
     // circle()은 x,y 좌표와 반지름을 받아서 원을 그림
     data.forEach((d, i) => {
       // 첫째 돼지 포인트
-      const firstPigPoint = rc.circle(x(i + 1), y(d["첫째 돼지"]), 10, {
+      const firstPigPoint = rc.circle(x(i + 1), y(d[stockNames[0] as keyof typeof d]), 10, {
         roughness: 1,
         fill: COLORS.first,
         fillStyle: "solid",
@@ -234,15 +261,15 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
       // 마지막 데이터 포인트에 첫째 돼지 이미지 추가
       if (i === data.length - 1) {
         g.append("image")
-          .attr("xlink:href", IMAGE_URLS.investing_game.little_pig.little_pig_1) // 이미지 경로
+          .attr("xlink:href", characterImages[0]) // 이미지 경로
           .attr("x", x(i + 1) - 20) // 이미지의 좌측 위치 (중앙 정렬을 위해 -15)
-          .attr("y", y(d["첫째 돼지"]) - 20) // 이미지의 위쪽 위치 (중앙 정렬을 위해 -15)
+          .attr("y", y(d[stockNames[0] as keyof typeof d]) - 20) // 이미지의 위쪽 위치 (중앙 정렬을 위해 -15)
           .attr("width", 40)
           .attr("height", 40);
       }
 
       // 둘째 돼지 포인트
-      const secondPigPoint = rc.circle(x(i + 1), y(d["둘째 돼지"]), 10, {
+      const secondPigPoint = rc.circle(x(i + 1), y(d[stockNames[1] as keyof typeof d]), 10, {
         roughness: 1,
         fill: COLORS.second,
         fillStyle: "solid",
@@ -253,7 +280,7 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
       // 마지막 데이터 포인트에 둘째 돼지 이미지 추가
       if (i === data.length - 1) {
         g.append("image")
-          .attr("xlink:href", IMAGE_URLS.investing_game.little_pig.little_pig_2) // 이미지 경로
+          .attr("xlink:href", characterImages[1]) // 이미지 경로
           .attr("x", x(i + 1) - 20) // 이미지의 좌측 위치 (중앙 정렬을 위해 -15)
           .attr("y", y(d["둘째 돼지"]) - 20) // 이미지의 위쪽 위치 (중앙 정렬을 위해 -15)
           .attr("width", 40)
@@ -261,7 +288,7 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
       }
 
       // 셋째 돼지 포인트
-      const thirdPigPoint = rc.circle(x(i + 1), y(d["셋째 돼지"]), 10, {
+      const thirdPigPoint = rc.circle(x(i + 1), y(d[stockNames[2] as keyof typeof d]), 10, {
         roughness: 1,
         fill: COLORS.third,
         fillStyle: "solid",
@@ -272,9 +299,9 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
       // 마지막 데이터 포인트에 셋째 돼지 이미지 추가
       if (i === data.length - 1) {
         g.append("image")
-          .attr("xlink:href", IMAGE_URLS.investing_game.little_pig.little_pig_3) // 이미지 경로
+          .attr("xlink:href", characterImages[2]) // 이미지 경로
           .attr("x", x(i + 1) - 20) // 이미지의 좌측 위치 (중앙 정렬을 위해 -15)
-          .attr("y", y(d["셋째 돼지"]) - 20) // 이미지의 위쪽 위치 (중앙 정렬을 위해 -15)
+          .attr("y", y(d[stockNames[2] as keyof typeof d]) - 20) // 이미지의 위쪽 위치 (중앙 정렬을 위해 -15)
           .attr("width", 40)
           .attr("height", 40);
       }
@@ -290,9 +317,9 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
       .attr("font-weight", "bold"); // 폰트 굵기
 
     const legendItems = [
-      { color: COLORS.first, name: "첫째 돼지" },
-      { color: COLORS.second, name: "둘째 돼지" },
-      { color: COLORS.third, name: "셋째 돼지" },
+      { color: COLORS.first, name: stockNames[0] },
+      { color: COLORS.second, name: stockNames[1] },
+      { color: COLORS.third, name: stockNames[2] },
     ];
 
     legendItems.forEach((item, i) => {
@@ -321,11 +348,8 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
   }, [data]);
 
   return (
-    <Background
-      backgroundImage={IMAGE_URLS.investing_game.little_pig.little_pig_bg}
-      backgroundClassName="flex flex-col items-center justify-center"
-    >
-      <YellowBorderModal className="flex flex-col items-center">
+    <Background backgroundImage={backgroundImage} backgroundClassName="flex flex-col items-center justify-center">
+      <BorderModal className="flex flex-col items-center" borderColor="#fff9d0" borderStrokeColor="#7b5025">
         {/* 제목 */}
         <TextWithStroke
           text="투자 결과!"
@@ -336,11 +360,7 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
         {/* 그래프 */}
         <div className="relative flex flex-col items-start">
           {/* 차트 돼지  */}
-          <img
-            src={IMAGE_URLS.investing_game.little_pig.little_pig_chart}
-            alt="차트돼지"
-            className="absolute -top-3 -left-3 w-11 h-11 object-contain z-100"
-          />
+          <img src={chartImage} alt="차트돼지" className="absolute -top-3 -left-3 w-11 h-11 object-contain z-100" />
 
           <div className="bg-[#FFFDFA] p-3 mb-2 rounded-lg shadow-lg w-[23.5rem] h-[11.875rem] relative mx-auto">
             <svg ref={svgRef} width="100%" height="100%" viewBox="0 0 600 350" preserveAspectRatio="xMidYMid meet" />
@@ -376,7 +396,7 @@ export const LittlePigGameEnd = ({ lastPoint, initialPoint }: { lastPoint: numbe
             </div>
           </div>
         </Link>
-      </YellowBorderModal>
+      </BorderModal>
     </Background>
   );
 };

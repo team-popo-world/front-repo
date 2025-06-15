@@ -1,8 +1,8 @@
 import { Background } from "@/components/layout/Background";
 import coin from "@/assets/image/common/common_coin.webp";
 import { TextWithStroke } from "@/components/text/TextWithStroke";
-import { GamePlayPigCard } from "../../component/little-pig-component/game-play-pig-card";
-import { NewsBox } from "../../component/little-pig-component/news-box";
+import { GamePlayStockCard } from "@/module/investing-game/component/game-component/game-play-stock-card";
+import { NewsBox } from "../../component/game-component/news-box";
 import { GamePlayTurnFinish } from "./game-play-turn-finish";
 import { Modal } from "@/components/modal/Modal";
 import type { GameState } from "@/page/investing/game/index";
@@ -10,16 +10,22 @@ import { useState, memo } from "react";
 import { BackArrow } from "@/components/button/BackArrow";
 import { GameOutModal } from "../../component/little-pig-component/game-out-modal";
 import { useNavigate } from "react-router-dom";
-import { IMAGE_URLS } from "@/lib/constants/constants";
 
 interface GamePlayProps {
   gameState: GameState;
   updateGameState: (updates: any) => void;
   handleTurnFinish: () => void;
   handleGameOut: () => void;
+  backgroundImage: string;
+  characterImages: string[];
+  titleTextColor: string;
+  textColor: string;
+  buttonColor: string;
+  borderColor: string;
+  borderStrokeColor: string;
 }
 
-interface PigData {
+interface StockData {
   image: string;
   name: string;
   priceChange: number;
@@ -28,7 +34,19 @@ interface PigData {
 
 const MemoizedTextWithStroke = memo(TextWithStroke);
 
-export const GamePlay = ({ gameState, updateGameState, handleTurnFinish, handleGameOut }: GamePlayProps) => {
+export const GamePlay = ({
+  gameState,
+  updateGameState,
+  handleTurnFinish,
+  handleGameOut,
+  backgroundImage,
+  characterImages,
+  titleTextColor,
+  textColor,
+  buttonColor,
+  borderColor,
+  borderStrokeColor,
+}: GamePlayProps) => {
   // 턴 종료시 결과창 모달
   const [isTurnFinishModalOpen, setIsTurnFinishModalOpen] = useState(false);
   // 뒤로가기 클릭시 게임 나가기 모달
@@ -48,7 +66,7 @@ export const GamePlay = ({ gameState, updateGameState, handleTurnFinish, handleG
     return gameState.point + calculatedPoint;
   };
 
-  const getPigData = (index: number, image: string): PigData | undefined => {
+  const getStockData = (index: number, image: string): StockData | undefined => {
     if (gameState.currentScenario) {
       const stock = gameState.currentScenario.stocks[index];
       const prev = gameState.beforeCount[index];
@@ -66,10 +84,7 @@ export const GamePlay = ({ gameState, updateGameState, handleTurnFinish, handleG
   if (!gameState.currentScenario) return null;
 
   return (
-    <Background
-      backgroundImage={IMAGE_URLS.investing_game.little_pig.little_pig_bg}
-      backgroundClassName="flex flex-col items-center"
-    >
+    <Background backgroundImage={backgroundImage} backgroundClassName="flex flex-col items-center">
       <Modal isOpen={isTurnFinishModalOpen}>
         <GamePlayTurnFinish
           onNextTurn={() => {
@@ -77,13 +92,18 @@ export const GamePlay = ({ gameState, updateGameState, handleTurnFinish, handleG
             handleTurnFinish();
           }}
           turn={gameState.turn}
-          pigData={[
-            getPigData(0, IMAGE_URLS.investing_game.little_pig.little_pig_1),
-            getPigData(1, IMAGE_URLS.investing_game.little_pig.little_pig_2),
-            getPigData(2, IMAGE_URLS.investing_game.little_pig.little_pig_3),
+          stockData={[
+            getStockData(0, characterImages[0]),
+            getStockData(1, characterImages[1]),
+            getStockData(2, characterImages[2]),
           ].filter((data): data is NonNullable<typeof data> => data !== null)}
           result={gameState.result}
           totalPoint={calculatedPoint()}
+          titleTextColor={titleTextColor}
+          textColor={textColor}
+          buttonColor={buttonColor}
+          borderColor={borderColor}
+          borderStrokeColor={borderStrokeColor}
         />
       </Modal>
       <Modal isOpen={isGameOutModalOpen}>
@@ -127,15 +147,9 @@ export const GamePlay = ({ gameState, updateGameState, handleTurnFinish, handleG
 
       <section className="relative flex items-center justify-center gap-x-2.5">
         {gameState.currentScenario.stocks.map((stock, index) => (
-          <GamePlayPigCard
+          <GamePlayStockCard
             key={stock.name}
-            pigImage={
-              index === 0
-                ? IMAGE_URLS.investing_game.little_pig.little_pig_1
-                : index === 1
-                ? IMAGE_URLS.investing_game.little_pig.little_pig_2
-                : IMAGE_URLS.investing_game.little_pig.little_pig_3
-            }
+            stockImage={characterImages[index]}
             name={stock.name}
             expectation={stock.expectation}
             currentPrice={gameState.price[index]}

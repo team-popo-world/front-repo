@@ -2,8 +2,8 @@ import coin from "@/assets/image/common/common_coin.webp";
 import { IMAGE_URLS } from "@/lib/constants/constants";
 import clsx from "clsx";
 
-interface PigCardProps {
-  pigImage: string;
+interface StockCardProps {
+  stockImage: string;
   name: string;
   expectation: string;
   currentPrice: number;
@@ -19,8 +19,8 @@ interface PigCardProps {
   setPlusClickEvent: () => void;
 }
 
-export const GamePlayPigCard = ({
-  pigImage,
+export const GamePlayStockCard = ({
+  stockImage,
   name,
   expectation,
   currentPrice,
@@ -34,7 +34,7 @@ export const GamePlayPigCard = ({
   setPoint,
   setMinusClickEvent,
   setPlusClickEvent,
-}: PigCardProps) => {
+}: StockCardProps) => {
   const handleDecrease = () => {
     if (count <= 0) return;
     onQuantityChange(count - 1);
@@ -60,7 +60,7 @@ export const GamePlayPigCard = ({
 
   return (
     <div className="relative flex flex-col items-start px-4 py-2 w-44 h-59 bg-main-yellow-300 border-2 xl:border-5 border-main-brown-450 rounded-xl">
-      <img src={pigImage} alt={name} className="self-center min-w-0 h-14 object-contain mt-4 mb-1" />
+      <img src={stockImage} alt={name} className="self-center min-w-0 h-14 object-contain mt-4 mb-1" />
       <h4 className="mb-0.5 text-main-brown-575 text-[0.7rem] font-bold self-center"> {name}</h4>
       <p className="mb-1 text-main-brown-575 text-[0.55rem] font-bold ">{expectation}</p>
       <div className="flex items-center gap-x-0.5 mb-0.5 mt-auto">
