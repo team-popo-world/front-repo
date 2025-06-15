@@ -20,10 +20,10 @@ const BONUS_RATE = 0.1; // 10%
 
 // 저축통장 생성 API 호출 함수
 async function createSavingsAccount(
-  goalAmount,
-  createdAt,
-  endDate,
-  rewardPoint
+  goalAmount: number,
+  createdAt: string,
+  endDate: string,
+  rewardPoint: number
 ) {
   try {
     // apiClient로 POST 요청 (토큰/주소 자동)
