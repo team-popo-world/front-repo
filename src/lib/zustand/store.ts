@@ -18,9 +18,8 @@ import Cookies from "js-cookie";
 interface AuthState {
   accessToken: string | null;
   isAuthenticated: boolean; // 인증 여부
-  user: {
-    name: string; // 이름
-  } | null;
+  name: string | null; // 이름
+  point: number | null; // 포인트
 }
 
 /**
@@ -32,7 +31,9 @@ interface AuthState {
  */
 interface AuthStore extends AuthState {
   setAccessToken: (accessToken: string | null) => void;
-  setUser: (user: AuthState["user"]) => void; // 유저 정보 설정
+  setUserName: (name: string | null) => void; // 유저 정보 설정
+  setPoint: (point: number | null) => void; // 포인트 설정
+  login: (name: string, point: number) => void; // 로그인
   logout: () => void; // 로그아웃
   refreshAccessToken: () => Promise<void>; // 페이지 로드 시 인증 상태 확인
 }
@@ -44,7 +45,8 @@ interface AuthStore extends AuthState {
 const INITIAL_AUTH_STATE: AuthState = {
   accessToken: null,
   isAuthenticated: false,
-  user: null,
+  name: null,
+  point: null,
 };
 
 /**
@@ -56,13 +58,20 @@ export const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
       ...INITIAL_AUTH_STATE,
-
       // 사용자 정보 설정 액션
-      setUser: (user) =>
+      setUserName: (name) =>
         set({
-          user,
-          isAuthenticated: true, // 사용자 정보가 있으면 인증 상태를 true로 설정
+          name,
         }),
+
+      setPoint: (point) =>
+        set({
+          point,
+        }),
+
+      login: (name: string, point: number) => {
+        set({ isAuthenticated: true, name, point });
+      },
 
       // 로그아웃 액션
       logout: () => {
@@ -98,7 +107,8 @@ export const useAuthStore = create<AuthStore>()(
       partialize: (state) => ({
         accessToken: state.accessToken,
         isAuthenticated: state.isAuthenticated,
-        user: state.user,
+        name: state.name,
+        point: state.point,
       }),
     }
   )

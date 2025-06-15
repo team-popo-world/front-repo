@@ -12,7 +12,7 @@ import Cookies from "js-cookie";
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const navigate = useNavigate();
-  const { setUser, setAccessToken } = useAuthStore();
+  const { login, setAccessToken } = useAuthStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -48,9 +48,7 @@ export default function LoginPage() {
 
       // 사용자 정보 저장
       if (response.data) {
-        setUser({
-          name: response.data.name,
-        });
+        login(response.data.name, response.data.point);
         console.log("로그인 성공");
       }
 
