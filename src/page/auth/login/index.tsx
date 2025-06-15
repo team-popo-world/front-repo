@@ -28,7 +28,7 @@ export default function LoginPage() {
 
     try {
       const response = await apiClient.post("/auth/login", form);
-      console.log("응답 헤더:", JSON.stringify(response.headers, null, 2));
+      console.log(response.data);
 
       // 액세스 토큰 저장
       const accessToken = response.headers["authorization"]?.replace("Bearer ", "");
