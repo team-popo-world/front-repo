@@ -1,5 +1,6 @@
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
+import { useAuthStore } from "@/lib/zustand/store";
 
 /**
  * API 에러를 처리하기 위한 커스텀 에러 클래스
@@ -10,11 +11,6 @@ export class ApiError extends Error {
     this.name = "ApiError";
   }
 }
-
-// 토큰 갱신 중인지 확인하는 플래그
-let isRefreshing = false;
-// 토큰 갱신 중에 들어온 요청들을 저장할 큐
-let refreshSubscribers: ((token: string) => void)[] = [];
 
 /**
  * Axios 인스턴스 생성
@@ -45,7 +41,8 @@ const apiClient = axios.create({
  */
 apiClient.interceptors.request.use(
   (config) => {
-    const token = Cookies.get("accessToken");
+    const token = useAuthStore.getState().accessToken;
+    console.log("token", token);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -72,7 +69,7 @@ apiClient.interceptors.request.use(
  * 주요 기능:
  * 1. 네트워크 에러 처리
  * 2. HTTP 상태 코드별 에러 처리
- * 3. 인증 에러 시 자동 로그아웃
+ * 3. 인증 에러 시 토큰 갱신
  */
 apiClient.interceptors.response.use(
   (response) => {
@@ -89,18 +86,31 @@ apiClient.interceptors.response.use(
     const { status } = error.response;
 
     if (status === 401) {
-      if (!isRefreshing) {
-        isRefreshing = true;
-
-        try {
-          return;
-        } catch (refreshError) {
-          isRefreshing = false;
-          return Promise.reject(new ApiError(401, "인증이 필요합니다."));
+      try {
+        // refresh 토큰으로 새로운 access 토큰 발급 요청
+        const refreshToken = Cookies.get("refreshToken");
+        if (!refreshToken) {
+          throw new Error("Refresh token not found");
         }
-      } else {
-        // 토큰 갱신 중인 경우, 요청을 큐에 저장
-        return;
+
+        const response = await apiClient.post(`/auth/token/refresh`, { refreshToken }, { withCredentials: true });
+
+        const accessToken = response.headers["authorization"]?.replace("Bearer ", "");
+        if (accessToken) {
+          useAuthStore.getState().setAccessToken(accessToken);
+        }
+
+        // 새로운 access 토큰으로 원래 요청 재시도
+        if (error.config) {
+          error.config.headers.Authorization = `Bearer ${accessToken}`;
+          return apiClient(error.config);
+        }
+      } catch (refreshError) {
+        // refresh 토큰도 만료된 경우
+        Cookies.remove("refreshToken");
+        useAuthStore.getState().logout();
+
+        return Promise.reject(new ApiError(401, "세션이 만료되었습니다. 다시 로그인해주세요."));
       }
     }
 

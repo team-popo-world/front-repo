@@ -12,7 +12,7 @@ import Cookies from "js-cookie";
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const navigate = useNavigate();
-  const { setUser } = useAuthStore();
+  const { setUser, setAccessToken } = useAuthStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,11 +33,7 @@ export default function LoginPage() {
       // 액세스 토큰 저장
       const accessToken = response.headers["authorization"]?.replace("Bearer ", "");
       if (accessToken) {
-        Cookies.set("accessToken", accessToken, {
-          expires: 1, // 1일 후 만료
-          secure: true,
-          sameSite: "strict", // CSRF 공격 방지
-        });
+        setAccessToken(accessToken);
       }
 
       // 리프레시 토큰 저장
