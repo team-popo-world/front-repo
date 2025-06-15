@@ -87,6 +87,13 @@ const INITIAL_GAME_STATE: GameState = {
   news_tag: "",
 };
 
+const CHAPTER_ID = {
+  little_pig: "1111",
+  truck: "2222",
+  ninja: "3333",
+  masic: "4444",
+};
+
 export default function InvestingGame() {
   // 동적 파라미터useParams 가 없으면 빈 문자열로 초기화
   const { gametype = "" } = useParams() || {};
@@ -108,7 +115,7 @@ export default function InvestingGame() {
   useEffect(() => {
     if (gameStage === "game-play") {
       const fetchChapterData = async () => {
-        const result = await getChapterData("1111");
+        const result = await getChapterData(CHAPTER_ID[gametype as keyof typeof CHAPTER_ID]);
 
         if (result.success && result.data) {
           const data = result.data;
