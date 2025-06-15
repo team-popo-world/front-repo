@@ -6,10 +6,13 @@ import apiClient from "../../../lib/api/axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../../styles/toast.css";
+import { useAuthStore } from "@/lib/zustand/store";
+import Cookies from "js-cookie";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const navigate = useNavigate();
+  const { setUser } = useAuthStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -24,36 +27,40 @@ export default function LoginPage() {
     }
 
     try {
-      // 로그인 요청
-      const response = await apiClient.post("/auth/login", {
-        email: form.email,
-        password: form.password,
-      });
+      const response = await apiClient.post("/auth/login", form);
+      console.log("응답 헤더:", JSON.stringify(response.headers, null, 2));
 
-      // 응답에서 토큰 등 정보 추출
-      let { accessToken, refreshToken, name, role } = response.data;
 
-      // 헤더에서 토큰 꺼내기 (바디에 없을 때)
-      if (!accessToken) {
-        // 헤더 이름은 소문자로 접근해야 함
-        accessToken = response.headers["authorization"]?.replace("Bearer ", "");
-      }
-      if (!refreshToken) {
-        refreshToken = response.headers["refresh-token"];
+      // 액세스 토큰 저장
+      const accessToken = response.headers["authorization"]?.replace("Bearer ", "");
+      if (accessToken) {
+        Cookies.set("accessToken", accessToken, {
+          expires: 1, // 1일 후 만료
+          secure: true,
+          sameSite: "strict", // CSRF 공격 방지
+        });
+
       }
 
-      // Child 역할만 허용
-      if (role !== "Child") {
-        toast.error("어린이 계정으로만 로그인이 가능합니다.");
-        return;
+      // 리프레시 토큰 저장
+      const refreshToken = response.headers["refresh-token"];
+      if (refreshToken) {
+        Cookies.set("refreshToken", refreshToken, {
+          expires: 14, // 14일 후 만료
+          secure: true,
+          sameSite: "strict", // CSRF 공격 방지
+        });
       }
 
-      // 토큰을 localStorage에 저장
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("refreshToken", refreshToken);
+      // 사용자 정보 저장
+      if (response.data) {
+        setUser({
+          name: response.data.name,
+        });
+        console.log("로그인 성공");
+      }
 
-      // 로그인 성공 시 메인 페이지로 이동
-      toast.success("로그인 성공!");
+      // 메인 페이지로 이동
       navigate("/");
     } catch (error: any) {
       console.error("로그인 에러:", error);
@@ -68,11 +75,7 @@ export default function LoginPage() {
 
   return (
     <Background backgroundImage={backgroundImage}>
-      <form
-        onSubmit={handleSubmit}
-        className="flex flex-col items-center"
-        autoComplete="off"
-      >
+      <form onSubmit={handleSubmit} className="flex flex-col items-center" autoComplete="off">
         <h1
           className="text-[4rem] font-extrabold text-[#BBEB4B] text-center mt-6"
           style={{ WebkitTextStroke: "3px #457E9E" }}
@@ -97,16 +100,14 @@ export default function LoginPage() {
           placeholder="비밀번호"
           className="mt-3 rounded-full bg-white px-4 py-3 placeholder-[#48BBD3] font-bold w-80 text-[1.2rem] focus:outline-none focus:ring-0"
         />
+
         <button
           type="submit"
           className="mt-3 rounded-full bg-[#EB864B] px-4 py-3 text-white font-bold w-80 text-[1.2rem] cursor-pointer"
         >
           로그인
         </button>
-        <Link
-          to="/auth/register"
-          className="mt-2 text-white text-center text-[0.8rem] "
-        >
+        <Link to="/auth/register" className="mt-2 text-white text-center text-[0.8rem] ">
           회원가입
         </Link>
         <div className="w-13 h-[1px] bg-white rounded-full" />

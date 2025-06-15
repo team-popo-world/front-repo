@@ -1,18 +1,110 @@
 import { useNavigate } from "react-router-dom";
 import { EmotionDiaryTemplate } from "../../module/emotionDiary/template";
+import { useEffect, useState } from "react";
+import apiClient, { ApiError } from "@/lib/api/axios";
+import type { Diary } from "@/module/emotionDiary/types/diary";
+
+const API_URL = "/api/diary";
 
 export default function EmotionDiaryPage() {
   const navigate = useNavigate();
 
-  const handleClickWrite = () => {
-    navigate("/emotionDiary/write");
+  const [diaryData, setDiaryData] = useState<Diary[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isWrittenToday, setIsWrittenToday] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  // 작성한 일기 목록 조회
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const response = await apiClient.get(API_URL);
+        const data = response.data;
+
+        setDiaryData(data);
+        setIsWrittenToday(isTodayDiaryExists(data));
+        console.log(data);
+      } catch (err: any) {
+        if (err instanceof ApiError) {
+          setError(err.message);
+        } else {
+          setError("알 수 없는 오류 발생");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  // 왼쪽 화살표
+  const handlePrevMonth = () => {
+    const newDate = new Date(currentDate);
+    newDate.setMonth(currentDate.getMonth() - 1);
+    setCurrentDate(newDate);
   };
 
+  // 오른쪽 화살표
+  const handleNextMonth = () => {
+    const newDate = new Date(currentDate);
+    newDate.setMonth(currentDate.getMonth() + 1);
+    setCurrentDate(newDate);
+  };
+
+  // 일기 월별 필터링
+  const filteredDiaryData = diaryData.filter((diary) => {
+    const createdAt = new Date(diary.createdAt);
+    return (
+      createdAt.getFullYear() === currentDate.getFullYear() &&
+      createdAt.getMonth() === currentDate.getMonth()
+    );
+  });
+
+  // 오늘의 일기 작성 유무
+  const isTodayDiaryExists = (diaryList: Diary[]) => {
+    const today = new Date().toISOString().slice(0, 10);
+    return diaryList.some((diary) => diary.createdAt.startsWith(today));
+  };
+
+  // 작성하기 버튼 클릭
+  const handleClickWrite = () => {
+    if (isWrittenToday) {
+      // 오늘의 일기를 작성했다면 모달창 true
+      setIsModalOpen(true);
+    } else {
+      // 일기 작성 페이지
+      navigate("/emotionDiary/write");
+    }
+  };
+
+  // 모달창 닫기
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  // 뒤로가기
   const handleBack = () => {
     navigate("/");
   };
 
   return (
-    <EmotionDiaryTemplate onClickWrite={handleClickWrite} onBack={handleBack} />
+    <div>
+      {!loading && !error && (
+        <EmotionDiaryTemplate
+          onBack={handleBack}
+          diaryData={filteredDiaryData}
+          onClickWrite={handleClickWrite}
+          isModalOpen={isModalOpen}
+          onCloseModal={handleCloseModal}
+          currentDate={currentDate}
+          onPrevMonth={handlePrevMonth}
+          onNextMonth={handleNextMonth}
+        />
+      )}
+    </div>
   );
 }

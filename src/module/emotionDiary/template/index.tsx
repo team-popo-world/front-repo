@@ -1,23 +1,35 @@
 import { Background } from "@/components/layout/Background";
-import { dummyDiaries } from "../dummy/diaryDummy";
 import { DiaryCard } from "../components/DiaryCard";
 import { BackArrow } from "@/components/button/BackArrow";
+import type { Diary } from "../types/diary";
+import { WriteLimitModal } from "../components/writeLimitModal";
 
 interface EmotionDiaryTemplateProps {
   onClickWrite: () => void;
   onBack: () => void;
+  diaryData: Diary[];
+  isModalOpen: boolean;
+  onCloseModal: () => void;
+  currentDate: Date;
+  onPrevMonth: () => void;
+  onNextMonth: () => void;
 }
 
 export const EmotionDiaryTemplate = ({
   onClickWrite,
   onBack,
+  diaryData,
+  isModalOpen,
+  onCloseModal,
+  currentDate,
+  onNextMonth,
+  onPrevMonth,
 }: EmotionDiaryTemplateProps) => {
-  // const formatDateToKorean = (dateStr: string): string => {
-  //   const date = new Date(dateStr);
-  //   const year = date.getFullYear();
-  //   const month = date.getMonth() + 1;
-  //   return `${year}년 ${month}월 `;
-  // };
+  const formatMonth = (date: Date): string => {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    return `${year}년 ${month}월`;
+  };
 
   return (
     <Background backgroundImage="https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749237608/ChatGPT_Image_2025%E1%84%82%E1%85%A7%E1%86%AB_6%E1%84%8B%E1%85%AF%E1%86%AF_7%E1%84%8B%E1%85%B5%E1%86%AF_%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB_04_17_24_1_yzgzkl.webp">
@@ -39,6 +51,7 @@ export const EmotionDiaryTemplate = ({
           src="https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749614463/Polygon_4_bejfpz.webp"
           alt="왼쪽 화살표"
           className="h-[0.8rem] scale-x-[-1] cursor-pointer"
+          onClick={onPrevMonth}
         />
         {/* 월 표시 */}
         <div
@@ -47,31 +60,32 @@ export const EmotionDiaryTemplate = ({
              bg-[#93d088] text-[#fffde7] text-[0.7rem]  rounded-full w-[6rem]
              shadow-md cursor-pointer"
         >
-          2025년 6월
+          {formatMonth(currentDate)}
         </div>
         {/* 오른쪽 화살표 버튼 */}
         <img
           src="https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749614463/Polygon_4_bejfpz.webp"
           alt="오른쪽 화살표"
           className="h-[0.8rem] cursor-pointer"
+          onClick={onNextMonth}
         />
       </div>
 
       {/* 일기 리스트 */}
-      <div className="flex justify-center items-center ml-[1rem] mt-[0.8rem] h-[12.5rem] px-[1rem] ">
+      <div className="flex justify-center items-center ml-[1rem] mt-[0.8rem] h-[12rem] px-[1rem] ">
         <div className=" flex flex-col gap-[0.4rem] w-[27rem]  items-center overflow-scroll h-full px-[0.2rem]">
-          {dummyDiaries.map((diary, index) => (
+          {diaryData.map((diary, index) => (
             <DiaryCard
-              key={diary.emotion_diary_id}
+              key={diary.emotionDiaryId}
               diary={diary}
               order={index + 1}
             />
           ))}
         </div>
       </div>
-      {/* 일기 작성 버튼 */}
 
-      <div className="flex justify-center items-center mt-[0.4rem] ">
+      {/* 일기 작성 버튼 */}
+      <div className="flex justify-center items-center mt-[0.6rem] ">
         <div
           aria-label="오늘의 일기 쓰기"
           className="w-[8rem] px-[1rem] py-[0.4rem] 
@@ -82,6 +96,11 @@ export const EmotionDiaryTemplate = ({
           오늘의 일기 쓰기
         </div>
       </div>
+
+      {/* 작성 제한 모달 */}
+      {isModalOpen && (
+        <WriteLimitModal isOpen={isModalOpen} onClose={onCloseModal} />
+      )}
     </Background>
   );
 };
