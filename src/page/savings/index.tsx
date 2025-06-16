@@ -11,6 +11,7 @@ import { addDays, isAfter, isSameDay } from "date-fns";
 import coinImage from "../../assets/image/common/common_coin.webp";
 import { TextWithStroke } from "../../components/text/TextWithStroke";
 import apiClient from "../../lib/api/axios";
+import { useNavigate } from "react-router-dom";
 
 const IS_TEST_MODE = true;
 
@@ -66,6 +67,11 @@ export default function SavingsPage() {
 
   // 저축 통장 상태 관리
   const [isCreated, setIsCreated] = useState(false); // 저축 통장 개설 여부
+  const [accountData, setAccountData] = useState<any>(null);
+  const [modalType, setModalType] = useState<null | "EXPIRED" | "ACHIEVED">(
+    null
+  );
+  const [showModal, setShowModal] = useState(false);
 
   // 입금 모달 관련 상태
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false); // 입금 모달 열림 상태
@@ -84,6 +90,8 @@ export default function SavingsPage() {
 
   // 보유포인트 상태 추가
   const [point, setPoint] = useState(2000);
+
+  const navigate = useNavigate();
 
   // ===== 유틸 함수 =====
   const resetSavingsAccount = () => {
@@ -181,7 +189,7 @@ export default function SavingsPage() {
   /**
    * 입금 모달에서 입금을 확정하는 함수
    */
-  const handleDepositConfirm = () => {
+  const handleDepositConfirm = async () => {
     if (!IS_TEST_MODE && hasDepositedToday) {
       setDepositError("오늘은 이미 입금하셨습니다.");
       return;
@@ -205,17 +213,31 @@ export default function SavingsPage() {
       setDepositError("보유 포인트가 부족합니다.");
       return;
     }
-    const sum = (Number(currentAmount) || 0) + (Number(depositInput) || 0);
-    setCurrentAmount(String(sum));
-    setPoint(point - Number(depositInput));
-    setIsDepositModalOpen(false);
-    setLastDepositAmount(depositInput);
-    setIsDepositResultModalOpen(true);
-    const todayKey = `savings_deposit_${new Date().toISOString().slice(0, 10)}`;
-    localStorage.setItem(todayKey, "1");
-    setHasDepositedToday(true);
-    if (goalAmount && sum === Number(goalAmount)) {
-      setIsBonusModalOpen(true);
+
+    // ✅ API 연동: PUT /api/saveAccount/dailyDeposit
+    try {
+      const res = await apiClient.put("/api/saveAccount/dailyDeposit", {
+        deposit_point: Number(depositInput),
+        success:
+          goalAmount &&
+          Number(currentAmount) + Number(depositInput) === Number(goalAmount),
+      });
+      const { current_point, account_point } = res.data;
+      setCurrentAmount(String(account_point));
+      setPoint(Number(current_point));
+      setIsDepositModalOpen(false);
+      setLastDepositAmount(depositInput);
+      setIsDepositResultModalOpen(true);
+      const todayKey = `savings_deposit_${new Date()
+        .toISOString()
+        .slice(0, 10)}`;
+      localStorage.setItem(todayKey, "1");
+      setHasDepositedToday(true);
+      if (goalAmount && Number(account_point) === Number(goalAmount)) {
+        setIsBonusModalOpen(true);
+      }
+    } catch (e: any) {
+      setDepositError("입금 처리 중 오류가 발생했습니다.");
     }
   };
 
@@ -267,6 +289,49 @@ export default function SavingsPage() {
       setCurrentAmount("0");
       setIsCreated(true);
     }
+  };
+
+  // 페이지 진입 시 저축통장 상태 조회
+  useEffect(() => {
+    loadSavingAccount();
+  }, []);
+
+  const loadSavingAccount = async () => {
+    try {
+      const response = await apiClient.get("/api/saveAccount");
+      const data = response.data;
+      setAccountData(data);
+      handleAccountStatus(data);
+    } catch (e) {
+      // 에러 시 생성 페이지로
+      navigate("/savings/create");
+    }
+  };
+
+  const handleAccountStatus = (data: any) => {
+    if (data.status === "NONE") {
+      navigate("/savings/create");
+      return;
+    }
+    if (data.status === "ACTIVE") {
+      // 정보만 표시, 모달 없음
+      return;
+    }
+    // EXPIRED, ACHIEVED는 모달 표시 (중복 방지)
+    const modalKey = `modal_seen_${data.status}_${data.created_date}_${data.end_date}`;
+    const hasSeenModal = localStorage.getItem(modalKey);
+    if (!hasSeenModal) {
+      setModalType(data.status);
+      setShowModal(true);
+    }
+  };
+
+  const handleModalConfirm = () => {
+    if (!accountData) return;
+    const modalKey = `modal_seen_${accountData.status}_${accountData.created_date}_${accountData.end_date}`;
+    localStorage.setItem(modalKey, "true");
+    setShowModal(false);
+    navigate("/savings/create");
   };
 
   return (
@@ -897,6 +962,50 @@ export default function SavingsPage() {
             </div>
           </div>
         </>
+      )}
+
+      {/* 만료/달성 모달 */}
+      {showModal && modalType === "EXPIRED" && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-8 shadow-xl flex flex-col items-center w-[20rem] border-8 border-[#BBA14F]">
+            <div className="text-2xl font-bold mb-4 text-[#BBA14F]">만료</div>
+            <div className="text-lg text-[#573924] mb-4">
+              저축 기간이 만료되어 <br />
+              <span className="font-extrabold text-[#BBA14F]">
+                {accountData?.returnedPoints ?? 0}냥
+              </span>
+              이 반환되었습니다.
+            </div>
+            <button
+              className="bg-[#BBA14F] text-white font-bold rounded-xl px-6 py-2 mt-2 transition"
+              onClick={handleModalConfirm}
+            >
+              확인
+            </button>
+          </div>
+        </div>
+      )}
+      {showModal && modalType === "ACHIEVED" && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-8 shadow-xl flex flex-col items-center w-[20rem] border-8 border-[#BBA14F]">
+            <div className="text-2xl font-bold mb-4 text-[#78CA7F]">
+              축하합니다!
+            </div>
+            <div className="text-lg text-[#573924] mb-4">
+              목표를 달성해서 <br />
+              <span className="font-extrabold text-[#78CA7F]">
+                {accountData?.returnedPoints ?? 0}냥
+              </span>
+              을 받았습니다!
+            </div>
+            <button
+              className="bg-[#78CA7F] text-white font-bold rounded-xl px-6 py-2 mt-2 transition"
+              onClick={handleModalConfirm}
+            >
+              확인
+            </button>
+          </div>
+        </div>
       )}
     </>
   );
