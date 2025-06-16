@@ -12,7 +12,7 @@ import Cookies from "js-cookie";
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
   const navigate = useNavigate();
-  const { setUser } = useAuthStore();
+  const { login, setAccessToken } = useAuthStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,17 +28,14 @@ export default function LoginPage() {
 
     try {
       const response = await apiClient.post("/auth/login", form);
-      console.log("응답 헤더:", JSON.stringify(response.headers, null, 2));
+      console.log(response.data);
 
 
       // 액세스 토큰 저장
       const accessToken = response.headers["authorization"]?.replace("Bearer ", "");
       if (accessToken) {
-        Cookies.set("accessToken", accessToken, {
-          expires: 1, // 1일 후 만료
-          secure: true,
-          sameSite: "strict", // CSRF 공격 방지
-        });
+
+        setAccessToken(accessToken);
 
       }
 
@@ -54,9 +51,7 @@ export default function LoginPage() {
 
       // 사용자 정보 저장
       if (response.data) {
-        setUser({
-          name: response.data.name,
-        });
+        login(response.data.name, response.data.point);
         console.log("로그인 성공");
       }
 

@@ -5,6 +5,7 @@ import { InventorySpeechBubble, SpeechBubble } from "../components/SpeechBubble"
 import { InventoryDarkWoodTitle } from "../components/WoodTitle";
 import { Modal } from "@/components/modal/Modal";
 import { InventoryModal } from "../components/InventoryModal";
+import NameAndPoint from "@/components/user/NameAndPoint";
 
 interface InventoryTemplateProps {
   isOpen: boolean;
@@ -32,6 +33,7 @@ export const InventoryTemplate = ({
   return (
     <Background backgroundImage={IMAGE_URLS.market.inventory_bg}>
       <BackArrow onClick={handleBack} />
+      <NameAndPoint />
       <InventoryDarkWoodTitle title="창고" />
       <InventorySpeechBubble
         text={currentMessage.text}

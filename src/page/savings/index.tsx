@@ -8,11 +8,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import { BackArrow } from "../../components/button/BackArrow";
 import { ko } from "date-fns/locale";
 import { addDays, isAfter, isSameDay } from "date-fns";
-import coinImage from "../../assets/image/common/common_coin.webp";
 import { TextWithStroke } from "../../components/text/TextWithStroke";
 import apiClient from "../../lib/api/axios";
+import { useAuthStore } from "@/lib/zustand/store";
+import { IMAGE_URLS } from "@/lib/constants/constants";
 
-const IS_TEST_MODE = true;
+const IS_TEST_MODE = false;
 
 // 상수 선언
 const MAX_DEPOSIT_RATE = 0.2; // 20%
@@ -83,7 +84,7 @@ export default function SavingsPage() {
   const today = new Date();
 
   // 보유포인트 상태 추가
-  const [point, setPoint] = useState(2000);
+  const { point } = useAuthStore();
 
   // ===== 유틸 함수 =====
   const resetSavingsAccount = () => {
@@ -98,7 +99,6 @@ export default function SavingsPage() {
     setOpenInput(null);
     setInputValue("");
   };
-  const rewardPoint = (amount: number) => setPoint((prev) => prev + amount);
 
   // ========== 이벤트 핸들러 함수들 ==========
 
@@ -172,10 +172,6 @@ export default function SavingsPage() {
         return;
       }
     }
-    if (Number(value) > point) {
-      setDepositError("보유 포인트가 부족합니다.");
-      return;
-    }
   };
 
   /**
@@ -201,10 +197,6 @@ export default function SavingsPage() {
         return;
       }
     }
-    if (Number(depositInput) > point) {
-      setDepositError("보유 포인트가 부족합니다.");
-      return;
-    }
 
     try {
       // 서버에 입금 요청
@@ -217,7 +209,6 @@ export default function SavingsPage() {
       const data = response.data;
       // 서버 응답값으로 상태 갱신
       setCurrentAmount(String(data.accountPoint)); // accountPoint가 현재 저축통장 금액
-      setPoint(Number(data.currentPoint)); // currentPoint가 보유 포인트
       setIsDepositModalOpen(false);
       setLastDepositAmount(depositInput);
       setIsDepositResultModalOpen(true);
@@ -253,11 +244,7 @@ export default function SavingsPage() {
       const current = Number(currentAmount);
       const bonus = Number(bonusAmount);
       if (now >= end) {
-        if (goal && current >= goal) {
-          rewardPoint(current + bonus);
-        } else if (current > 0) {
-          rewardPoint(current);
-        }
+        // 목표 달성 시 보너스 지급 등은 서버에서 처리
         resetSavingsAccount();
       }
     }
@@ -426,6 +413,12 @@ export default function SavingsPage() {
         .react-datepicker__day--outside-month {
           opacity: 0.4 !important; /* 투명도 조정, 필요시 값 변경 */
         }
+
+        .react-datepicker__day--disabled {
+          color: #ccc;
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
       
 }
         
@@ -434,16 +427,16 @@ export default function SavingsPage() {
 
       {/* 메인 컨테이너 */}
       <Background backgroundImage={background_img}>
-        {/* 오른쪽 상단 총 금액 표시 */}
+        {/* 오른쪽 상단 총 금액 표시 (실제 포인트) */}
         <div className="absolute top-3 right-1 w-23 min-h-0 flex flex-wrap active:scale-95 transition-all duration-100 z-50">
           <div className="relative w-5.5 h-5.5 left-4 inline-flex items-center gap-0.5">
             <img
-              src={coinImage}
+              src={IMAGE_URLS.common.coin}
               alt="코인"
               className="w-full h-full object-contain"
             />
             <TextWithStroke
-              text={`${point}냥`}
+              text={`${point ?? 0}냥`}
               className="whitespace-nowrap"
               textClassName="text-main-yellow-800 text-[0.7rem]"
               strokeClassName="text-main-brown-800 text-[0.7rem] text-stroke-width-[0.12rem] text-stroke-color-main-brown-800"
@@ -876,7 +869,6 @@ export default function SavingsPage() {
               <button
                 className="cursor-pointer bg-[#BBA14F] text-white font-bold rounded-xl px-6 py-2 mt-2 transition"
                 onClick={() => {
-                  rewardPoint(Number(currentAmount) + Number(bonusAmount));
                   setIsBonusModalOpen(false);
                   resetSavingsAccount();
                 }}

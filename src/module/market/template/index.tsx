@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Poni } from "../components/Poni";
 import { BackArrow } from "@/components/button/BackArrow";
 import { IMAGE_URLS } from "@/lib/constants/constants";
+import NameAndPoint from "@/components/user/NameAndPoint";
 
 // 포니 초기 위치
 const INITIAL_POSITION = {
@@ -34,6 +35,7 @@ export const MarketTemplate = ({
     <Background backgroundImage={IMAGE_URLS.market.bg}>
       {/* 뒤로가기키 */}
       <BackArrow onClick={handleBack} />
+      <NameAndPoint />
       {/* 처음 페이지 방문했을때 포니 배타고 오는것 */}
       {isAnimating && (
         <Poni

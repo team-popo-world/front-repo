@@ -55,7 +55,7 @@ export default function QuestDetail() {
         );
 
         const data = await response.data;
-        const mapped = data.map((item: any) => ({
+        const mapped = data.quests.map((item: any) => ({
           ...item,
           state: questStateMap[item.state],
         }));

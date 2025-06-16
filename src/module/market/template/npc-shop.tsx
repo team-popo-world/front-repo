@@ -6,6 +6,7 @@ import { SpeechBubble } from "../components/SpeechBubble";
 import coin from "@/assets/image/common/common_coin.webp";
 import { Modal } from "@/components/modal/Modal";
 import { PurchaseModal } from "../components/PurchaseModal";
+import NameAndPoint from "@/components/user/NameAndPoint";
 
 interface NpcShopTemplateProps {
   isOpen: boolean;
@@ -43,6 +44,7 @@ export const NpcShopTemplate = ({
         />
       </Modal>
       <BackArrow onClick={handleBack} />
+      <NameAndPoint />
       <WoodTitle title="NPC 상점" />
       <SpeechBubble
         text={currentMessage.text}

@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../../styles/toast.css";
 import { toast } from "react-toastify";
+import { BackArrow } from "../../../components/button/BackArrow";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -114,6 +115,7 @@ export default function RegisterPage() {
 
   return (
     <Background backgroundImage={backgroundImage}>
+      <BackArrow />
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <h1
           className="text-[3rem] font-extrabold text-[#BBEB4B] text-center mt-3"
