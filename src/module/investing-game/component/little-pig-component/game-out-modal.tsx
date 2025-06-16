@@ -1,7 +1,6 @@
 // src/module/investing-game/component/little-pig-component/game-out-modal.tsx
-import sirenPig from "@/assets/image/investing-game/little_pig/little_siren_pig.webp";
-import closePig from "@/assets/image/investing-game/little_pig/little_pig_close.webp";
 import { memo } from "react";
+import { IMAGE_URLS } from "@/lib/constants/constants";
 
 interface GameOutModalProps {
   onConfirm: () => void;
@@ -29,8 +28,16 @@ export const GameOutModal = memo(({ onConfirm, onCancel }: GameOutModalProps) =>
         </button>
       </div>
 
-      <img src={closePig} alt="닫기 돼지" className="absolute -top-4 -left-5 min-w-0 h-15 object-contain" />
-      <img src={sirenPig} alt="사이렌 돼지" className="absolute -bottom-6 -right-4 min-w-0 h-16 object-contain" />
+      <img
+        src={IMAGE_URLS.investing_game.little_pig.little_pig_close}
+        alt="닫기 돼지"
+        className="absolute -top-4 -left-5 min-w-0 h-15 object-contain"
+      />
+      <img
+        src={IMAGE_URLS.investing_game.little_pig.little_siren_pig}
+        alt="사이렌 돼지"
+        className="absolute -bottom-6 -right-4 min-w-0 h-16 object-contain"
+      />
     </div>
   );
 });

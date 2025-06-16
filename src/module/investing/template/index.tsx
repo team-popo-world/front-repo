@@ -14,6 +14,7 @@ interface InvestingTemplateProps {
   point: number | null;
 }
 
+
 export const InvestingTemplate = ({
   onBack,
   animation,
@@ -96,7 +97,9 @@ export const InvestingTemplate = ({
         textClassName="text-main-yellow-150 text-[1.3rem]"
         strokeClassName="text-investing-blue-100 text-[1.3rem] text-stroke-width-[0.6rem] text-stroke-color-main-brown-800"
       />
+
       <Info price="2000냥" className="absolute right-[4rem] bottom-[1rem]" />
+
 
       {/* 챕터 클릭 포지션 */}
       <div
