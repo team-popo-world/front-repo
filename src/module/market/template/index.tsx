@@ -23,6 +23,9 @@ interface MarketTemplateProps {
   direction: "right" | "left";
   handleBack: () => void;
   handleAnimationComplete: () => void;
+  preloadNpcShop: () => void;
+  preloadInventory: () => void;
+  preloadParentShop: () => void;
 }
 
 export const MarketTemplate = ({
@@ -30,6 +33,9 @@ export const MarketTemplate = ({
   direction,
   handleBack,
   handleAnimationComplete,
+  preloadNpcShop,
+  preloadInventory,
+  preloadParentShop,
 }: MarketTemplateProps) => {
   return (
     <Background backgroundImage={IMAGE_URLS.market.bg}>
@@ -54,7 +60,7 @@ export const MarketTemplate = ({
       </div>
 
       {/* npc 상점 */}
-      <Link to="/market/npc">
+      <Link to="/market/npc" onClick={preloadNpcShop}>
         <div className="flex flex-col items-center justify-center absolute top-28 left-48 active:scale-95 transition-all duration-100">
           <img src={IMAGE_URLS.market.npc_shop} alt="npc_shop" className="w-32 h-32 object-contain" />
           <div className="px-4 text-[0.6rem] py-[2px] -ml-5 -mt-0.5 font-bold text-[#5C3600] bg-[#F6D8B8] border md:border-3 border-[#97774A] rounded-lg ">
@@ -63,7 +69,7 @@ export const MarketTemplate = ({
         </div>
       </Link>
       {/* 포포 창고 */}
-      <Link to="/market/inventory">
+      <Link to="/market/inventory" onClick={preloadInventory}>
         <div className="flex flex-col items-center justify-center absolute top-74 left-86 active:scale-95 transition-all duration-100">
           <img src={IMAGE_URLS.market.inventory} alt="inventory" className="w-24 h-24 object-contain " />
           <div className="px-5 text-[0.6rem] py-[2px] -mt-0.5 font-bold text-[#5C3600] bg-[#F6D8B8] border md:border-3 border-[#97784A] rounded-lg ">
@@ -72,7 +78,7 @@ export const MarketTemplate = ({
         </div>
       </Link>
       {/* 부모님 상점 */}
-      <Link to="/market/parent">
+      <Link to="/market/parent" onClick={preloadParentShop}>
         <div className="flex flex-col items-center justify-center absolute top-45 left-105 active:scale-95 transition-all duration-100">
           <img src={IMAGE_URLS.market.parent_shop} alt="parent_shop" className="w-24 h-24 object-contain" />
           <div className="px-4 text-[0.6rem] py-[2px] -mt-0.5 font-bold text-[#5C3600] bg-[#F6D8B8] border md:border-3 border-[#97784A] rounded-lg ">

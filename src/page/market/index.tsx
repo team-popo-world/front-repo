@@ -1,8 +1,21 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MarketTemplate } from "../../module/market/template";
-
+import { preload } from "react-dom";
+import { IMAGE_URLS } from "@/lib/constants/constants";
 export default function MarketPage() {
+  const marketPageImages = [
+    IMAGE_URLS.market.bg,
+    IMAGE_URLS.market.popo,
+    IMAGE_URLS.market.npc_shop,
+    IMAGE_URLS.market.inventory,
+    IMAGE_URLS.market.parent_shop,
+  ];
+
+  marketPageImages.forEach((image) => {
+    preload(image, { as: "image" });
+  });
+
   const { state } = useLocation();
   const from = state?.from;
   const [isAnimating, setIsAnimating] = useState(false);
@@ -35,6 +48,53 @@ export default function MarketPage() {
       setIsAnimating(false);
       navigate("/");
     }
+    const inventoryPageImages = [
+      IMAGE_URLS.market.inventory_bg,
+      IMAGE_URLS.market.parent_shop_bg,
+      IMAGE_URLS.market.npc_shop_bg,
+      IMAGE_URLS.market.wood_title_parent,
+      IMAGE_URLS.market.wood_title,
+      ...Object.values(IMAGE_URLS.items),
+    ];
+    inventoryPageImages.forEach((image) => {
+      preload(image, { as: "image" });
+    });
+  };
+
+  const preloadNpcShop = () => {
+    const npcShopPageImages = [
+      IMAGE_URLS.market.npc_shop_bg,
+      IMAGE_URLS.market.wood_title_parent,
+      IMAGE_URLS.market.wood_title,
+      ...Object.values(IMAGE_URLS.items),
+    ];
+    npcShopPageImages.forEach((image) => {
+      preload(image, { as: "image" });
+    });
+  };
+
+  const preloadInventory = () => {
+    const inventoryPageImages = [
+      IMAGE_URLS.market.inventory_bg,
+      IMAGE_URLS.market.wood_title_parent,
+      IMAGE_URLS.market.wood_title,
+      ...Object.values(IMAGE_URLS.items),
+    ];
+    inventoryPageImages.forEach((image) => {
+      preload(image, { as: "image" });
+    });
+  };
+
+  const preloadParentShop = () => {
+    const parentShopPageImages = [
+      IMAGE_URLS.market.parent_shop_bg,
+      IMAGE_URLS.market.wood_title_parent,
+      IMAGE_URLS.market.wood_title,
+      ...Object.values(IMAGE_URLS.items),
+    ];
+    parentShopPageImages.forEach((image) => {
+      preload(image, { as: "image" });
+    });
   };
 
   return (
@@ -43,6 +103,9 @@ export default function MarketPage() {
       direction={direction}
       handleBack={handleBack}
       handleAnimationComplete={handleAnimationComplete}
+      preloadNpcShop={preloadNpcShop}
+      preloadInventory={preloadInventory}
+      preloadParentShop={preloadParentShop}
     />
   );
 }
