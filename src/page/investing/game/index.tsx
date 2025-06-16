@@ -88,7 +88,7 @@ const INITIAL_GAME_STATE: GameState = {
 };
 
 const CHAPTER_ID = {
-  little_pig: "1111",
+  "little-pig": "1111",
   truck: "2222",
   ninja: "3333",
   masic: "4444",
@@ -116,7 +116,7 @@ export default function InvestingGame() {
     if (gameStage === "game-play") {
       const fetchChapterData = async () => {
         const result = await getChapterData(CHAPTER_ID[gametype as keyof typeof CHAPTER_ID]);
-
+        console.log(result);
         if (result.success && result.data) {
           const data = result.data;
           const sessionId = data.sessionId; // 게임 세션 id 추출
@@ -132,7 +132,7 @@ export default function InvestingGame() {
             price: story[0].stocks.map((stock: Stock) => stock.current_value), // 첫번째 시나리오의 주식 가격 저장
             nextPrice: story[1].stocks.map((stock: Stock) => stock.current_value), // 다음 턴 주식 가격 저장
             turnMax: story.length, // 게임 시나리오 길이 저장
-            news_tag: story[0].newtag, // 뭔지 모르겠음
+            news_tag: story[0].news_tag, // 뭔지 모르겠음
           }));
 
           const nowKST = getKSTDateTime();
