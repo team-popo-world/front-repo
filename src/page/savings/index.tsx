@@ -11,7 +11,6 @@ import { addDays, isAfter, isSameDay } from "date-fns";
 import coinImage from "../../assets/image/common/common_coin.webp";
 import { TextWithStroke } from "../../components/text/TextWithStroke";
 import apiClient from "../../lib/api/axios";
-import { useNavigate } from "react-router-dom";
 
 const IS_TEST_MODE = true;
 
@@ -67,11 +66,6 @@ export default function SavingsPage() {
 
   // 저축 통장 상태 관리
   const [isCreated, setIsCreated] = useState(false); // 저축 통장 개설 여부
-  const [accountData, setAccountData] = useState<any>(null);
-  const [modalType, setModalType] = useState<null | "EXPIRED" | "ACHIEVED">(
-    null
-  );
-  const [showModal, setShowModal] = useState(false);
 
   // 입금 모달 관련 상태
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false); // 입금 모달 열림 상태
@@ -90,8 +84,6 @@ export default function SavingsPage() {
 
   // 보유포인트 상태 추가
   const [point, setPoint] = useState(2000);
-
-  const navigate = useNavigate();
 
   // ===== 유틸 함수 =====
   const resetSavingsAccount = () => {
@@ -214,17 +206,18 @@ export default function SavingsPage() {
       return;
     }
 
-    // ✅ API 연동: PUT /api/saveAccount/dailyDeposit
     try {
-      const res = await apiClient.put("/api/saveAccount/dailyDeposit", {
-        deposit_point: Number(depositInput),
+      // 서버에 입금 요청
+      const response = await apiClient.put("/api/saveAccount/dailyDeposit", {
+        depositPoint: Number(depositInput),
+        // success는 프론트에서 계산 후 전달(목표 달성 시 true)
         success:
-          goalAmount &&
-          Number(currentAmount) + Number(depositInput) === Number(goalAmount),
+          Number(currentAmount) + Number(depositInput) >= Number(goalAmount),
       });
-      const { current_point, account_point } = res.data;
-      setCurrentAmount(String(account_point));
-      setPoint(Number(current_point));
+      const data = response.data;
+      // 서버 응답값으로 상태 갱신
+      setCurrentAmount(String(data.accountPoint)); // accountPoint가 현재 저축통장 금액
+      setPoint(Number(data.currentPoint)); // currentPoint가 보유 포인트
       setIsDepositModalOpen(false);
       setLastDepositAmount(depositInput);
       setIsDepositResultModalOpen(true);
@@ -233,11 +226,21 @@ export default function SavingsPage() {
         .slice(0, 10)}`;
       localStorage.setItem(todayKey, "1");
       setHasDepositedToday(true);
-      if (goalAmount && Number(account_point) === Number(goalAmount)) {
+      // 목표 달성 시 보너스 모달
+      if (Number(currentAmount) + Number(depositInput) >= Number(goalAmount)) {
         setIsBonusModalOpen(true);
       }
-    } catch (e: any) {
-      setDepositError("입금 처리 중 오류가 발생했습니다.");
+    } catch (error: any) {
+      // 서버에서 에러 메시지 반환 시 처리
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.currentPoint
+      ) {
+        setDepositError(error.response.data.currentPoint);
+      } else {
+        setDepositError("입금 중 오류가 발생했습니다.");
+      }
     }
   };
 
@@ -291,48 +294,46 @@ export default function SavingsPage() {
     }
   };
 
-  // 페이지 진입 시 저축통장 상태 조회
-  useEffect(() => {
-    loadSavingAccount();
-  }, []);
-
-  const loadSavingAccount = async () => {
+  // 계좌 정보 불러오는 함수 추가
+  async function fetchAccountInfo() {
     try {
       const response = await apiClient.get("/api/saveAccount");
       const data = response.data;
-      setAccountData(data);
-      handleAccountStatus(data);
+      // status가 ACTIVE이고, createdDate 등 주요 필드가 null이 아니면 활성화된 계좌로 간주
+      if (
+        data &&
+        data.status === "ACTIVE" &&
+        data.createdDate &&
+        data.endDate
+      ) {
+        setIsCreated(true);
+        setGoalAmount(String(data.goalAmount));
+        setCurrentAmount(String(data.accountPoint)); // accountPoint가 현재 저축통장 금액
+        setStartDate(data.createdDate ? new Date(data.createdDate) : null);
+        setEndDate(data.endDate ? new Date(data.endDate) : null);
+        setBonusAmount(""); // 필요시 보너스 금액 세팅
+      } else {
+        setIsCreated(false);
+        setGoalAmount("");
+        setCurrentAmount("");
+        setStartDate(null);
+        setEndDate(null);
+        setBonusAmount("");
+      }
     } catch (e) {
-      // 에러 시 생성 페이지로
-      navigate("/savings/create");
+      setIsCreated(false);
+      setGoalAmount("");
+      setCurrentAmount("");
+      setStartDate(null);
+      setEndDate(null);
+      setBonusAmount("");
     }
-  };
+  }
 
-  const handleAccountStatus = (data: any) => {
-    if (data.status === "NONE") {
-      navigate("/savings/create");
-      return;
-    }
-    if (data.status === "ACTIVE") {
-      // 정보만 표시, 모달 없음
-      return;
-    }
-    // EXPIRED, ACHIEVED는 모달 표시 (중복 방지)
-    const modalKey = `modal_seen_${data.status}_${data.created_date}_${data.end_date}`;
-    const hasSeenModal = localStorage.getItem(modalKey);
-    if (!hasSeenModal) {
-      setModalType(data.status);
-      setShowModal(true);
-    }
-  };
-
-  const handleModalConfirm = () => {
-    if (!accountData) return;
-    const modalKey = `modal_seen_${accountData.status}_${accountData.created_date}_${accountData.end_date}`;
-    localStorage.setItem(modalKey, "true");
-    setShowModal(false);
-    navigate("/savings/create");
-  };
+  // 페이지 진입 시 계좌 정보 조회
+  useEffect(() => {
+    fetchAccountInfo();
+  }, []);
 
   return (
     <>
@@ -661,19 +662,28 @@ export default function SavingsPage() {
             <img src={character_img} alt="character" className="w-65" />
 
             {/* 메인 액션 버튼 (통장 개설 또는 입금하기) */}
-            <button
-              className="bg-[#FDF0B7] text-[#573924] font-bold text-[1.2rem] rounded-4xl py-3 w-45 cursor-pointer disabled:opacity-60"
-              onClick={handleCreateAccount}
-              disabled={
-                isLoading ||
-                !goalAmount ||
-                !startDate ||
-                !endDate ||
-                !bonusAmount
-              }
-            >
-              {isLoading ? "개설 중..." : "저축 통장 개설"}
-            </button>
+            {isCreated ? (
+              <button
+                className="bg-[#FDF0B7] text-[#573924] font-bold text-[1.2rem] rounded-4xl py-3 w-45 cursor-pointer disabled:opacity-60"
+                onClick={handleDepositClick}
+              >
+                입금하기
+              </button>
+            ) : (
+              <button
+                className="bg-[#FDF0B7] text-[#573924] font-bold text-[1.2rem] rounded-4xl py-3 w-45 cursor-pointer disabled:opacity-60"
+                onClick={handleCreateAccount}
+                disabled={
+                  isLoading ||
+                  !goalAmount ||
+                  !startDate ||
+                  !endDate ||
+                  !bonusAmount
+                }
+              >
+                {isLoading ? "개설 중..." : "저축 통장 개설"}
+              </button>
+            )}
           </div>
         </div>
       </Background>
@@ -962,50 +972,6 @@ export default function SavingsPage() {
             </div>
           </div>
         </>
-      )}
-
-      {/* 만료/달성 모달 */}
-      {showModal && modalType === "EXPIRED" && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-8 shadow-xl flex flex-col items-center w-[20rem] border-8 border-[#BBA14F]">
-            <div className="text-2xl font-bold mb-4 text-[#BBA14F]">만료</div>
-            <div className="text-lg text-[#573924] mb-4">
-              저축 기간이 만료되어 <br />
-              <span className="font-extrabold text-[#BBA14F]">
-                {accountData?.returnedPoints ?? 0}냥
-              </span>
-              이 반환되었습니다.
-            </div>
-            <button
-              className="bg-[#BBA14F] text-white font-bold rounded-xl px-6 py-2 mt-2 transition"
-              onClick={handleModalConfirm}
-            >
-              확인
-            </button>
-          </div>
-        </div>
-      )}
-      {showModal && modalType === "ACHIEVED" && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-white rounded-2xl p-8 shadow-xl flex flex-col items-center w-[20rem] border-8 border-[#BBA14F]">
-            <div className="text-2xl font-bold mb-4 text-[#78CA7F]">
-              축하합니다!
-            </div>
-            <div className="text-lg text-[#573924] mb-4">
-              목표를 달성해서 <br />
-              <span className="font-extrabold text-[#78CA7F]">
-                {accountData?.returnedPoints ?? 0}냥
-              </span>
-              을 받았습니다!
-            </div>
-            <button
-              className="bg-[#78CA7F] text-white font-bold rounded-xl px-6 py-2 mt-2 transition"
-              onClick={handleModalConfirm}
-            >
-              확인
-            </button>
-          </div>
-        </div>
       )}
     </>
   );
