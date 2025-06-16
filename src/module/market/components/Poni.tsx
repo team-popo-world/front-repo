@@ -16,18 +16,12 @@ interface PoniProps {
   onAnimationComplete: () => void;
 }
 
-export const Poni = ({
-  initialPosition,
-  isAnimating,
-  targetPosition,
-  direction = "left",
-  onAnimationComplete,
-}: PoniProps) => {
+export const Poni = ({ initialPosition, targetPosition, direction = "left", onAnimationComplete }: PoniProps) => {
   return (
     <motion.div
       className="absolute w-20 h-20"
       initial={initialPosition}
-      animate={isAnimating ? targetPosition : { top: "8rem", left: "14rem" }}
+      animate={targetPosition}
       transition={{
         duration: 1.5,
         ease: [0.4, 0, 0.2, 1],
