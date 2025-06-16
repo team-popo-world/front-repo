@@ -87,6 +87,13 @@ const INITIAL_GAME_STATE: GameState = {
   news_tag: "",
 };
 
+const CHAPTER_ID = {
+  little_pig: "1111",
+  truck: "2222",
+  ninja: "3333",
+  masic: "4444",
+};
+
 export default function InvestingGame() {
   // 동적 파라미터useParams 가 없으면 빈 문자열로 초기화
   const { gametype = "" } = useParams() || {};
@@ -108,7 +115,7 @@ export default function InvestingGame() {
   useEffect(() => {
     if (gameStage === "game-play") {
       const fetchChapterData = async () => {
-        const result = await getChapterData("1111");
+        const result = await getChapterData(CHAPTER_ID[gametype as keyof typeof CHAPTER_ID]);
 
         if (result.success && result.data) {
           const data = result.data;
@@ -187,12 +194,12 @@ export default function InvestingGame() {
 
     // 턴 끝남
     // 만약 게임이 끝났다면 게임 종료 처리
-    if (gameState.turn >= gameState.turnMax) {
+    if (gameState.turn >= gameState.turnMax - 1) {
       const lastPoint =
         gameState.point + gameState.price.reduce((acc, curr, index) => acc + curr * gameState.count[index], 0);
       updateGameState({ isGameOver: true });
       // 게임 결과 페이지로 이동
-      navigate(`/investing/game/little-pig?stage=game-end`);
+      navigate(`/investing/game/${gametype}?stage=game-end`);
       endGame(sessionId, "1111", true, lastPoint - INITIAL_POINT);
       return;
     }
@@ -269,8 +276,16 @@ export default function InvestingGame() {
       const lastPoint =
         gameState.point + gameState.price.reduce((acc, curr, index) => acc + curr * gameState.count[index], 0);
       const initialPoint = INITIAL_POINT;
+      const stockNames = gameState.currentScenario?.stocks.map((stock) => stock.name);
       return (
-        <GameEndTemplate gameType={gametype} lastPoint={lastPoint} initialPoint={initialPoint} sessionId={sessionId} />
+        <GameEndTemplate
+          gameType={gametype}
+          lastPoint={lastPoint}
+          initialPoint={initialPoint}
+          sessionId={sessionId}
+          stockNames={stockNames || []}
+          scenario={gameState.scenario}
+        />
       );
     default:
       return null;

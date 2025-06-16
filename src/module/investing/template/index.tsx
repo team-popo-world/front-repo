@@ -6,21 +6,14 @@ interface InvestingTemplateProps {
   onClickChapter?: (chapter: string) => void;
 }
 
-export const InvestingTemplate = ({
-  onClickChapter,
-}: InvestingTemplateProps) => {
+export const InvestingTemplate = ({ onClickChapter }: InvestingTemplateProps) => {
   return (
     // 백그라운드 이미지
     <Background
-      backgroundImage={
-        "https://res.cloudinary.com/dgmbxvpv9/image/upload/v1748949363/investing_map_page.webp"
-      }
+      backgroundImage={"https://res.cloudinary.com/dgmbxvpv9/image/upload/v1748949363/investing_map_page.webp"}
     >
       {/* 모의투자 제목 + 보유 코인 div */}
-      <div
-        aria-label="페이지 제목과 보유 코인 정보 섹션"
-        className="flex flex-col justify-center items-center mt-7"
-      >
+      <div aria-label="페이지 제목과 보유 코인 정보 섹션" className="flex flex-col justify-center items-center mt-7">
         {/* 모의투자 제목 */}
         <div aria-label="페이지 제목: 모의투자">
           <TextWithStroke
@@ -84,10 +77,7 @@ export const InvestingTemplate = ({
         textClassName="text-main-yellow-150 text-[1.3rem]"
         strokeClassName="text-investing-blue-100 text-[1.3rem] text-stroke-width-[0.6rem] text-stroke-color-main-brown-800"
       />
-      <Info
-        price="2000냥"
-        className="absolute right-[4.9rem] bottom-[1.45rem]"
-      />
+      <Info price="2000냥" className="absolute right-[4.9rem] bottom-[1.45rem]" />
 
       {/* 챕터 클릭 포지션 */}
       <div
@@ -98,17 +88,17 @@ export const InvestingTemplate = ({
       <div
         aria-label="푸드트럭 왕국"
         className="w-[12.1rem] h-[12rem] absolute right-[1.5rem] top-[1.9rem] cursor-pointer"
-        onClick={() => onClickChapter?.("chapter2")}
+        onClick={() => onClickChapter?.("truck")}
       ></div>
       <div
         aria-label="마법 왕국"
         className="w-[12.1rem] h-[12rem] absolute left-[1.5rem] top-[14.1rem] cursor-pointer"
-        onClick={() => onClickChapter?.("chapter3")}
+        onClick={() => onClickChapter?.("masic")}
       ></div>
       <div
         aria-label="달빛 도둑"
         className="w-[12.1rem] h-[12rem] absolute right-[1.5rem] top-[14.1rem] cursor-pointer"
-        onClick={() => onClickChapter?.("chapter4")}
+        onClick={() => onClickChapter?.("ninja")}
       ></div>
     </Background>
   );
