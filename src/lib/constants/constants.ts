@@ -110,6 +110,10 @@ const IMAGE_URLS = {
     masic_popo:
       "https://res.cloudinary.com/djmcg7zgu/image/upload/v1749515991/masic_popo_sgclsk",
   },
+  investing: {
+    bg: "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1750022907/investing-bg_pvefqn",
+    poni: "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1750024423/investing-poni_zrfrbe",
+  },
 };
 
 export { BACKGROUND_SIZE, INVESTING_GAME_INITIAL_POINT, IMAGE_URLS };
