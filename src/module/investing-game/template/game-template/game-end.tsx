@@ -98,7 +98,7 @@ export const GameEnd = ({
       // y(d)는 scaleLinear()로 변환된 결과이므로 실제 픽셀 좌표 MoveTo (M) 명령어, Horizontal Line To (H) 명령어
       .attr("d", (d) => `M0,${y(d)}H${width}`) // attr()로는 주로 SVG 속성들을 설정
       .attr("stroke", "#7b5025") // --color-main-brown-575
-      .attr("stroke-dasharray", (d, i) => {
+      .attr("stroke-dasharray", (_d, i) => {
         return i !== 0 ? "5,5" : "0,0";
       }) // 5px 선, 5px 공백
       .attr("stroke-width", 1);
@@ -109,8 +109,8 @@ export const GameEnd = ({
     xGridLines
       .append("path")
       .attr("d", (d) => `M${x(d)},0V${height}`)
-      .attr("stroke", (d, i) => (i === 0 ? "#7b5025" : "none")) // 첫번째 그리고 나머지는 그리지 않음
-      .attr("stroke-dasharray", (d, i) => {
+      .attr("stroke", (_d, i) => (i === 0 ? "#7b5025" : "none")) // 첫번째 그리고 나머지는 그리지 않음
+      .attr("stroke-dasharray", (_d, i) => {
         return i !== 0 ? "5,5" : "0,0";
       }) // 5px 선, 5px 공백
       .attr("stroke-width", 1);
@@ -128,7 +128,7 @@ export const GameEnd = ({
       .append("g") // g그룹에 추가
       .attr("class", "tick") // tick 클래스 추가
       .attr("transform", (d) => `translate(${x(d)},0)`) // 좌표 이동
-      .each(function (d) {
+      .each(function (_d) {
         const roughLine = rc.line(0, 0, 0, 6, {
           roughness: 1,
           stroke: "#7b5025", // --color-main-brown-575
@@ -164,7 +164,7 @@ export const GameEnd = ({
       .append("g")
       .attr("class", "tick")
       .attr("transform", (d) => `translate(0,${y(d)})`)
-      .each(function (d) {
+      .each(function (_d) {
         const roughLine = rc.line(0, 0, -6, 0, {
           roughness: 1,
           stroke: "#8B4513",

@@ -2,7 +2,7 @@ import { QuestDetailTemplate } from "@/module/quest/template/QuestDetailTemplate
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type { Quest } from "@/module/quest/types/quest";
-import apiClient, { ApiError } from "@/lib/api/axios";
+import apiClient, { ApiError as _ApiError } from "@/lib/api/axios";
 
 const questStateMap: Record<string, Quest["state"]> = {
   PENDING_ACCEPT: "수락하기",

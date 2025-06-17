@@ -1,6 +1,6 @@
 import { Background } from "../../../components/layout/Background";
 import backgroundImage from "../../../assets/image/register/register_background.png";
-import { Link, useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import { useState } from "react";
 import apiClient from "../../../lib/api/axios";
 import { ToastContainer } from "react-toastify";
