@@ -30,10 +30,13 @@ export default function LoginPage() {
       const response = await apiClient.post("/auth/login", form);
       console.log(response.data);
 
+
       // 액세스 토큰 저장
       const accessToken = response.headers["authorization"]?.replace("Bearer ", "");
       if (accessToken) {
+
         setAccessToken(accessToken);
+
       }
 
       // 리프레시 토큰 저장

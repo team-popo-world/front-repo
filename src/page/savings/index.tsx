@@ -2,11 +2,45 @@ import { Background } from "../../components/layout/Background";
 import background_img from "../../assets/image/savings/savings_background.webp";
 import character_img from "../../assets/image/savings/savings_character.webp";
 import star_img from "../../assets/image/savings/savings_star.webp";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { BackArrow } from "../../components/button/BackArrow";
 import { ko } from "date-fns/locale";
+import { addDays, isAfter, isSameDay } from "date-fns";
+import { TextWithStroke } from "../../components/text/TextWithStroke";
+import apiClient from "../../lib/api/axios";
+import { useAuthStore } from "@/lib/zustand/store";
+import { IMAGE_URLS } from "@/lib/constants/constants";
+
+const IS_TEST_MODE = false;
+
+// 상수 선언
+const MAX_DEPOSIT_RATE = 0.2; // 20%
+const BONUS_RATE = 0.1; // 10%
+
+// 저축통장 생성 API 호출 함수
+async function createSavingsAccount(
+  goalAmount: number,
+  createdAt: string,
+  endDate: string,
+  rewardPoint: number
+) {
+  try {
+    // apiClient로 POST 요청 (토큰/주소 자동)
+    const response = await apiClient.post("/api/saveAccount", {
+      goalAmount, // 목표 금액
+      createdAt, // 시작 날짜 (YYYY-MM-DD)
+      endDate, // 종료 날짜 (YYYY-MM-DD)
+      rewardPoint, // 보너스 금액
+    });
+    // 성공 시 메시지 반환
+    return { success: true, message: response.data };
+  } catch (error: any) {
+    // 에러 메시지 반환
+    return { success: false, message: error.message };
+  }
+}
 
 export default function SavingsPage() {
   // ========== 상태 관리 변수들 ==========
@@ -19,13 +53,12 @@ export default function SavingsPage() {
   // 금액 관련 상태
   const [currentAmount, setCurrentAmount] = useState<string>(""); // 현재 저축된 금액
   const [goalAmount, setGoalAmount] = useState<string>(""); // 목표 저축 금액
-  const [depositAmount, setDepositAmount] = useState<string>(""); // 초기 입금 금액 (통장 개설시)
   const [bonusAmount, setBonusAmount] = useState<string>(""); // 보너스 금액 상태 추가
+  const [createMessage, setCreateMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   // 입력 모달 관련 상태
-  const [openInput, setOpenInput] = useState<
-    "current" | "goal" | "deposit" | null
-  >(null); // 현재 열린 입력 모달 타입
+  const [openInput, setOpenInput] = useState<"goal" | null>(null); // 현재 열린 입력 모달 타입
   const [inputValue, setInputValue] = useState<string>(""); // 입력 모달의 임시 입력값
 
   // 날짜 선택기 참조
@@ -38,12 +71,34 @@ export default function SavingsPage() {
   // 입금 모달 관련 상태
   const [isDepositModalOpen, setIsDepositModalOpen] = useState(false); // 입금 모달 열림 상태
   const [depositInput, setDepositInput] = useState(""); // 입금 모달의 입력값
+  const [depositError, setDepositError] = useState(""); // 입금 에러 메시지
+  const [hasDepositedToday, setHasDepositedToday] = useState(false); // 오늘 입금 여부
 
   // 보상 및 결과 모달 관련 상태
   const [isBonusModalOpen, setIsBonusModalOpen] = useState(false); // 목표 달성 보너스 모달
   const [isDepositResultModalOpen, setIsDepositResultModalOpen] =
     useState(false); // 입금 결과 모달
   const [lastDepositAmount, setLastDepositAmount] = useState(""); // 마지막 입금 금액 (결과 모달에서 표시용)
+
+  // 오늘 날짜 구하기
+  const today = new Date();
+
+  // 보유포인트 상태 추가
+  const { point } = useAuthStore();
+
+  // ===== 유틸 함수 =====
+  const resetSavingsAccount = () => {
+    setIsCreated(false);
+    setCurrentAmount("");
+    setGoalAmount("");
+    setStartDate(null);
+    setEndDate(null);
+    setBonusAmount("");
+    setDepositInput("");
+    setDepositError("");
+    setOpenInput(null);
+    setInputValue("");
+  };
 
   // ========== 이벤트 핸들러 함수들 ==========
 
@@ -59,55 +114,213 @@ export default function SavingsPage() {
    * 금액 입력 모달을 여는 함수
    * @param type - 입력할 금액의 타입 (현재금액/목표금액/입금금액)
    */
-  const handleOpenInput = (type: "current" | "goal" | "deposit") => {
+  const handleOpenInput = (type: "goal") => {
     setOpenInput(type);
-    // 기존 값이 있으면 입력 필드에 미리 채워넣기
-    if (type === "current") setInputValue(currentAmount);
-    if (type === "goal") setInputValue(goalAmount);
-    if (type === "deposit") setInputValue(depositAmount);
+    setInputValue(goalAmount);
   };
 
   /**
    * 입력 모달에서 입력한 값을 저장하는 함수
    */
   const handleSaveInput = () => {
-    // 현재 열린 입력 모달의 타입에 따라 해당 상태 업데이트
-    if (openInput === "current") setCurrentAmount(inputValue);
     if (openInput === "goal") {
       setGoalAmount(inputValue);
-      // 목표 금액 입력 시 보너스 금액도 계산 (10%)
-      const bonus = Math.floor(Number(inputValue) * 0.1);
+      const bonus = Math.floor(Number(inputValue) * BONUS_RATE);
       setBonusAmount(bonus ? String(bonus) : "");
     }
-    if (openInput === "deposit") setDepositAmount(inputValue);
-    setOpenInput(null); // 입력 모달 닫기
+    setOpenInput(null);
   };
+
+  // 컴포넌트 마운트 시 오늘 입금 여부 확인
+  useEffect(() => {
+    if (isCreated) {
+      const todayKey = `savings_deposit_${new Date()
+        .toISOString()
+        .slice(0, 10)}`;
+      setHasDepositedToday(!!localStorage.getItem(todayKey));
+    }
+  }, [isCreated]);
 
   /**
    * 입금하기 버튼 클릭 시 입금 모달을 여는 함수
    */
   const handleDepositClick = () => {
-    setDepositInput(""); // 입력값 초기화
-    setIsDepositModalOpen(true); // 입금 모달 열기
+    setDepositInput("");
+    setDepositError("");
+    const todayKey = `savings_deposit_${new Date().toISOString().slice(0, 10)}`;
+    setHasDepositedToday(!!localStorage.getItem(todayKey));
+    setIsDepositModalOpen(true);
+  };
+
+  // 입금 금액 입력 시 20% 초과 및 목표금액 초과, 보유포인트 초과 체크
+  const handleDepositInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setDepositInput(value);
+    setDepositError("");
+    if (goalAmount) {
+      const maxDeposit = Math.floor(Number(goalAmount) * MAX_DEPOSIT_RATE);
+      const remainToGoal = Number(goalAmount) - Number(currentAmount);
+      const maxDepositDisplay = Math.min(maxDeposit, remainToGoal);
+      if (Number(value) > maxDepositDisplay) {
+        setDepositError(`최대 입금 가능 금액은 ${maxDepositDisplay}냥입니다.`);
+        return;
+      }
+      if (Number(currentAmount) + Number(value) > Number(goalAmount)) {
+        setDepositError(
+          "입금 후 현재 금액이 목표 저축 금액을 초과할 수 없습니다."
+        );
+        return;
+      }
+    }
   };
 
   /**
    * 입금 모달에서 입금을 확정하는 함수
    */
-  const handleDepositConfirm = () => {
-    // 현재 금액과 입금 금액을 합산
-    const sum = (Number(currentAmount) || 0) + (Number(depositInput) || 0);
-    setCurrentAmount(String(sum)); // 새로운 현재 금액 설정
-    setIsDepositModalOpen(false); // 입금 모달 닫기
+  const handleDepositConfirm = async () => {
+    if (!IS_TEST_MODE && hasDepositedToday) {
+      setDepositError("오늘은 이미 입금하셨습니다.");
+      return;
+    }
+    if (goalAmount) {
+      const maxDeposit = Math.floor(Number(goalAmount) * MAX_DEPOSIT_RATE);
+      const remainToGoal = Number(goalAmount) - Number(currentAmount);
+      const maxDepositDisplay = Math.min(maxDeposit, remainToGoal);
+      if (Number(depositInput) > maxDepositDisplay) {
+        setDepositError(`최대 입금 가능 금액은 ${maxDepositDisplay}냥입니다.`);
+        return;
+      }
+      if (Number(currentAmount) + Number(depositInput) > Number(goalAmount)) {
+        setDepositError(
+          "입금 후 현재 금액이 목표 저축 금액을 초과할 수 없습니다."
+        );
+        return;
+      }
+    }
 
-    setLastDepositAmount(depositInput); // 결과 모달에서 표시할 입금 금액 저장
-    setIsDepositResultModalOpen(true); // 입금 결과 모달 열기
-
-    // 목표 달성 체크 - 현재 금액이 목표 금액과 정확히 일치하면 보너스 모달 표시
-    if (goalAmount && sum === Number(goalAmount)) {
-      setIsBonusModalOpen(true);
+    try {
+      // 서버에 입금 요청
+      const response = await apiClient.put("/api/saveAccount/dailyDeposit", {
+        depositPoint: Number(depositInput),
+        // success는 프론트에서 계산 후 전달(목표 달성 시 true)
+        success:
+          Number(currentAmount) + Number(depositInput) >= Number(goalAmount),
+      });
+      const data = response.data;
+      // 서버 응답값으로 상태 갱신
+      setCurrentAmount(String(data.accountPoint)); // accountPoint가 현재 저축통장 금액
+      setIsDepositModalOpen(false);
+      setLastDepositAmount(depositInput);
+      setIsDepositResultModalOpen(true);
+      const todayKey = `savings_deposit_${new Date()
+        .toISOString()
+        .slice(0, 10)}`;
+      localStorage.setItem(todayKey, "1");
+      setHasDepositedToday(true);
+      // 목표 달성 시 보너스 모달
+      if (Number(currentAmount) + Number(depositInput) >= Number(goalAmount)) {
+        setIsBonusModalOpen(true);
+      }
+    } catch (error: any) {
+      // 서버에서 에러 메시지 반환 시 처리
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.currentPoint
+      ) {
+        setDepositError(error.response.data.currentPoint);
+      } else {
+        setDepositError("입금 중 오류가 발생했습니다.");
+      }
     }
   };
+
+  // 페이지 진입 시 만기 체크 및 상태 초기화(목표달성은 관여X)
+  useEffect(() => {
+    if (isCreated && endDate) {
+      const now = new Date();
+      const end = new Date(endDate);
+      const goal = Number(goalAmount);
+      const current = Number(currentAmount);
+      const bonus = Number(bonusAmount);
+      if (now >= end) {
+        // 목표 달성 시 보너스 지급 등은 서버에서 처리
+        resetSavingsAccount();
+      }
+    }
+  }, [isCreated, endDate, goalAmount, currentAmount, bonusAmount]);
+
+  const handleCreateAccount = async () => {
+    if (!goalAmount || !startDate || !endDate || !bonusAmount) {
+      setCreateMessage("모든 값을 입력해 주세요.");
+      return;
+    }
+    setIsLoading(true);
+    setCreateMessage("");
+    // 날짜를 "YYYY-MM-DD" 문자열로 변환
+    const start =
+      startDate instanceof Date
+        ? startDate.toISOString().slice(0, 10)
+        : String(startDate);
+    const end =
+      endDate instanceof Date
+        ? endDate.toISOString().slice(0, 10)
+        : String(endDate);
+
+    const result = await createSavingsAccount(
+      Number(goalAmount),
+      start,
+      end,
+      Number(bonusAmount)
+    );
+    setIsLoading(false);
+    setCreateMessage(result.message);
+    if (result.success) {
+      setCurrentAmount("0");
+      setIsCreated(true);
+    }
+  };
+
+  // 계좌 정보 불러오는 함수 추가
+  async function fetchAccountInfo() {
+    try {
+      const response = await apiClient.get("/api/saveAccount");
+      const data = response.data;
+      // status가 ACTIVE이고, createdDate 등 주요 필드가 null이 아니면 활성화된 계좌로 간주
+      if (
+        data &&
+        data.status === "ACTIVE" &&
+        data.createdDate &&
+        data.endDate
+      ) {
+        setIsCreated(true);
+        setGoalAmount(String(data.goalAmount));
+        setCurrentAmount(String(data.accountPoint)); // accountPoint가 현재 저축통장 금액
+        setStartDate(data.createdDate ? new Date(data.createdDate) : null);
+        setEndDate(data.endDate ? new Date(data.endDate) : null);
+        setBonusAmount(""); // 필요시 보너스 금액 세팅
+      } else {
+        setIsCreated(false);
+        setGoalAmount("");
+        setCurrentAmount("");
+        setStartDate(null);
+        setEndDate(null);
+        setBonusAmount("");
+      }
+    } catch (e) {
+      setIsCreated(false);
+      setGoalAmount("");
+      setCurrentAmount("");
+      setStartDate(null);
+      setEndDate(null);
+      setBonusAmount("");
+    }
+  }
+
+  // 페이지 진입 시 계좌 정보 조회
+  useEffect(() => {
+    fetchAccountInfo();
+  }, []);
 
   return (
     <>
@@ -200,6 +413,12 @@ export default function SavingsPage() {
         .react-datepicker__day--outside-month {
           opacity: 0.4 !important; /* 투명도 조정, 필요시 값 변경 */
         }
+
+        .react-datepicker__day--disabled {
+          color: #ccc;
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
       
 }
         
@@ -208,6 +427,22 @@ export default function SavingsPage() {
 
       {/* 메인 컨테이너 */}
       <Background backgroundImage={background_img}>
+        {/* 오른쪽 상단 총 금액 표시 (실제 포인트) */}
+        <div className="absolute top-3 right-1 w-23 min-h-0 flex flex-wrap active:scale-95 transition-all duration-100 z-50">
+          <div className="relative w-5.5 h-5.5 left-4 inline-flex items-center gap-0.5">
+            <img
+              src={IMAGE_URLS.common.coin}
+              alt="코인"
+              className="w-full h-full object-contain"
+            />
+            <TextWithStroke
+              text={`${point ?? 0}냥`}
+              className="whitespace-nowrap"
+              textClassName="text-main-yellow-800 text-[0.7rem]"
+              strokeClassName="text-main-brown-800 text-[0.7rem] text-stroke-width-[0.12rem] text-stroke-color-main-brown-800"
+            />
+          </div>
+        </div>
         <BackArrow />
 
         {/* 페이지 제목 */}
@@ -219,96 +454,91 @@ export default function SavingsPage() {
         </div>
 
         {/* 메인 콘텐츠 영역 */}
-        <div className="flex flex-row justify-between items-end w-full mx-auto mt-2">
+        <div className="flex flex-row justify-between items-end w-full mx-auto mt-3">
           {/* 저축 정보 카드 */}
           <div className="bg-[#FFF6D1] rounded-[3rem] ml-10 pl-9 pr-4 py-6 w-90">
             {/* 저축 통장이 개설되지 않은 경우 - 초기 설정 화면 */}
             {!isCreated ? (
-              <div className="grid grid-cols-2 gap-x-1 gap-y-1">
-                {/* 시작 날짜 입력 */}
-                <div>
-                  <div className="font-bold text-lg text-[#BBA14F]">
-                    시작 날짜
+              <>
+                <div className="grid grid-cols-2 gap-x-1 gap-y-6">
+                  {/* 시작 날짜 입력 */}
+                  <div>
+                    <div className="font-bold text-lg text-[#BBA14F]">
+                      시작 날짜
+                    </div>
+                    <div
+                      onClick={() => setOpenPicker("start")}
+                      className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8"
+                    >
+                      {startDate
+                        ? new Date(startDate).toLocaleDateString("ko-KR", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                          }) + ""
+                        : "날짜 선택"}
+                    </div>
                   </div>
-                  <div
-                    onClick={() => setOpenPicker("start")}
-                    className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8"
+
+                  {/* 종료 날짜 입력 */}
+                  <div>
+                    <div className="font-bold text-lg text-[#BBA14F]">
+                      종료 날짜
+                    </div>
+                    <div
+                      onClick={() => setOpenPicker("end")}
+                      className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8"
+                    >
+                      {endDate
+                        ? new Date(endDate).toLocaleDateString("ko-KR", {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                          }) + ""
+                        : "날짜 선택"}
+                    </div>
+                  </div>
+
+                  {/* 목표 저축 금액 입력 */}
+                  <div>
+                    <div className="font-bold text-lg text-[#BBA14F]">
+                      목표 저축 금액
+                    </div>
+                    <div
+                      onClick={() => handleOpenInput("goal")}
+                      className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8"
+                    >
+                      {goalAmount ? goalAmount + "냥" : "입력"}
+                    </div>
+                  </div>
+
+                  {/* 목표 달성 보상 안내 */}
+                  <div>
+                    <div className="font-bold text-lg text-[#BBA14F]">
+                      목표 달성시 보상
+                    </div>
+                    <div className="font-bold text-lg text-[#6F4223]">
+                      {bonusAmount ? `보너스 ${bonusAmount}냥` : "-"}
+                    </div>
+                  </div>
+                </div>
+                {/* 인포박스 하단 중앙 문구 */}
+                <div className="w-full flex justify-center mt-4 ml-[-0.5rem]">
+                  <span
+                    className="text-[0.8rem] font-bold text-center px-2 py-1 rounded-2xl"
+                    style={{
+                      background: "#FFF6D1",
+                      color: "#FFD600",
+                      display: "inline-block",
+                      lineHeight: "1.4",
+                    }}
                   >
-                    {startDate
-                      ? new Date(startDate).toLocaleDateString("ko-KR", {
-                          year: "numeric",
-                          month: "2-digit",
-                          day: "2-digit",
-                        }) + ""
-                      : "날짜 선택"}
-                  </div>
+                    <span className="text-[#FFD600]">
+                      포포와 함께 저축 챌린지! 보너스 냥을 노려보세요!
+                    </span>
+                  </span>
                 </div>
-
-                {/* 종료 날짜 입력 */}
-                <div>
-                  <div className="font-bold text-lg text-[#BBA14F]">
-                    종료 날짜
-                  </div>
-                  <div
-                    onClick={() => setOpenPicker("end")}
-                    className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8"
-                  >
-                    {endDate
-                      ? new Date(endDate).toLocaleDateString("ko-KR", {
-                          year: "numeric",
-                          month: "2-digit",
-                          day: "2-digit",
-                        }) + ""
-                      : "날짜 선택"}
-                  </div>
-                </div>
-
-                {/* 현재 금액 (초기값 0) */}
-                <div>
-                  <div className="font-bold text-lg text-[#BBA14F]">
-                    현재 금액
-                  </div>
-                  <div className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8">
-                    0냥
-                  </div>
-                </div>
-
-                {/* 목표 저축 금액 입력 */}
-                <div>
-                  <div className="font-bold text-lg text-[#BBA14F]">
-                    목표 저축 금액
-                  </div>
-                  <div
-                    onClick={() => handleOpenInput("goal")}
-                    className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8"
-                  >
-                    {goalAmount ? goalAmount + "냥" : "입력"}
-                  </div>
-                </div>
-
-                {/* 초기 입금 금액 입력 */}
-                <div>
-                  <div className="font-bold text-lg text-[#BBA14F]">
-                    입금 금액
-                  </div>
-                  <div
-                    onClick={() => handleOpenInput("deposit")}
-                    className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8"
-                  >
-                    {depositAmount ? depositAmount + "냥" : "입력"}
-                  </div>
-                </div>
-
-                {/* 목표 달성 보상 안내 */}
-                <div>
-                  <div className="font-bold text-lg text-[#BBA14F]">
-                    목표 달성시 보상
-                  </div>
-                  <div className="font-bold text-lg text-[#6F4223]">
-                    {bonusAmount ? `보너스 ${bonusAmount}냥` : "-"}
-                  </div>
-                </div>
-              </div>
+              </>
             ) : (
               /* 저축 통장이 개설된 경우 - 정보 표시 화면 */
               <div className="flex flex-col items-center justify-center w-full py-[0.4rem]">
@@ -425,21 +655,28 @@ export default function SavingsPage() {
             <img src={character_img} alt="character" className="w-65" />
 
             {/* 메인 액션 버튼 (통장 개설 또는 입금하기) */}
-            <button
-              className="bg-[#FDF0B7] text-[#573924] font-bold text-[1.2rem] rounded-4xl py-3 w-45 cursor-pointer"
-              onClick={() => {
-                if (!isCreated) {
-                  // 통장이 개설되지 않은 경우: 초기 입금 금액을 현재 금액으로 설정하고 통장 개설
-                  setCurrentAmount(depositAmount);
-                  setIsCreated(true);
-                } else {
-                  // 통장이 이미 개설된 경우: 추가 입금 모달 열기
-                  handleDepositClick();
+            {isCreated ? (
+              <button
+                className="bg-[#FDF0B7] text-[#573924] font-bold text-[1.2rem] rounded-4xl py-3 w-45 cursor-pointer disabled:opacity-60"
+                onClick={handleDepositClick}
+              >
+                입금하기
+              </button>
+            ) : (
+              <button
+                className="bg-[#FDF0B7] text-[#573924] font-bold text-[1.2rem] rounded-4xl py-3 w-45 cursor-pointer disabled:opacity-60"
+                onClick={handleCreateAccount}
+                disabled={
+                  isLoading ||
+                  !goalAmount ||
+                  !startDate ||
+                  !endDate ||
+                  !bonusAmount
                 }
-              }}
-            >
-              {isCreated ? "입금하기" : "저축 통장 개설"}
-            </button>
+              >
+                {isLoading ? "개설 중..." : "저축 통장 개설"}
+              </button>
+            )}
           </div>
         </div>
       </Background>
@@ -461,7 +698,6 @@ export default function SavingsPage() {
               ref={openPicker === "start" ? startPickerRef : endPickerRef}
               selected={openPicker === "start" ? startDate : endDate}
               onChange={(date) => {
-                // 선택된 날짜를 해당 상태에 저장하고 모달 닫기
                 if (openPicker === "start") setStartDate(date);
                 else setEndDate(date);
                 setOpenPicker(null);
@@ -471,6 +707,18 @@ export default function SavingsPage() {
               dateFormat="yyyy년 MM월 dd일"
               inline
               locale={ko}
+              {...(openPicker === "start"
+                ? {
+                    minDate: today,
+                    openToDate: today,
+                  }
+                : {})}
+              {...(openPicker === "end" && startDate
+                ? {
+                    minDate: addDays(startDate, 5),
+                    openToDate: addDays(startDate, 5),
+                  }
+                : {})}
             />
           </div>
         </>
@@ -491,7 +739,6 @@ export default function SavingsPage() {
               {/* 모달 제목 */}
               <div className="text-xl font-bold mb-4 text-[#6F4223]">
                 {openInput === "goal" && "목표 저축 금액"}
-                {openInput === "deposit" && "입금 금액"}
               </div>
 
               {/* 금액 입력 필드 */}
@@ -506,7 +753,7 @@ export default function SavingsPage() {
 
               {/* 확인 버튼 */}
               <button
-                className="cursor-pointer bg-[#BBA14F] text-[#6F4223] font-bold rounded-xl px-6 py-2 mt-2 transition"
+                className="cursor-pointer bg-[#BBA14F] text-white font-bold rounded-xl px-6 py-2 mt-2 transition"
                 onClick={handleSaveInput}
               >
                 확인
@@ -521,13 +768,22 @@ export default function SavingsPage() {
         <>
           {/* 모달 배경 오버레이 */}
           <div
-            className="fixed inset-0 bg-black/40 z-50"
+            className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center"
             onClick={() => setIsDepositModalOpen(false)}
-          ></div>
-
-          {/* 입금 폼 */}
-          <div className="fixed inset-0 flex items-center justify-center z-50 font-TJ">
-            <div className="bg-[#FFF6D5] rounded-2xl p-8 shadow-xl flex flex-col items-center w-[16rem]">
+          >
+            {/* 입금 폼 */}
+            <div
+              className="bg-[#FFF6D5] rounded-2xl p-8 shadow-xl flex flex-col items-center w-[16rem] relative font-TJ"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* X 닫기 버튼 */}
+              <button
+                className="absolute top-0.5 right-2.5 text-2xl text-[#BBA14F] hover:text-[#6F4223] font-bold focus:outline-none cursor-pointer"
+                onClick={() => setIsDepositModalOpen(false)}
+                aria-label="닫기"
+              >
+                ×
+              </button>
               <div className="text-xl font-bold mb-4 text-[#6F4223]">
                 입금 금액
               </div>
@@ -535,19 +791,50 @@ export default function SavingsPage() {
               {/* 입금 금액 입력 필드 */}
               <input
                 type="number"
-                className="bg-white border-4 border-[#BBA14F] rounded-lg px-4 py-2 text-m text-center mb-4 focus:outline-none w-full"
+                className="bg-white border-4 border-[#BBA14F] rounded-lg px-4 py-2 text-m text-center mb-2 focus:outline-none w-full"
                 value={depositInput}
-                onChange={(e) => setDepositInput(e.target.value)}
+                onChange={handleDepositInputChange}
                 placeholder="금액을 입력하세요"
                 autoFocus
+                disabled={!IS_TEST_MODE && hasDepositedToday}
               />
+              {/* 최대 입금 가능 금액 안내 */}
+              {goalAmount && (
+                <div className="text-xs text-[#BBA14F] mb-1">
+                  {/* 최대 입금 가능 금액 안내 */}
+                  {(() => {
+                    const maxDeposit = Math.floor(
+                      Number(goalAmount) * MAX_DEPOSIT_RATE
+                    );
+                    const remainToGoal =
+                      Number(goalAmount) - Number(currentAmount);
+                    const maxDepositDisplay = Math.min(
+                      maxDeposit,
+                      remainToGoal
+                    );
+                    return `최대 입금 가능 금액: ${maxDepositDisplay}냥`;
+                  })()}
+                </div>
+              )}
+              {/* 에러 메시지 */}
+              {depositError && (
+                <div className="text-xs text-red-500 mb-1">{depositError}</div>
+              )}
 
               {/* 입금하기 버튼 */}
               <button
-                className="cursor-pointer bg-[#BBA14F] text-white font-bold rounded-xl px-6 py-2 mt-2 transition"
+                className="cursor-pointer bg-[#BBA14F] text-white font-bold rounded-xl px-6 py-2 mt-2 transition disabled:opacity-50"
                 onClick={handleDepositConfirm}
+                disabled={
+                  (!IS_TEST_MODE && hasDepositedToday) ||
+                  !depositInput ||
+                  !!depositError ||
+                  Number(depositInput) <= 0
+                }
               >
-                입금하기
+                {!IS_TEST_MODE && hasDepositedToday
+                  ? "오늘은 입금 완료"
+                  : "입금하기"}
               </button>
             </div>
           </div>
@@ -581,7 +868,10 @@ export default function SavingsPage() {
               {/* 확인 버튼 */}
               <button
                 className="cursor-pointer bg-[#BBA14F] text-white font-bold rounded-xl px-6 py-2 mt-2 transition"
-                onClick={() => setIsBonusModalOpen(false)}
+                onClick={() => {
+                  setIsBonusModalOpen(false);
+                  resetSavingsAccount();
+                }}
               >
                 확인
               </button>
