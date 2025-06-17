@@ -125,6 +125,32 @@ const IMAGE_URLS = {
     bg: "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1750022907/investing-bg_pvefqn",
     poni: "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1750024423/investing-poni_zrfrbe",
   },
+
+  raising: {
+    apple: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750155644/raising_apple_nvewgu",
+    watermelon: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750155644/raising_watermelon_mtkh5k",
+    nest: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750155644/raising_nest_gbvvtg",
+    fish: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750155644/raising_fish_b6v2o5",
+    character5: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750155644/raising_character5_oygkcg",
+    character4: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750155644/raising_character4_kcscvg",
+    character3: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750155644/raising_character3_vskzce",
+    character2: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750155644/raising_character2_sjrocs",
+    character1: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750155644/raising_character1_eyjdnq",
+    carrot: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750155644/raising_carrot_udhxsx",
+    broccoli: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750155644/raising_broccoli_pt0evy",
+    bread: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750155644/raising_bread_rjrnm2",
+    background: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750155644/raising_background_nuax5h",
+  },
+
+  login: {
+    bg: "https://res.cloudinary.com/djmcg7zgu/image/upload/v1750155969/register_background_t1zcbz.png",
+  },
+
+  savings: {
+    bg: "https://res.cloudinary.com/djmcg7zgu/image/upload/v1750155990/savings_background_bf0hz5.webp",
+    star: "https://res.cloudinary.com/djmcg7zgu/image/upload/v1750155990/savings_star_jtuc8d.webp",
+    popo: "https://res.cloudinary.com/djmcg7zgu/image/upload/v1750155990/savings_character_ofguqf.webp",
+  },
 };
 
 export { BACKGROUND_SIZE, INVESTING_GAME_INITIAL_POINT, IMAGE_URLS };

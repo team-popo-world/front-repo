@@ -2,6 +2,8 @@
 import { useState } from "react";
 import MainTemplate from "../../module/main/template";
 import { useNavigate } from "react-router-dom";
+import { IMAGE_URLS } from "@/lib/constants/constants";
+import { preload } from "react-dom";
 
 // 섬별 위치 정보
 const ISLAND_POSITIONS = {
@@ -33,6 +35,34 @@ export default function Main() {
     setTargetPosition(ISLAND_POSITIONS[island]);
     setTargetPath(path);
     setDirection(direction);
+
+    if (island === "investing") {
+      const investingPageImages = [...Object.values(IMAGE_URLS.investing)];
+      investingPageImages.forEach((image) => {
+        preload(image, { as: "image" });
+      });
+    }
+
+    if (island === "market") {
+      const marketPageImages = [...Object.values(IMAGE_URLS.market), ...Object.values(IMAGE_URLS.items)];
+      marketPageImages.forEach((image) => {
+        preload(image, { as: "image" });
+      });
+    }
+
+    if (island === "savings") {
+      const savingsPageImages = [...Object.values(IMAGE_URLS.savings)];
+      savingsPageImages.forEach((image) => {
+        preload(image, { as: "image" });
+      });
+    }
+
+    if (island === "raising") {
+      const raisingPageImages = [...Object.values(IMAGE_URLS.raising)];
+      raisingPageImages.forEach((image) => {
+        preload(image, { as: "image" });
+      });
+    }
   };
 
   const handleAnimationComplete = () => {
