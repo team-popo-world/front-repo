@@ -189,7 +189,7 @@ export default function InvestingGame() {
       };
 
       // 각 주식별로 턴 데이터 전송
-      sendTurnData(sessionId, "1111", gameState.turn, turnData);
+      sendTurnData(sessionId, CHAPTER_ID[gametype as keyof typeof CHAPTER_ID], gameState.turn, turnData);
     });
 
     // 턴 끝남

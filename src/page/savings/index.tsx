@@ -23,9 +23,7 @@ export default function SavingsPage() {
   const [bonusAmount, setBonusAmount] = useState<string>(""); // 보너스 금액 상태 추가
 
   // 입력 모달 관련 상태
-  const [openInput, setOpenInput] = useState<
-    "current" | "goal" | "deposit" | null
-  >(null); // 현재 열린 입력 모달 타입
+  const [openInput, setOpenInput] = useState<"current" | "goal" | "deposit" | null>(null); // 현재 열린 입력 모달 타입
   const [inputValue, setInputValue] = useState<string>(""); // 입력 모달의 임시 입력값
 
   // 날짜 선택기 참조
@@ -41,8 +39,7 @@ export default function SavingsPage() {
 
   // 보상 및 결과 모달 관련 상태
   const [isBonusModalOpen, setIsBonusModalOpen] = useState(false); // 목표 달성 보너스 모달
-  const [isDepositResultModalOpen, setIsDepositResultModalOpen] =
-    useState(false); // 입금 결과 모달
+  const [isDepositResultModalOpen, setIsDepositResultModalOpen] = useState(false); // 입금 결과 모달
   const [lastDepositAmount, setLastDepositAmount] = useState(""); // 마지막 입금 금액 (결과 모달에서 표시용)
 
   // ========== 이벤트 핸들러 함수들 ==========
@@ -227,9 +224,7 @@ export default function SavingsPage() {
               <div className="grid grid-cols-2 gap-x-1 gap-y-1">
                 {/* 시작 날짜 입력 */}
                 <div>
-                  <div className="font-bold text-lg text-[#BBA14F]">
-                    시작 날짜
-                  </div>
+                  <div className="font-bold text-lg text-[#BBA14F]">시작 날짜</div>
                   <div
                     onClick={() => setOpenPicker("start")}
                     className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8"
@@ -246,9 +241,7 @@ export default function SavingsPage() {
 
                 {/* 종료 날짜 입력 */}
                 <div>
-                  <div className="font-bold text-lg text-[#BBA14F]">
-                    종료 날짜
-                  </div>
+                  <div className="font-bold text-lg text-[#BBA14F]">종료 날짜</div>
                   <div
                     onClick={() => setOpenPicker("end")}
                     className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8"
@@ -265,9 +258,7 @@ export default function SavingsPage() {
 
                 {/* 현재 금액 (초기값 0) */}
                 <div>
-                  <div className="font-bold text-lg text-[#BBA14F]">
-                    현재 금액
-                  </div>
+                  <div className="font-bold text-lg text-[#BBA14F]">현재 금액</div>
                   <div className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8">
                     0냥
                   </div>
@@ -275,9 +266,7 @@ export default function SavingsPage() {
 
                 {/* 목표 저축 금액 입력 */}
                 <div>
-                  <div className="font-bold text-lg text-[#BBA14F]">
-                    목표 저축 금액
-                  </div>
+                  <div className="font-bold text-lg text-[#BBA14F]">목표 저축 금액</div>
                   <div
                     onClick={() => handleOpenInput("goal")}
                     className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8"
@@ -288,9 +277,7 @@ export default function SavingsPage() {
 
                 {/* 초기 입금 금액 입력 */}
                 <div>
-                  <div className="font-bold text-lg text-[#BBA14F]">
-                    입금 금액
-                  </div>
+                  <div className="font-bold text-lg text-[#BBA14F]">입금 금액</div>
                   <div
                     onClick={() => handleOpenInput("deposit")}
                     className="font-bold text-lg text-[#6F4223] bg-transparent outline-none cursor-pointer flex items-center h-8"
@@ -301,9 +288,7 @@ export default function SavingsPage() {
 
                 {/* 목표 달성 보상 안내 */}
                 <div>
-                  <div className="font-bold text-lg text-[#BBA14F]">
-                    목표 달성시 보상
-                  </div>
+                  <div className="font-bold text-lg text-[#BBA14F]">목표 달성시 보상</div>
                   <div className="font-bold text-lg text-[#6F4223]">
                     {bonusAmount ? `보너스 ${bonusAmount}냥` : "-"}
                   </div>
@@ -315,9 +300,7 @@ export default function SavingsPage() {
                 <div className="w-full flex flex-col text-lg">
                   {/* 시작 날짜 표시 */}
                   <div>
-                    <span className="font-bold text-[#BBA14F]">
-                      시작 날짜:{" "}
-                    </span>
+                    <span className="font-bold text-[#BBA14F]">시작 날짜: </span>
                     <span className="font-bold text-[#573924]">
                       {startDate
                         ? new Date(startDate).toLocaleDateString("ko-KR", {
@@ -331,9 +314,7 @@ export default function SavingsPage() {
 
                   {/* 종료 날짜 표시 */}
                   <div>
-                    <span className="font-bold text-[#BBA14F]">
-                      종료 날짜:{" "}
-                    </span>
+                    <span className="font-bold text-[#BBA14F]">종료 날짜: </span>
                     <span className="font-bold text-[#573924]">
                       {endDate
                         ? new Date(endDate).toLocaleDateString("ko-KR", {
@@ -347,22 +328,14 @@ export default function SavingsPage() {
 
                   {/* 현재 금액 표시 */}
                   <div>
-                    <span className="font-bold text-[#BBA14F]">
-                      현재 금액:{" "}
-                    </span>
-                    <span className="font-bold text-[#573924]">
-                      {currentAmount ? currentAmount + "냥" : "-"}
-                    </span>
+                    <span className="font-bold text-[#BBA14F]">현재 금액: </span>
+                    <span className="font-bold text-[#573924]">{currentAmount ? currentAmount + "냥" : "-"}</span>
                   </div>
 
                   {/* 목표 저축 금액 표시 */}
                   <div>
-                    <span className="font-bold text-[#BBA14F]">
-                      목표 저축 금액:{" "}
-                    </span>
-                    <span className="font-bold text-[#573924]">
-                      {goalAmount ? goalAmount + "냥" : "-"}
-                    </span>
+                    <span className="font-bold text-[#BBA14F]">목표 저축 금액: </span>
+                    <span className="font-bold text-[#573924]">{goalAmount ? goalAmount + "냥" : "-"}</span>
                   </div>
                 </div>
               </div>
@@ -381,11 +354,7 @@ export default function SavingsPage() {
                     style={{
                       width:
                         goalAmount && currentAmount
-                          ? `${Math.min(
-                              (Number(currentAmount) / Number(goalAmount)) *
-                                100,
-                              100
-                            )}%`
+                          ? `${Math.min((Number(currentAmount) / Number(goalAmount)) * 100, 100)}%`
                           : "0%",
                     }}
                   ></div>
@@ -398,11 +367,7 @@ export default function SavingsPage() {
                     style={{
                       left:
                         goalAmount && currentAmount
-                          ? `calc(${Math.min(
-                              (Number(currentAmount) / Number(goalAmount)) *
-                                100,
-                              100
-                            )}% - 1rem)`
+                          ? `calc(${Math.min((Number(currentAmount) / Number(goalAmount)) * 100, 100)}% - 1rem)`
                           : "-1rem",
                       width: "2rem",
                       height: "2rem",
@@ -413,8 +378,7 @@ export default function SavingsPage() {
 
                 {/* 현재 금액 / 목표 금액 텍스트 */}
                 <div className="mt-0 text-m font-bold text-[#573924]">
-                  {currentAmount ? currentAmount : 0} /{" "}
-                  {goalAmount ? goalAmount : 0}냥
+                  {currentAmount ? currentAmount : 0} / {goalAmount ? goalAmount : 0}냥
                 </div>
               </div>
             )}
@@ -450,10 +414,7 @@ export default function SavingsPage() {
       {openPicker && (
         <>
           {/* 모달 배경 오버레이 */}
-          <div
-            className="fixed inset-0 bg-black/40 z-50"
-            onClick={handleOverlayClick}
-          ></div>
+          <div className="fixed inset-0 bg-black/40 z-50" onClick={handleOverlayClick}></div>
 
           {/* 날짜 선택기 */}
           <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -480,10 +441,7 @@ export default function SavingsPage() {
       {openInput && (
         <>
           {/* 모달 배경 오버레이 */}
-          <div
-            className="fixed inset-0 bg-black/40 z-50"
-            onClick={handleOverlayClick}
-          ></div>
+          <div className="fixed inset-0 bg-black/40 z-50" onClick={handleOverlayClick}></div>
 
           {/* 입력 폼 */}
           <div className="fixed inset-0 flex items-center justify-center z-50 font-TJ">
@@ -520,17 +478,12 @@ export default function SavingsPage() {
       {isDepositModalOpen && (
         <>
           {/* 모달 배경 오버레이 */}
-          <div
-            className="fixed inset-0 bg-black/40 z-50"
-            onClick={() => setIsDepositModalOpen(false)}
-          ></div>
+          <div className="fixed inset-0 bg-black/40 z-50" onClick={() => setIsDepositModalOpen(false)}></div>
 
           {/* 입금 폼 */}
           <div className="fixed inset-0 flex items-center justify-center z-50 font-TJ">
             <div className="bg-[#FFF6D5] rounded-2xl p-8 shadow-xl flex flex-col items-center w-[16rem]">
-              <div className="text-xl font-bold mb-4 text-[#6F4223]">
-                입금 금액
-              </div>
+              <div className="text-xl font-bold mb-4 text-[#6F4223]">입금 금액</div>
 
               {/* 입금 금액 입력 필드 */}
               <input
@@ -558,24 +511,16 @@ export default function SavingsPage() {
       {isBonusModalOpen && (
         <>
           {/* 모달 배경 오버레이 */}
-          <div
-            className="fixed inset-0 bg-black/40 z-50"
-            onClick={() => setIsBonusModalOpen(false)}
-          ></div>
+          <div className="fixed inset-0 bg-black/40 z-50" onClick={() => setIsBonusModalOpen(false)}></div>
 
           {/* 축하 메시지 */}
           <div className="fixed inset-0 flex items-center justify-center z-50 font-TJ">
             <div className="bg-[#FFF6D5] rounded-2xl p-8 shadow-xl flex flex-col items-center w-[18rem]">
-              <div className="text-2xl font-bold mb-4 text-[#6F4223]">
-                축하합니다!
-              </div>
+              <div className="text-2xl font-bold mb-4 text-[#6F4223]">축하합니다!</div>
               <div className="text-lg text-[#573924] mb-4">
                 목표를 달성해서
                 <br />
-                <span className="font-extrabold text-[#BBA14F]">
-                  보너스 {bonusAmount}냥
-                </span>
-                을 받았습니다!
+                <span className="font-extrabold text-[#BBA14F]">보너스 {bonusAmount}냥</span>을 받았습니다!
               </div>
 
               {/* 확인 버튼 */}
@@ -594,17 +539,12 @@ export default function SavingsPage() {
       {isDepositResultModalOpen && (
         <>
           {/* 모달 배경 오버레이 */}
-          <div
-            className="fixed inset-0 bg-black/40 z-50"
-            onClick={() => setIsDepositResultModalOpen(false)}
-          ></div>
+          <div className="fixed inset-0 bg-black/40 z-50" onClick={() => setIsDepositResultModalOpen(false)}></div>
 
           {/* 입금 결과 표시 */}
           <div className="fixed inset-0 flex items-center justify-center z-50 font-TJ">
             <div className="bg-[#FFF6D5] rounded-2xl p-8 shadow-xl flex flex-col items-center w-[22rem] border-8 border-[#BBA14F]">
-              <div className="text-2xl font-bold mb-4 text-[#BBA14F]">
-                적금!
-              </div>
+              <div className="text-2xl font-bold mb-4 text-[#BBA14F]">적금!</div>
 
               {/* 입금 정보와 확인 버튼 */}
               <div className="flex flex-row items-center justify-between w-full mb-4">
@@ -632,11 +572,7 @@ export default function SavingsPage() {
                     style={{
                       width:
                         goalAmount && currentAmount
-                          ? `${Math.min(
-                              (Number(currentAmount) / Number(goalAmount)) *
-                                100,
-                              100
-                            )}%`
+                          ? `${Math.min((Number(currentAmount) / Number(goalAmount)) * 100, 100)}%`
                           : "0%",
                     }}
                   ></div>
@@ -649,11 +585,7 @@ export default function SavingsPage() {
                     style={{
                       left:
                         goalAmount && currentAmount
-                          ? `calc(${Math.min(
-                              (Number(currentAmount) / Number(goalAmount)) *
-                                100,
-                              100
-                            )}% - 1.5rem)`
+                          ? `calc(${Math.min((Number(currentAmount) / Number(goalAmount)) * 100, 100)}% - 1.5rem)`
                           : "-1.5rem",
                       width: "3rem",
                       height: "3rem",
@@ -665,9 +597,7 @@ export default function SavingsPage() {
                 {/* 달성률 퍼센트 표시 */}
                 <div className="mt-2 text-xl font-bold text-[#573924]">
                   {goalAmount && currentAmount
-                    ? `${Math.floor(
-                        (Number(currentAmount) / Number(goalAmount)) * 100
-                      )}%`
+                    ? `${Math.floor((Number(currentAmount) / Number(goalAmount)) * 100)}%`
                     : "0%"}
                 </div>
               </div>
