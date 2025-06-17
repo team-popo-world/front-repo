@@ -28,6 +28,9 @@ export default function Main() {
   const [direction, setDirection] = useState<"left" | "right">("left");
   const navigate = useNavigate();
 
+  preload(IMAGE_URLS.attandance.circle_popo, { as: "image" });
+  preload(IMAGE_URLS.attandance.masic_popo, { as: "image" });
+
   const handleIslandClick = (
     island: keyof typeof ISLAND_POSITIONS,
     path: string,
