@@ -17,7 +17,10 @@ const ISLAND_POSITIONS = {
 
 export default function Main() {
   const [isAnimating, setIsAnimating] = useState(false);
-  const [targetPosition, setTargetPosition] = useState<{ top: string; left: string }>({
+  const [targetPosition, setTargetPosition] = useState<{
+    top: string;
+    left: string;
+  }>({
     top: "8rem",
     left: "14rem",
   });
@@ -44,7 +47,10 @@ export default function Main() {
     }
 
     if (island === "market") {
-      const marketPageImages = [...Object.values(IMAGE_URLS.market), ...Object.values(IMAGE_URLS.items)];
+      const marketPageImages = [
+        ...Object.values(IMAGE_URLS.market),
+        ...Object.values(IMAGE_URLS.items),
+      ];
       marketPageImages.forEach((image) => {
         preload(image, { as: "image" });
       });
@@ -60,6 +66,13 @@ export default function Main() {
     if (island === "raising") {
       const raisingPageImages = [...Object.values(IMAGE_URLS.raising)];
       raisingPageImages.forEach((image) => {
+        preload(image, { as: "image" });
+      });
+    }
+
+    if (island == "emotionDiary") {
+      const emotionDiaryImages = [...Object.values(IMAGE_URLS.emotionList)];
+      emotionDiaryImages.forEach((image) => {
         preload(image, { as: "image" });
       });
     }
