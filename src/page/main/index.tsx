@@ -43,17 +43,20 @@ export default function Main() {
     setDirection(direction);
 
     if (island === "investing") {
-      const investingPageImages = [...Object.values(IMAGE_URLS.investing)];
+      const investingPageImages = [
+        ...Object.values(IMAGE_URLS.investing),
+        ...Object.values(IMAGE_URLS.investing_game.little_pig),
+        ...Object.values(IMAGE_URLS.investing_game.masic),
+        ...Object.values(IMAGE_URLS.investing_game.ninja),
+        ...Object.values(IMAGE_URLS.investing_game.truck),
+      ];
       investingPageImages.forEach((image) => {
         preload(image, { as: "image" });
       });
     }
 
     if (island === "market") {
-      const marketPageImages = [
-        ...Object.values(IMAGE_URLS.market),
-        ...Object.values(IMAGE_URLS.items),
-      ];
+      const marketPageImages = [...Object.values(IMAGE_URLS.market), ...Object.values(IMAGE_URLS.items)];
       marketPageImages.forEach((image) => {
         preload(image, { as: "image" });
       });
