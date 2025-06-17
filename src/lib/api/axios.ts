@@ -9,6 +9,7 @@ export class ApiError extends Error {
   constructor(public status: number, public message: string, public data?: any) {
     super(message);
     this.name = "ApiError";
+ 
   }
 }
 
@@ -58,6 +59,7 @@ apiClient.interceptors.request.use(
   },
   (error) => {
     // 요청 설정 중 에러 발생 시 처리
+    console.log(error);
     return Promise.reject(new ApiError(0, "요청 설정 중 오류가 발생했습니다."));
   }
 );
