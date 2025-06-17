@@ -1,6 +1,7 @@
 // src/page/main/index.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MainTemplate from "../../module/main/template";
+import Tutorial from "../../module/main/template/Tutorial";
 import { useNavigate } from "react-router-dom";
 
 // 섬별 위치 정보
@@ -21,7 +22,16 @@ export default function Main() {
   });
   const [targetPath, setTargetPath] = useState<string>("");
   const [direction, setDirection] = useState<"left" | "right">("left");
+  const [showTutorial, setShowTutorial] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if it's the user's first visit
+    const hasSeenTutorial = localStorage.getItem("hasSeenTutorial");
+    if (hasSeenTutorial === "false") {
+      setShowTutorial(true);
+    }
+  }, []);
 
   const handleIslandClick = (
     island: keyof typeof ISLAND_POSITIONS,
@@ -48,13 +58,24 @@ export default function Main() {
     }
   };
 
+  const handleTutorialComplete = () => {
+    setShowTutorial(false);
+    // localStorage.setItem("hasSeenTutorial", "true");
+  };
+
   return (
-    <MainTemplate
-      isAnimating={isAnimating}
-      targetPosition={targetPosition}
-      direction={direction}
-      handleIslandClick={handleIslandClick}
-      handleAnimationComplete={handleAnimationComplete}
-    />
+    <>
+      {showTutorial ? (
+        <Tutorial onComplete={handleTutorialComplete} />
+      ) : (
+        <MainTemplate
+          isAnimating={isAnimating}
+          targetPosition={targetPosition}
+          direction={direction}
+          handleIslandClick={handleIslandClick}
+          handleAnimationComplete={handleAnimationComplete}
+        />
+      )}
+    </>
   );
 }
