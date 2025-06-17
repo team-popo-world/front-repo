@@ -19,6 +19,7 @@ export function AttandanceTemplate() {
 
   useEffect(() => {
     getAttendance().then((data) => {
+      console.log(data);
       setAttendance(data);
     });
   }, []);
@@ -31,7 +32,8 @@ export function AttandanceTemplate() {
 
   const handleAttendance = () => {
     postAttendance(getToday()).then((data) => {
-      // setAttendance(data);
+      console.log(data);
+      setAttendance(data.weekAttendance);
     });
   };
 

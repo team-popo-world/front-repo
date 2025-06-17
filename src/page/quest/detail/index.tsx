@@ -38,9 +38,7 @@ export default function QuestDetail() {
   const [questData, setQuestData] = useState<Quest[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedState, setSelectedState] = useState<Quest["state"] | null>(
-    null
-  );
+  const [selectedState, setSelectedState] = useState<Quest["state"] | null>(null);
   const total = questData.length;
   const completed = questData.filter((q) => q.state === "완료!").length;
   const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
@@ -50,9 +48,7 @@ export default function QuestDetail() {
       setLoading(true);
       setError(null);
       try {
-        const response = await apiClient.get(
-          `http://52.78.53.247:8080/api/quest?type=${questType}`
-        );
+        const response = await apiClient.get(`http://52.78.53.247:8080/api/quest?type=${questType}`);
 
         const data = await response.data;
         const mapped = data.quests.map((item: any) => ({
@@ -78,11 +74,7 @@ export default function QuestDetail() {
     navigate("/quest");
   };
 
-  const handleChangeState = async (
-    questId: string,
-    childId: string,
-    state: Quest["state"]
-  ) => {
+  const handleChangeState = async (questId: string, childId: string, state: Quest["state"]) => {
     const serverState = serverQuestStateMap[state];
     if (!serverState) return;
 
@@ -96,18 +88,14 @@ export default function QuestDetail() {
       if (!nextState) return;
 
       setQuestData((prev) =>
-        prev.map((quest) =>
-          quest.quest_id === questId ? { ...quest, state: nextState } : quest
-        )
+        prev.map((quest) => (quest.quest_id === questId ? { ...quest, state: nextState } : quest))
       );
     } catch (err) {
       console.error("상태 변경 실패:", err);
     }
   };
 
-  const filteredQuestData = selectedState
-    ? questData.filter((q) => q.state === selectedState)
-    : questData;
+  const filteredQuestData = selectedState ? questData.filter((q) => q.state === selectedState) : questData;
 
   return (
     <div>
@@ -116,9 +104,7 @@ export default function QuestDetail() {
           questType={questType}
           questData={filteredQuestData}
           selectedState={selectedState}
-          onSelectState={(state) =>
-            setSelectedState((prev) => (prev === state ? null : state))
-          }
+          onSelectState={(state) => setSelectedState((prev) => (prev === state ? null : state))}
           onComplete={handleComplete}
           onBack={handleBack}
           onChangeState={handleChangeState}
