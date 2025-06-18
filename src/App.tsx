@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import Main from "@/page/main";
 import Investing from "@/page/investing";
 import Market from "@/page/market";
@@ -37,7 +37,7 @@ console.log("테스트");
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path="/" element={<ProtectedRouter />}>
             <Route index element={<Main />} />
@@ -69,7 +69,7 @@ function App() {
           <Route path="/auth/register" element={<RegisterPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </QueryClientProvider>
   );
 }
