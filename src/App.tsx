@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Main from "@/page/main";
 import Investing from "@/page/investing";
 import Market from "@/page/market";
@@ -20,7 +20,7 @@ import Inventory from "./page/market/inventory";
 import ProtectedRouter from "@/components/auth/ProtectedRouter";
 import LoginPage from "./page/auth/login";
 import RegisterPage from "./page/auth/register";
-
+import { BrowserRouter } from "react-router-dom";
 // QueryClient 인스턴스 생성
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -37,7 +37,7 @@ console.log("테스트");
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <HashRouter>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<ProtectedRouter />}>
             <Route index element={<Main />} />
@@ -69,7 +69,7 @@ function App() {
           <Route path="/auth/register" element={<RegisterPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
-      </HashRouter>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 }
