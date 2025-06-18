@@ -8,6 +8,10 @@
       }
     ],
     "rewrites": [
+        {
+            "source": "/(.*)",
+            "destination": "/"
+          },
       {
         "source": "/api/(.*)",
         "destination": "http://52.78.53.247:8080/$1"
