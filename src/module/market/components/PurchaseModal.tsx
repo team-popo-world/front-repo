@@ -11,7 +11,10 @@ interface PurchaseModalProps {
 
 export const PurchaseModal = ({ text, price, image, onConfirm, onClose }: PurchaseModalProps) => {
   return (
-    <div className="relative flex flex-col items-center gap-y-4 w-100 min-h-64 py-4 px-13 bg-[#FFF6D5] border-4 lg:border-6 border-[#FEA95E] rounded-3xl">
+    <div
+      className="relative flex flex-col items-center gap-y-4 w-100 min-h-64 py-4 px-13 bg-[#FFF6D5] border-4 lg:border-6 border-[#FEA95E] rounded-3xl"
+      onClick={(e) => e.stopPropagation()}
+    >
       <img
         src={IMAGE_URLS.market.modal_popo}
         alt="modal_popo"

@@ -1,7 +1,10 @@
 import { ParentShopTemplate } from "@/module/market/template/parent-shop";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IMAGE_URLS } from "@/lib/constants/constants";
 import { useNavigate } from "react-router-dom";
+import { getStoreItems, type StoreItem } from "@/lib/api/market/store";
+import { buyProduct } from "@/lib/api/market/buy-product";
+import { useAuthStore } from "../../../lib/zustand/store";
 
 export const TEXT_MESSAGE = {
   not_product: {
@@ -22,68 +25,23 @@ export const TEXT_MESSAGE = {
   },
 };
 
-export const PRODUCT_LIST = [
-  {
-    name: "노트북 10분",
-    image: IMAGE_URLS.items.donut,
-    price: 100,
-  },
-  {
-    name: "노트북 20분",
-    image: IMAGE_URLS.items.Bungeoppang,
-    price: 100,
-  },
-  {
-    name: "노트북 30분",
-    image: IMAGE_URLS.items.carrot,
-    price: 100,
-  },
-  {
-    name: "노트북 40분",
-    image: IMAGE_URLS.items.strawberry,
-    price: 100,
-  },
-  {
-    name: "노트북 50분",
-    image: IMAGE_URLS.items.donut,
-    price: 100,
-  },
-  {
-    name: "노트북 60분",
-    image: IMAGE_URLS.items.apple,
-    price: 100,
-  },
-  {
-    name: "노트북 70분",
-    image: IMAGE_URLS.items.feed,
-    price: 100,
-  },
-  {
-    name: "노트북 80분",
-    image: IMAGE_URLS.items.strawberry,
-    price: 100,
-  },
-  {
-    name: "노트북 90분",
-    image: IMAGE_URLS.items.feed,
-    price: 100,
-  },
-  {
-    name: "노트북 100분",
-    image: IMAGE_URLS.items.carrot,
-    price: 100,
-  },
-];
-
 export default function NpcShop() {
   const navigate = useNavigate();
+  const [productList, setProductList] = useState<StoreItem[]>([]);
+  const { setPoint } = useAuthStore();
   const [isOpen, setIsOpen] = useState(false);
   const [productIndex, setProductIndex] = useState(0);
-  const lastIndex = Math.ceil(PRODUCT_LIST.length / 3) - 1;
-  const [selectedProduct, setSelectedProduct] = useState<{ name: string; price: number; image: string } | null>(null);
+  const lastIndex = Math.ceil(productList.length / 3) - 1;
+  const [selectedProduct, setSelectedProduct] = useState<StoreItem | null>(null);
+
+  useEffect(() => {
+    getStoreItems("parent").then((items) => {
+      setProductList(items);
+    });
+  }, []);
 
   const getMessage = () => {
-    if (PRODUCT_LIST.length === 0) {
+    if (productList.length === 0) {
       return TEXT_MESSAGE.not_product;
     }
     if (productIndex === 0) {
@@ -105,13 +63,22 @@ export default function NpcShop() {
     }
   };
 
-  const handleProductClick = (product: { name: string; price: number; image: string }) => {
+  const handleProductClick = (product: StoreItem) => {
     setSelectedProduct(product);
     setIsOpen(true);
   };
 
   const handleBack = () => {
     navigate("/market", { state: { from: "parent-shop" } });
+  };
+
+  const handlePurchase = async () => {
+    try {
+      const response = await buyProduct({ productId: selectedProduct?.id || "", amount: 1 });
+      setPoint(response.currentPoint);
+    } catch (error) {
+      console.error("Failed to buy product", error);
+    }
   };
 
   return (
@@ -123,8 +90,9 @@ export default function NpcShop() {
       currentMessage={currentMessage}
       handleSpeechBubbleClick={handleSpeechBubbleClick}
       handleProductClick={handleProductClick}
-      PRODUCT_LIST={PRODUCT_LIST}
+      productList={productList}
       handleBack={handleBack}
+      handlePurchase={handlePurchase}
     />
   );
 }
