@@ -2,6 +2,8 @@
 import { useState } from "react";
 import MainTemplate from "../../module/main/template";
 import { useNavigate } from "react-router-dom";
+import { useSoundStore } from "@/lib/zustand/soundStore";
+import { useAuthStore } from "@/lib/zustand/store";
 
 // 섬별 위치 정보
 const ISLAND_POSITIONS = {
@@ -14,6 +16,9 @@ const ISLAND_POSITIONS = {
 } as const;
 
 export default function Main() {
+  const { logout } = useAuthStore();
+  const { toggleMute, isMuted } = useSoundStore();
+
   const [isAnimating, setIsAnimating] = useState(false);
   const [targetPosition, setTargetPosition] = useState<{ top: string; left: string }>({
     top: "8rem",
@@ -54,8 +59,11 @@ export default function Main() {
       isAnimating={isAnimating}
       targetPosition={targetPosition}
       direction={direction}
+      isMuted={isMuted}
       handleIslandClick={handleIslandClick}
       handleAnimationComplete={handleAnimationComplete}
+      toggleMute={toggleMute}
+      logout={logout}
     />
   );
 }

@@ -45,8 +45,8 @@ export default function NameAndPoint() {
         />
       </div>
 
-      <img src={IMAGE_URLS.common.coin} alt="coin" className="w-[1.3rem] absolute right-[4.5rem] top-[2.5em]" />
-      <div className="absolute right-[2rem] top-[2.3rem]">
+      <img src={IMAGE_URLS.common.coin} alt="coin" className="w-[1.2rem] absolute right-[4.4rem] top-[2.5em]" />
+      <div className="absolute left-[34.6rem] top-[2.3rem]">
         <TextWithStroke
           text={point?.toString() || ""}
           textClassName="text-main-yellow-800 text-[0.7rem]"

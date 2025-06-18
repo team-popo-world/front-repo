@@ -139,8 +139,8 @@ const IMAGE_URLS = {
   },
 
   sound: {
-    on: "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1750024423/sound_ga7lq2",
-    off: "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1750024423/Xsound_q2ec8r",
+    on: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750222986/sound_ga7lq2",
+    off: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750222986/Xsound_q2ec8r",
   },
 };
 

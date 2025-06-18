@@ -4,7 +4,6 @@ import { TextWithStroke } from "../../../components/text/TextWithStroke";
 import { Link } from "react-router-dom";
 import { Background } from "../../../components/layout/Background";
 import { Poni } from "../components/Poni";
-import { useAuthStore } from "@/lib/zustand/store";
 import NameAndPoint from "@/components/user/NameAndPoint";
 import { playButtonSound } from "@/lib/utils/sound";
 import ClickSound from "@/assets/sound/button_click.mp3";
@@ -22,19 +21,22 @@ interface MainTemplateProps {
   isAnimating: boolean;
   targetPosition: { top: string; left: string };
   direction: "left" | "right";
+  isMuted: boolean;
   handleIslandClick: (island: keyof typeof ISLAND_POSITIONS, path: string, direction?: "left" | "right") => void;
   handleAnimationComplete: () => void;
   toggleMute: () => void;
+  logout: () => void;
 }
 export default function MainTemplate({
   isAnimating,
   targetPosition,
   direction,
+  isMuted,
   handleIslandClick,
   handleAnimationComplete,
+  toggleMute,
+  logout,
 }: MainTemplateProps) {
-  const { logout } = useAuthStore();
-
   return (
     <Background backgroundImage={IMAGE_URLS.main.bg}>
       {/* 여백 */}
@@ -63,6 +65,19 @@ export default function MainTemplate({
           textClassName="text-main-pink-400 text-[0.9rem]"
           strokeClassName="text-main-brown-800 text-[0.9rem] text-stroke-width-[0.15rem] text-stroke-color-main-brown-800"
         />
+      </div>
+      <div
+        className="absolute  left-[6.5rem] top-[0.7rem] flex flex-col items-center cursor-pointer"
+        onClick={() => {
+          playButtonSound(ClickSound);
+          toggleMute();
+        }}
+      >
+        {isMuted ? (
+          <img src={IMAGE_URLS.sound.off} alt="sound" className="w-[1.6rem]" />
+        ) : (
+          <img src={IMAGE_URLS.sound.on} alt="sound" className="w-[1.6rem]" />
+        )}
       </div>
       {/* 퀴즈 */}
       <Link to="/quiz" onClick={() => playButtonSound(ClickSound)}>
