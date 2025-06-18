@@ -10,6 +10,8 @@ import { useState, memo } from "react";
 import { BackArrow } from "@/components/button/BackArrow";
 import { GameOutModal } from "../../component/little-pig-component/game-out-modal";
 import { useNavigate } from "react-router-dom";
+import { playButtonSound } from "@/lib/utils/sound";
+import ClickSound from "@/assets/sound/button_click.mp3";
 
 interface GamePlayProps {
   gameState: GameState;
@@ -166,11 +168,13 @@ export const GamePlay = ({
             setPoint={(newPoint) => updateGameState({ point: newPoint })}
             volumeChange={gameState.count[index] - gameState.beforeCount[index]}
             setMinusClickEvent={() => {
+              playButtonSound(ClickSound);
               updateGameState({
                 minusClickCount: gameState.minusClickCount.map((c, i) => (i === index ? c + 1 : c)),
               });
             }}
             setPlusClickEvent={() => {
+              playButtonSound(ClickSound);
               updateGameState({
                 plusClickCount: gameState.plusClickCount.map((c, i) => (i === index ? c + 1 : c)),
               });
@@ -181,9 +185,10 @@ export const GamePlay = ({
 
       <button
         onClick={() => {
+          playButtonSound(ClickSound);
           setIsTurnFinishModalOpen(true);
         }}
-        className="self-end mx-2 my-1 px-4 py-0.5 font-bold bg-main-yellow-350 border-2 xl:border-5 border-main-brown-400 rounded-lg"
+        className="self-end mx-2 my-1 px-4 py-0.5 font-bold bg-main-yellow-350 border-2 xl:border-5 border-main-brown-400 rounded-lg active:scale-95 transition-all duration-100"
       >
         턴 종료!
       </button>

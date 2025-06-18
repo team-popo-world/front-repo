@@ -21,6 +21,7 @@ export default function Main() {
   });
   const [targetPath, setTargetPath] = useState<string>("");
   const [direction, setDirection] = useState<"left" | "right">("left");
+
   const navigate = useNavigate();
 
   const handleIslandClick = (

@@ -91,7 +91,17 @@ apiClient.interceptors.response.use(
           throw new Error("Refresh token not found");
         }
 
-        const response = await apiClient.post(`/auth/token/refresh`, { refreshToken }, { withCredentials: true });
+        const response = await apiClient.post(
+          `/auth/token/refresh`,
+          {}, // 빈 body
+          {
+            withCredentials: true,
+            headers: {
+              "Refresh-Token": refreshToken,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         const accessToken = response.headers["authorization"]?.replace("Bearer ", "");
         if (accessToken) {

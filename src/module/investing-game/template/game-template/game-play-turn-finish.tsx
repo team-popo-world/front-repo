@@ -2,6 +2,8 @@
 import { BorderModal } from "@/module/investing-game/component/game-component/border-modal";
 import { TurnFinishStockCard } from "@/module/investing-game/component/game-component/turn-finish-stock-card";
 import coin from "@/assets/image/common/common_coin.webp";
+import { playButtonSound } from "@/lib/utils/sound";
+import ClickSound from "@/assets/sound/button_click.mp3";
 
 // 돼지 데이터 타입 정의
 interface StockData {
@@ -61,7 +63,10 @@ export const GamePlayTurnFinish = ({
       <button
         className={`absolute bottom-2 right-13 px-3 py-1.5 text-white text-[0.7rem] font-bold rounded-lg active:scale-95 transition-all duration-100`}
         style={{ backgroundColor: buttonColor }}
-        onClick={onNextTurn}
+        onClick={() => {
+          playButtonSound(ClickSound);
+          onNextTurn();
+        }}
       >
         Let's 투자!
       </button>

@@ -7,6 +7,8 @@ import * as d3 from "d3";
 import { Link } from "react-router-dom";
 import { BorderModal } from "../../component/game-component/border-modal";
 import type { Scenario } from "@/page/investing/game";
+import { playButtonSound } from "@/lib/utils/sound";
+import ClickSound from "@/assets/sound/button_click.mp3";
 
 // 각 돼지별 차트 색상 정의
 const COLORS = {
@@ -389,9 +391,9 @@ export const GameEnd = ({
 
           {/* 버튼 */}
         </div>
-        <Link to="/" className="self-end mr-3">
+        <Link to="/" className="self-end mr-3" onClick={() => playButtonSound(ClickSound)}>
           <div className="flex items-center justify-center gap-x-2">
-            <div className="bg-main-yellow-500 text-main-brown-900 text-sm font-bold px-2 py-1 rounded-lg">
+            <div className="bg-main-yellow-500 text-main-brown-900 text-sm font-bold px-3 py-1.5 rounded-lg active:scale-95 transition-all duration-100">
               메인으로!
             </div>
           </div>

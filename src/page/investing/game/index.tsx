@@ -90,8 +90,8 @@ const INITIAL_GAME_STATE: GameState = {
 const CHAPTER_ID = {
   "little-pig": "1111",
   truck: "2222",
-  ninja: "3333",
-  masic: "4444",
+  ninja: "4444",
+  masic: "3333",
 };
 
 export default function InvestingGame() {
@@ -222,6 +222,7 @@ export default function InvestingGame() {
     updateGameState({
       turn: nextTurn,
       currentScenario: nextScenario,
+      result: nextScenario.result,
       beforeCount: [...gameState.count],
       beforePrice: [...gameState.price],
       price: nextPrices,

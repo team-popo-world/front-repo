@@ -3,6 +3,8 @@ import { InvestingTemplate } from "../../module/investing/template";
 import { useAnimation } from "framer-motion";
 import { useEffect } from "react";
 import { useAuthStore } from "@/lib/zustand/store";
+import { playButtonSound } from "@/lib/utils/sound";
+import ClickSound from "@/assets/sound/button_click.mp3";
 
 export default function InvestingPage() {
   const navigate = useNavigate();
@@ -17,6 +19,7 @@ export default function InvestingPage() {
   };
 
   const handleChapterClick = async (chapter: string) => {
+    playButtonSound(ClickSound);
     const { x, y } = chapterPositions[chapter];
     await animation.start({
       rotate: Array.from({ length: 37 }, (_, i) => i * 25),
