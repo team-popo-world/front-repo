@@ -27,69 +27,43 @@ export default function LoginPage() {
     }
 
     try {
-      // 로그인 요청
-      const response = await apiClient.post("/auth/login", form, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true
-      });
+      const response = await apiClient.post("/auth/login", form);
+      console.log(response.data);
 
-      // 응답 데이터 로깅
-      console.log("로그인 응답:", response);
 
-      // 액세스 토큰 처리
+      // 액세스 토큰 저장
       const accessToken = response.headers["authorization"]?.replace("Bearer ", "");
       if (accessToken) {
-        console.log("액세스 토큰 설정:", accessToken);
+
         setAccessToken(accessToken);
-      } else {
-        console.warn("액세스 토큰이 응답에 없습니다.");
+
       }
 
-      // 리프레시 토큰 처리
+      // 리프레시 토큰 저장
       const refreshToken = response.headers["refresh-token"];
       if (refreshToken) {
-        console.log("리프레시 토큰 저장");
         Cookies.set("refreshToken", refreshToken, {
-          expires: 14,
+          expires: 14, // 14일 후 만료
           secure: true,
-          sameSite: "lax"
+          sameSite: "strict", // CSRF 공격 방지
         });
-      } else {
-        console.warn("리프레시 토큰이 응답에 없습니다.");
       }
 
       // 사용자 정보 저장
       if (response.data) {
-        console.log("사용자 정보 저장:", response.data);
         login(response.data.name, response.data.point);
+        console.log("로그인 성공");
       }
 
       // 메인 페이지로 이동
       navigate("/");
     } catch (error: any) {
       console.error("로그인 에러:", error);
-      
-      // 에러 응답이 있는 경우
       if (error.response) {
-        console.error("에러 상세:", {
-          status: error.response.status,
-          data: error.response.data,
-          headers: error.response.headers
-        });
-        
-        // 서버에서 보낸 에러 메시지 사용
-        const errorMessage = error.response.data?.message || "로그인에 실패했습니다.";
-        toast.error(errorMessage);
-      } else if (error.request) {
-        // 요청은 보냈지만 응답을 받지 못한 경우
-        console.error("응답 없음:", error.request);
-        toast.error("서버에서 응답이 없습니다. 잠시 후 다시 시도해주세요.");
+        console.error("에러 응답:", error.response.data);
+        toast.error(error.response.data.message || "로그인에 실패했습니다.");
       } else {
-        // 요청 자체가 실패한 경우
-        console.error("요청 실패:", error.message);
-        toast.error("네트워크 연결을 확인해주세요.");
+        toast.error("서버 연결에 실패했습니다.");
       }
     }
   };
