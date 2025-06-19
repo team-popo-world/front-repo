@@ -82,7 +82,7 @@ export default function MainTemplate({
       </div>
       {/* 퀴즈 */}
       <Link to="/quiz" onClick={() => playButtonSound(ClickSound)}>
-        <div className="absolute top-[0.5rem] right-[9.8rem]  flex flex-col justify-center items-center ">
+      <div className="absolute top-[0.5rem] right-[9.8rem]  flex flex-col justify-center items-center ">
           <img src={IMAGE_URLS.main.quiz} alt="quiz" className="w-[1.8rem]" />
           <TextWithStroke
             text="퀴즈"
@@ -94,7 +94,7 @@ export default function MainTemplate({
 
       {/* 출석 */}
       <Link to="/attandance" onClick={() => playButtonSound(ClickSound)}>
-        <div className="absolute top-[0.6rem]  right-[7.6rem]  flex flex-col items-center justify-center ">
+      <div className="absolute top-[0.6rem]  right-[7.6rem]  flex flex-col items-center justify-center ">
           <img
             src={IMAGE_URLS.main.attendance}
             alt="attendance"
@@ -124,9 +124,9 @@ export default function MainTemplate({
         <img
           src={IMAGE_URLS.main.market}
           alt="market"
-          className="absolute top-[3.5rem] left-[2.5rem] w-[8.1rem] active:scale-95 transition-all duration-100"
+          className="absolute top-[3.5rem] left-[2.5rem] w-[8.1rem]"
         />
-        <div className="absolute top-[10.25rem] left-[5.2rem] px-[0.7rem] text-[0.8rem] pt-[0.08rem] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
+        <div className="absolute top-[10.25rem] left-[5.25rem] px-[0.7rem] text-[0.8rem] pt-[0.08rem] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
           시장
         </div>
       </div>
@@ -142,7 +142,7 @@ export default function MainTemplate({
         <img
           src={IMAGE_URLS.main.diary}
           alt="emotionsDiary"
-          className="w-[7.6rem] absolute left-[2rem] bottom-[4.7rem] active:scale-95 transition-all duration-100"
+          className="w-[7.8rem] absolute left-[2rem] bottom-[4.7rem]"
         />
         <div className="absolute  bottom-[4.5rem] left-[3.7rem] pl-[0.7rem] pr-[0.6rem] text-[0.8rem] pt-[0.08rem] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
           감정일기
@@ -160,7 +160,7 @@ export default function MainTemplate({
         <img
           src={IMAGE_URLS.main.raising}
           alt="raising"
-          className="w-[8rem] absolute left-[8.75rem] bottom-[1.64rem] active:scale-95 transition-all duration-100"
+          className="w-[8.2rem] absolute left-[8.77rem] bottom-[1.58rem]"
         />
         <div className="absolute bottom-[1.5rem] left-[10rem]  px-[0.7rem] text-[0.8rem] pt-[0.08rem] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
           포포 키우기
@@ -175,12 +175,12 @@ export default function MainTemplate({
         }}
         className="cursor-pointer"
       >
-        <img
+          <img
           src={IMAGE_URLS.main.saving}
           alt="savings"
-          className="w-[8rem] right-[9.75rem] bottom-[0.9rem] absolute active:scale-95 transition-all duration-100"
+          className="w-[8.2rem] right-[9.75rem] bottom-[0.9rem] absolute"
         />
-        <div className="absolute bottom-[1rem] right-[12.27rem]  px-[0.85rem] text-[0.8rem] pt-[0.08rem]  font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
+        <div className="absolute bottom-[1rem] right-[12.3rem]  px-[1rem] text-[0.8rem] pt-[0.08rem]  font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
           적금
         </div>
       </div>
@@ -196,7 +196,7 @@ export default function MainTemplate({
         <img
           src={IMAGE_URLS.main.quest}
           alt="quest"
-          className="w-[7.2rem] absolute right-[2.4rem] bottom-[6.25rem] active:scale-95 transition-all duration-100"
+          className="w-[7.2rem] absolute right-[2.4rem] bottom-[6.25rem]"
         />
         <div className="absolute bottom-[6rem] right-[3.8rem]  px-[0.85rem] text-[0.8rem] pt-[0.08rem]   font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
           퀘스트
@@ -214,9 +214,9 @@ export default function MainTemplate({
         <img
           src={IMAGE_URLS.main.investing}
           alt="quiz"
-          className="w-[7.5rem] absolute  right-[2.75rem] top-[5.5rem] active:scale-95 transition-all duration-100"
+          className="w-[7.5rem] absolute  right-[2.75rem] top-[5.5rem]"
         />
-        <div className="absolute top-[11.4rem] right-[4rem]  px-[0.85rem] text-[0.8rem] pt-[0.08rem] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
+        <div className="absolute top-[11.4rem] right-[4.2rem]  px-[0.85rem] text-[0.8rem] pt-[0.08rem] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
           모의투자
         </div>
       </div>
