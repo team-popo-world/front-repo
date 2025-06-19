@@ -8,10 +8,11 @@ import apiClient from "../../lib/api/axios";
 interface Feed {
   productId: string;
   name: string;
-  price: number;
+  imageUrl: string;
   stock: number;
   type: string;
   exp: number;
+  price: number;
 }
 
 // 포포 키우기 응답 타입
@@ -46,52 +47,58 @@ const feedImageMap: Record<string, keyof typeof IMAGE_URLS.raising> = {
 // 기본 먹이 목록 (모든 가능한 먹이 정보)
 const ALL_FEEDS: Feed[] = [
   {
-    productId: "866bef12-a4cd-4b27-baf7-9d75194e7175",
-    name: "당근",
-    price: 100,
-    stock: 0,
-    type: "npc",
-    exp: 10
-  },
-  {
-    productId: "6bb33b33-5c96-4f01-b902-844a2556d5f8",
-    name: "물고기",
-    price: 200,
-    stock: 0,
-    type: "npc",
-    exp: 15
-  },
-  {
-    productId: "ac4fef2e-8b24-467a-91cd-ebac7d69725d",
-    name: "빵",
-    price: 150,
-    stock: 0,
-    type: "npc",
-    exp: 12
-  },
-  {
-    productId: "a2899806-3258-48e6-b394-02681339b336",
-    name: "사과",
-    price: 80,
-    stock: 0,
-    type: "npc",
-    exp: 8
-  },
-  {
-    productId: "c53f181f-7c6e-44c8-a711-4194cac552f1",
+    productId: "2e54bc74-2ac1-427d-8d36-db32ff3a55f1",
     name: "수박",
-    price: 300,
+    imageUrl: "https://res.cloudinary.com/djmcg7zgu/image/upload/w_auto,f_auto,q_auto/v1749382424/watermelon_vrrndc",
     stock: 0,
     type: "npc",
-    exp: 20
+    exp: 20,
+    price: 300
   },
   {
-    productId: "cbb28e06-b5d9-425d-aea9-f33e7f74a32b",
+    productId: "81809d00-7af4-4784-a962-6b48ddecc576",
     name: "브로콜리",
-    price: 120,
+    imageUrl: "https://res.cloudinary.com/djmcg7zgu/image/upload/w_auto,f_auto,q_auto/v1749382424/broccoli_nmpcqu",
     stock: 0,
     type: "npc",
-    exp: 10
+    exp: 14,
+    price: 120
+  },
+  {
+    productId: "3e2724e3-0f74-490c-8022-ade43bdd2bb1",
+    name: "빵",
+    imageUrl: "https://res.cloudinary.com/djmcg7zgu/image/upload/w_auto,f_auto,q_auto/v1749382424/bread_nykeqe",
+    stock: 0,
+    type: "npc",
+    exp: 12,
+    price: 150
+  },
+  {
+    productId: "b51ef10c-8974-4bb7-87a3-2be5ed8e4948",
+    name: "사과",
+    imageUrl: "https://res.cloudinary.com/djmcg7zgu/image/upload/w_auto,f_auto,q_auto/v1749382424/apple_dyzpm6",
+    stock: 0,
+    type: "npc",
+    exp: 8,
+    price: 80
+  },
+  {
+    productId: "6de9042e-4170-4847-aeef-4d0f59fd9cb7",
+    name: "당근",
+    imageUrl: "https://res.cloudinary.com/djmcg7zgu/image/upload/w_auto,f_auto,q_auto/v1749382424/carrot_i3xbjj",
+    stock: 0,
+    type: "npc",
+    exp: 10,
+    price: 100
+  },
+  {
+    productId: "40c049d1-d8cc-41f5-9947-84d9ea2352f7",
+    name: "물고기",
+    imageUrl: "https://res.cloudinary.com/djmcg7zgu/image/upload/w_auto,f_auto,q_auto/v1749382424/fish_hqsqfs",
+    stock: 0,
+    type: "npc",
+    exp: 15,
+    price: 200
   }
 ];
 
@@ -117,7 +124,13 @@ export default function RaisingPage() {
       // API 응답과 기본 먹이 목록을 합침
       const mergedFeeds = ALL_FEEDS.map(defaultFeed => {
         const apiFeed = availableFeeds.find(feed => feed.productId === defaultFeed.productId);
-        return apiFeed || defaultFeed;  // API에 없는 먹이는 기본 정보(stock: 0) 사용
+        if (apiFeed) {
+          return {
+            ...apiFeed,
+            stock: apiFeed.stock ?? 0  // stock이 undefined나 null이면 0으로 표시
+          };
+        }
+        return defaultFeed;  // API에 없는 먹이는 기본 정보(stock: 0) 사용
       });
 
       setLevel(currentLevel);
