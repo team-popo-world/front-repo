@@ -1,5 +1,4 @@
 import { IMAGE_URLS } from "@/lib/constants/constants";
-import coin from "@/assets/image/common/common_coin.webp";
 
 interface PurchaseModalProps {
   text: string;
@@ -9,7 +8,13 @@ interface PurchaseModalProps {
   onClose: () => void;
 }
 
-export const PurchaseModal = ({ text, price, image, onConfirm, onClose }: PurchaseModalProps) => {
+export const PurchaseModal = ({
+  text,
+  price,
+  image,
+  onConfirm,
+  onClose,
+}: PurchaseModalProps) => {
   return (
     <div
       className="relative flex flex-col items-center gap-y-4 w-100 min-h-64 py-4 px-13 bg-[#FFF6D5] border-4 lg:border-6 border-[#FEA95E] rounded-3xl"
@@ -26,7 +31,11 @@ export const PurchaseModal = ({ text, price, image, onConfirm, onClose }: Purcha
         <div className="flex flex-col gap-y-2">
           <div className="text-xl text-[#6E532C] font-bold">{text}</div>
           <div className="flex items-center gap-x-1">
-            <img src={coin} alt="coin" className="w-7 h-7 object-contain" />
+            <img
+              src={IMAGE_URLS.common.coin}
+              alt="coin"
+              className="w-7 h-7 object-contain"
+            />
             <div className="text-lg text-[#6E532C] font-bold">{price}냥</div>
           </div>
         </div>

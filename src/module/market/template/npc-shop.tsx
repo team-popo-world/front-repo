@@ -3,7 +3,6 @@ import { Background } from "@/components/layout/Background";
 import { IMAGE_URLS } from "@/lib/constants/constants";
 import { WoodTitle } from "../components/WoodTitle";
 import { SpeechBubble } from "../components/SpeechBubble";
-import coin from "@/assets/image/common/common_coin.webp";
 import { Modal } from "@/components/modal/Modal";
 import { PurchaseModal } from "../components/PurchaseModal";
 import NameAndPoint from "@/components/user/NameAndPoint";
@@ -81,11 +80,12 @@ export const NpcShopTemplate = ({
           >
             <div className="text-[#6E532C] text-[0.65rem] font-bold">{product.name}</div>
             <div className="flex items-center gap-1">
-              <img src={coin} alt="coin" className="w-3.5 h-3.5 object-contain" />
+              <img src={IMAGE_URLS.common.coin} alt="coin" className="w-3.5 h-3.5 object-contain" />
               <div className="text-[0.6rem] text-[#6E532C] font-bold">{product.price}냥</div>
             </div>
           </div>
-        ))}
+          )
+        )}
       </div>
     </Background>
   );

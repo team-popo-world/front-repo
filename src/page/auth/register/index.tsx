@@ -1,5 +1,5 @@
 import { Background } from "../../../components/layout/Background";
-import backgroundImage from "../../../assets/image/register/register_background.png";
+
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import apiClient from "../../../lib/api/axios";
@@ -8,6 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "../../../styles/toast.css";
 import { toast } from "react-toastify";
 import { BackArrow } from "../../../components/button/BackArrow";
+import { IMAGE_URLS } from "@/lib/constants/constants";
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -78,12 +79,9 @@ export default function RegisterPage() {
       return;
     }
 
-    const passwordRule =
-      /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/;
+    const passwordRule = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).+$/;
     if (!passwordRule.test(form.password)) {
-      toast.error(
-        "비밀번호에는 특수문자 1개, 대문자 1개, 숫자 1개 이상이 포함되어야 합니다."
-      );
+      toast.error("비밀번호에는 특수문자 1개, 대문자 1개, 숫자 1개 이상이 포함되어야 합니다.");
       return;
     }
 
@@ -114,7 +112,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <Background backgroundImage={backgroundImage}>
+    <Background backgroundImage={IMAGE_URLS.login.bg}>
       <BackArrow />
       <form onSubmit={handleSubmit} className="flex flex-col items-center">
         <h1

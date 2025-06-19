@@ -16,4 +16,5 @@ export interface Quest {
   isStatic: boolean;
   reward: number;
   imageUrl?: string;
+  label: string;
 }

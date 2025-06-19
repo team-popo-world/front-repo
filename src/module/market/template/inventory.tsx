@@ -1,7 +1,7 @@
 import { BackArrow } from "@/components/button/BackArrow";
 import { Background } from "@/components/layout/Background";
 import { IMAGE_URLS } from "@/lib/constants/constants";
-import { InventorySpeechBubble, SpeechBubble } from "../components/SpeechBubble";
+import { InventorySpeechBubble, SpeechBubble as _SpeechBubble} from "../components/SpeechBubble";
 import { InventoryDarkWoodTitle } from "../components/WoodTitle";
 import { Modal } from "@/components/modal/Modal";
 import { InventoryModal } from "../components/InventoryModal";
@@ -24,7 +24,7 @@ interface InventoryTemplateProps {
 export const InventoryTemplate = ({
   isOpen,
   setIsOpen,
-  productIndex,
+  productIndex: _productIndex,
   selectedProduct,
   currentMessage,
   handleSpeechBubbleClick,

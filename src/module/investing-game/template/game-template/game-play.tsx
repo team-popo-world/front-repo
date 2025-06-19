@@ -1,5 +1,4 @@
 import { Background } from "@/components/layout/Background";
-import coin from "@/assets/image/common/common_coin.webp";
 import { TextWithStroke } from "@/components/text/TextWithStroke";
 import { GamePlayStockCard } from "@/module/investing-game/component/game-component/game-play-stock-card";
 import { NewsBox } from "../../component/game-component/news-box";
@@ -10,6 +9,10 @@ import { useState, memo } from "react";
 import { BackArrow } from "@/components/button/BackArrow";
 import { GameOutModal } from "../../component/little-pig-component/game-out-modal";
 import { useNavigate } from "react-router-dom";
+import { playButtonSound } from "@/lib/utils/sound";
+import ClickSound from "@/assets/sound/button_click.mp3";
+import SoundButton from "@/components/button/SoundButton";
+import { IMAGE_URLS } from "@/lib/constants/constants";
 
 interface GamePlayProps {
   gameState: GameState;
@@ -57,16 +60,22 @@ export const GamePlay = ({
   const calculatedPoint = () => {
     // 실제 판매하지는 않았지만 현재 가지고 있는 물건 개수가
     // 다음 턴 가격으로 판매되었다고 가정하고 총 자산에 반영함
-    const calculatedPoint = gameState.nextPrice.reduce((acc, nextTurnPrice, index) => {
-      const soldCount = gameState.count[index]; // 총 자산은 현재 가지고 있는 모든 물건 판것을 추가함
-      const soldPrice = nextTurnPrice * soldCount; // 다음턴에 반영된 가격이 총 자산에 반영됨
-      return acc + soldPrice;
-    }, 0);
+    const calculatedPoint = gameState.nextPrice.reduce(
+      (acc, nextTurnPrice, index) => {
+        const soldCount = gameState.count[index]; // 총 자산은 현재 가지고 있는 모든 물건 판것을 추가함
+        const soldPrice = nextTurnPrice * soldCount; // 다음턴에 반영된 가격이 총 자산에 반영됨
+        return acc + soldPrice;
+      },
+      0
+    );
 
     return gameState.point + calculatedPoint;
   };
 
-  const getStockData = (index: number, image: string): StockData | undefined => {
+  const getStockData = (
+    index: number,
+    image: string
+  ): StockData | undefined => {
     if (gameState.currentScenario) {
       const stock = gameState.currentScenario.stocks[index];
       const prev = gameState.beforeCount[index];
@@ -84,7 +93,10 @@ export const GamePlay = ({
   if (!gameState.currentScenario) return null;
 
   return (
-    <Background backgroundImage={backgroundImage} backgroundClassName="flex flex-col items-center">
+    <Background
+      backgroundImage={backgroundImage}
+      backgroundClassName="flex flex-col items-center"
+    >
       <Modal isOpen={isTurnFinishModalOpen}>
         <GamePlayTurnFinish
           onNextTurn={() => {
@@ -126,6 +138,8 @@ export const GamePlay = ({
           setIsGameOutModalOpen(true);
         }}
       />
+      {/* 음소거 버튼 */}
+      <SoundButton />
 
       <div className="self-end mt-4 mr-6 mb-1">
         <MemoizedTextWithStroke
@@ -134,7 +148,11 @@ export const GamePlay = ({
           strokeClassName="text-main-brown-700 text-[1rem] font-bold text-stroke-width-[0.2rem] text-stroke-color-main-brown-700"
         />
         <div className="flex items-center justify-end gap-x-0.5">
-          <img src={coin} alt="코인" className="w-4 h-4 object-contain" />
+          <img
+            src={IMAGE_URLS.common.coin}
+            alt="코인"
+            className="w-4 h-4 object-contain"
+          />
           <TextWithStroke
             text={`${gameState.point}냥`}
             textClassName="text-main-yellow-200 text-[0.65rem] font-bold tracking-[0.075rem]"
@@ -143,7 +161,10 @@ export const GamePlay = ({
         </div>
       </div>
 
-      <NewsBox title={gameState.currentScenario.news} hint={gameState.currentScenario.news_hint} />
+      <NewsBox
+        title={gameState.currentScenario.news}
+        hint={gameState.currentScenario.news_hint}
+      />
 
       <section className="relative flex items-center justify-center gap-x-2.5">
         {gameState.currentScenario.stocks.map((stock, index) => (
@@ -159,20 +180,28 @@ export const GamePlay = ({
             count={gameState.count[index]}
             onQuantityChange={(newQuantity) => {
               updateGameState({
-                count: gameState.count.map((c, i) => (i === index ? newQuantity : c)),
+                count: gameState.count.map((c, i) =>
+                  i === index ? newQuantity : c
+                ),
               });
             }}
             point={gameState.point}
             setPoint={(newPoint) => updateGameState({ point: newPoint })}
             volumeChange={gameState.count[index] - gameState.beforeCount[index]}
             setMinusClickEvent={() => {
+              playButtonSound(ClickSound);
               updateGameState({
-                minusClickCount: gameState.minusClickCount.map((c, i) => (i === index ? c + 1 : c)),
+                minusClickCount: gameState.minusClickCount.map((c, i) =>
+                  i === index ? c + 1 : c
+                ),
               });
             }}
             setPlusClickEvent={() => {
+              playButtonSound(ClickSound);
               updateGameState({
-                plusClickCount: gameState.plusClickCount.map((c, i) => (i === index ? c + 1 : c)),
+                plusClickCount: gameState.plusClickCount.map((c, i) =>
+                  i === index ? c + 1 : c
+                ),
               });
             }}
           />
@@ -181,9 +210,10 @@ export const GamePlay = ({
 
       <button
         onClick={() => {
+          playButtonSound(ClickSound);
           setIsTurnFinishModalOpen(true);
         }}
-        className="self-end mx-2 my-1 px-4 py-0.5 font-bold bg-main-yellow-350 border-2 xl:border-5 border-main-brown-400 rounded-lg"
+        className="self-end mx-2 my-1 px-4 py-0.5 font-bold bg-main-yellow-350 border-2 xl:border-5 border-main-brown-400 rounded-lg active:scale-95 transition-all duration-100"
       >
         턴 종료!
       </button>

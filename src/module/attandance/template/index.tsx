@@ -3,6 +3,7 @@ import { IMAGE_URLS } from "@/lib/constants/constants";
 import { useEffect, useState } from "react";
 import { getKSTDateTime } from "@/lib/utils/getKSTDateTime";
 import { getAttendance, postAttendance } from "@/lib/api/attandance/attendance";
+import { PointModal } from "@/components/modal/PointModal";
 
 // text F48A00
 // button_bg F48A00
@@ -16,9 +17,11 @@ interface Attendance {
 
 export function AttandanceTemplate() {
   const [attendance, setAttendance] = useState<Attendance[]>([]);
+  const [isPointModalOpen, setIsPointModalOpen] = useState(false);
 
   useEffect(() => {
     getAttendance().then((data) => {
+      console.log(data);
       setAttendance(data);
     });
   }, []);
@@ -31,7 +34,8 @@ export function AttandanceTemplate() {
 
   const handleAttendance = () => {
     postAttendance(getToday()).then((data) => {
-      // setAttendance(data);
+      console.log(data);
+      setAttendance(data.weekAttendance);
     });
   };
 
@@ -61,6 +65,15 @@ export function AttandanceTemplate() {
           "bg-[#FFF4BF] px-28 relative w-[360px] h-[258px] sm:w-[430px] sm:h-[300px] md:w-[615px] md:h-[430px] xl:w-[1180px] xl:h-[820px] bg-contain bg-center bg-no-repeat"
         }
       >
+        {/* 포인트 모달 */}
+        <PointModal
+          isOpen={isPointModalOpen}
+          onClose={() => setIsPointModalOpen(false)}
+          text={`축하해요! \n 출석체크 보상을 받았어요!`}
+          price={100}
+          onConfirm={() => setIsPointModalOpen(false)}
+        />
+
         <BackArrow />
         {/* 왼쪽 제목 */}
         <div className="ml-6 flex flex-col w-fit mb-6">

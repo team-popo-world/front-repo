@@ -9,6 +9,7 @@ export class ApiError extends Error {
   constructor(public status: number, public message: string, public data?: any) {
     super(message);
     this.name = "ApiError";
+ 
   }
 }
 
@@ -21,7 +22,7 @@ export class ApiError extends Error {
  * - 기본 헤더: Content-Type: application/json
  */
 
-const API_URL = "http://52.78.53.247:8080";
+const API_URL = "/api";
 
 const apiClient = axios.create({
   baseURL: API_URL,
@@ -58,6 +59,7 @@ apiClient.interceptors.request.use(
   },
   (error) => {
     // 요청 설정 중 에러 발생 시 처리
+    console.log(error);
     return Promise.reject(new ApiError(0, "요청 설정 중 오류가 발생했습니다."));
   }
 );
@@ -91,7 +93,17 @@ apiClient.interceptors.response.use(
           throw new Error("Refresh token not found");
         }
 
-        const response = await apiClient.post(`/auth/token/refresh`, { refreshToken }, { withCredentials: true });
+        const response = await apiClient.post(
+          `/auth/token/refresh`,
+          {}, // 빈 body
+          {
+            withCredentials: true,
+            headers: {
+              "Refresh-Token": refreshToken,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         const accessToken = response.headers["authorization"]?.replace("Bearer ", "");
         if (accessToken) {

@@ -1,6 +1,9 @@
 // src/module/investing-game/component/little-pig-component/game-out-modal.tsx
 import { memo } from "react";
 import { IMAGE_URLS } from "@/lib/constants/constants";
+import { playButtonSound } from "@/lib/utils/sound";
+import ClickSound from "@/assets/sound/button_click.mp3";
+import backSound from "@/assets/sound/back_click.mp3";
 
 interface GameOutModalProps {
   onConfirm: () => void;
@@ -17,11 +20,20 @@ export const GameOutModal = memo(({ onConfirm, onCancel }: GameOutModalProps) =>
 
       {/* 버튼 컨테이너 */}
       <div className="flex gap-x-4 mt-2 self-end">
-        <button onClick={onConfirm} className="px-4 py-1 bg-main-red-500 text-white rounded-lg text-sm font-bold  ">
+        <button
+          onClick={() => {
+            playButtonSound(backSound);
+            onConfirm();
+          }}
+          className="px-4 py-1 bg-main-red-500 text-white rounded-lg text-sm font-bold  "
+        >
           나가기
         </button>
         <button
-          onClick={onCancel}
+          onClick={() => {
+            playButtonSound(ClickSound);
+            onCancel();
+          }}
           className="px-4 py-1 bg-main-yellow-300 text-main-brown-850 rounded-lg text-sm font-bold  "
         >
           취소
