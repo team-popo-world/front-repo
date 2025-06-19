@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import poniImage from "@/assets/image/main/main_poni.webp";
+import { IMAGE_URLS } from "@/lib/constants/constants";
 import clsx from "clsx";
 
 interface PoniProps {
@@ -18,7 +18,6 @@ interface PoniProps {
 
 export const Poni = ({
   initialPosition,
-  isAnimating,
   targetPosition,
   direction = "left",
   onAnimationComplete,
@@ -27,7 +26,7 @@ export const Poni = ({
     <motion.div
       className="absolute w-20 h-20"
       initial={initialPosition}
-      animate={isAnimating ? targetPosition : { top: "8rem", left: "14rem" }}
+      animate={targetPosition}
       transition={{
         duration: 1.5,
         ease: [0.4, 0, 0.2, 1],
@@ -35,9 +34,12 @@ export const Poni = ({
       onAnimationComplete={onAnimationComplete}
     >
       <motion.img
-        src={poniImage}
+        src={IMAGE_URLS.main.popo}
         alt="poni"
-        className={clsx("w-full h-full object-contain", direction === "right" ? "-scale-x-100" : "scale-x-100")}
+        className={clsx(
+          "w-full h-full object-contain",
+          direction === "right" ? "-scale-x-100" : "scale-x-100"
+        )}
         transition={{
           duration: 1,
           repeat: 0,

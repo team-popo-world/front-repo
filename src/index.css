@@ -110,6 +110,15 @@
   -webkit-text-stroke-color: --value([color]);
 }
 
+.scrollbar-hidden {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
 @media (max-width: 430px) {
   html {
     font-size: 60%;

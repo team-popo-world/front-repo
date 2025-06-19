@@ -2,16 +2,21 @@ import { useAuthStore } from "@/lib/zustand/store";
 import { TextWithStroke } from "../text/TextWithStroke";
 import { IMAGE_URLS } from "@/lib/constants/constants";
 
+interface NameAndPointProps {
+  position?: {
+    top?: string;
+    right?: string;
+  };
+}
+
 const limitNameLength = (name: string) => {
   if (!name) return "";
 
-  // 한글은 2글자,영어 소문자 1글자, 나머지 1.2글자로 계산
   let length = 0;
   let result = "";
 
   for (let i = 0; i < name.length; i++) {
     const char = name[i];
-    // 한글인 경우 (가-힣 범위)
     if (/[가-힣]/.test(char)) {
       length += 2;
     } else if (/[a-z]/.test(char)) {
@@ -30,29 +35,36 @@ const limitNameLength = (name: string) => {
   return result;
 };
 
-export default function NameAndPoint() {
+export default function NameAndPoint({ position }: NameAndPointProps) {
   const { name, point } = useAuthStore();
 
+  const wrapperStyle = {
+    top: position?.top || "0.3rem",
+    right: position?.right || "0.7rem",
+  };
+
   return (
-    <>
-      <div className="absolute right-[0.7rem] top-[0.3rem]">
-        <img src={IMAGE_URLS.common.name} alt="name" className="w-[6rem]" />
+    <div className="absolute z-10" style={wrapperStyle}>
+      {/* 이름 배경 + 이름 텍스트 */}
+      <div className="relative ">
+        <img src={IMAGE_URLS.common.name} alt="name" className="w-[6rem] " />
         <TextWithStroke
-          className="absolute left-[2.1rem] bottom-[1.8rem]"
+          className="absolute left-[2.1rem] bottom-[1.8rem] ml-[0.1rem]"
           text={limitNameLength(name || "")}
-          textClassName="text-main-yellow-800 text-[0.8rem]"
+          textClassName="text-main-yellow-200 text-[0.8rem]"
           strokeClassName="text-main-brown-800 text-[0.8rem] text-stroke-width-[0.12rem] text-stroke-color-main-brown-800"
         />
       </div>
 
-      <img src={IMAGE_URLS.common.coin} alt="coin" className="w-[1.2rem] absolute right-[4.4rem] top-[2.5em]" />
-      <div className="absolute left-[34.6rem] top-[2.3rem]">
+      {/* 코인 이미지 + 포인트 텍스트 */}
+      <div className="flex items-center gap-[0.1rem] mt-[0.3rem] ml-[0.5rem] absolute bottom-[0.25rem] left-[0.4rem]">
+        <img src={IMAGE_URLS.common.coin} alt="coin" className="w-[1.3rem]" />
         <TextWithStroke
-          text={point?.toString() || ""}
+          text={(point?.toString() || "") + "냥"}
           textClassName="text-main-yellow-800 text-[0.7rem]"
           strokeClassName="text-main-brown-800 text-[0.7rem] text-stroke-width-[0.12rem] text-stroke-color-main-brown-800"
         />
       </div>
-    </>
+    </div>
   );
 }

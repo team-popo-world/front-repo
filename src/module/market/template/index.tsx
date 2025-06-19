@@ -41,15 +41,13 @@ export const MarketTemplate = ({
       {/* 이름 포인트 */}
       <NameAndPoint />
       {/* 처음 페이지 방문했을때 포니 배타고 오는것 */}
-      {isAnimating && (
-        <Poni
-          initialPosition={INITIAL_POSITION[direction]}
-          isAnimating={isAnimating}
-          targetPosition={TARGET_POSITION[direction]}
-          direction={direction}
-          onAnimationComplete={handleAnimationComplete}
-        />
-      )}
+      <Poni
+        initialPosition={INITIAL_POSITION[direction]}
+        isAnimating={isAnimating}
+        targetPosition={TARGET_POSITION[direction]}
+        direction={direction}
+        onAnimationComplete={handleAnimationComplete}
+      />
       {/* 제목 */}
       <div className="absolute top-2 left-1/2 -translate-x-1/2">
         <TextWithStroke
@@ -58,10 +56,7 @@ export const MarketTemplate = ({
           strokeClassName="text-main-black-500 text-[3.25rem] font-bold text-stroke-width-[0.3rem] text-stroke-color-main-black-500"
         />
       </div>
-      {/* 포포 */}
-      {!isAnimating && (
-        <img src={IMAGE_URLS.market.popo} alt="popo" className="w-32 h-32 object-contain absolute top-54 left-12" />
-      )}
+
       {/* npc 상점 */}
       <Link to="/market/npc">
         <div className="flex flex-col items-center justify-center absolute top-28 left-48 active:scale-95 transition-all duration-100">

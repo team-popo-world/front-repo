@@ -59,6 +59,7 @@ export default function MainTemplate({
         }}
       >
         <img src={IMAGE_URLS.common.logout} alt="로그아웃" className="w-[1.6rem]" />
+
         <TextWithStroke
           text="로그아웃"
           className="mt-[0.1rem]"
@@ -94,7 +95,11 @@ export default function MainTemplate({
       {/* 출석 */}
       <Link to="/attandance" onClick={() => playButtonSound(ClickSound)}>
         <div className="absolute top-[0.6rem]  right-[7.6rem]  flex flex-col items-center justify-center ">
-          <img src={IMAGE_URLS.main.attendance} alt="attendance" className="w-[1.8rem]" />
+          <img
+            src={IMAGE_URLS.main.attendance}
+            alt="attendance"
+            className="w-[1.8rem]"
+          />
           <TextWithStroke
             text="출석"
             textClassName="text-main-blue-700 text-[0.88rem]"
@@ -139,7 +144,7 @@ export default function MainTemplate({
           alt="emotionsDiary"
           className="w-[7.6rem] absolute left-[2rem] bottom-[4.7rem] active:scale-95 transition-all duration-100"
         />
-        <div className="absolute  bottom-[4.5rem] left-[3.4rem] pl-[0.7rem] pr-[0.6rem] text-[0.8rem] pt-[0.08rem] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
+        <div className="absolute  bottom-[4.5rem] left-[3.7rem] pl-[0.7rem] pr-[0.6rem] text-[0.8rem] pt-[0.08rem] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
           감정일기
         </div>
       </div>

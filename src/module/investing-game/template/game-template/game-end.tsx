@@ -1,5 +1,4 @@
 import { Background } from "@/components/layout/Background";
-import coin from "@/assets/image/common/common_coin.webp";
 import { TextWithStroke } from "@/components/text/TextWithStroke";
 import { useEffect, useRef } from "react";
 import rough from "roughjs";
@@ -9,6 +8,7 @@ import { BorderModal } from "../../component/game-component/border-modal";
 import type { Scenario } from "@/page/investing/game";
 import { playButtonSound } from "@/lib/utils/sound";
 import ClickSound from "@/assets/sound/button_click.mp3";
+import { IMAGE_URLS } from "@/lib/constants/constants";
 
 // 각 돼지별 차트 색상 정의
 const COLORS = {
@@ -64,7 +64,9 @@ export const GameEnd = ({
 
     // SVG 그룹 생성
     // 차트가 있는 전체 영역
-    const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
+    const g = svg
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
 
     // X축 스케일 설정
     // scaleLinear()는 입력값(데이터)을 출력값(화면 좌표)로 선형(linear) 변환
@@ -93,26 +95,34 @@ export const GameEnd = ({
 
     // y축 그리드 그리기
     // 차트 높이를 4개로 나누어 그리드 선을 그리고 g 태그에 추가
-    const yGridLines = g.selectAll(".grid-line").data(y.ticks(4)).enter().append("g");
+    const yGridLines = g
+      .selectAll(".grid-line")
+      .data(y.ticks(4))
+      .enter()
+      .append("g");
 
     yGridLines
       .append("path")
       // y(d)는 scaleLinear()로 변환된 결과이므로 실제 픽셀 좌표 MoveTo (M) 명령어, Horizontal Line To (H) 명령어
       .attr("d", (d) => `M0,${y(d)}H${width}`) // attr()로는 주로 SVG 속성들을 설정
       .attr("stroke", "#7b5025") // --color-main-brown-575
-      .attr("stroke-dasharray", (d, i) => {
+      .attr("stroke-dasharray", (_d, i) => {
         return i !== 0 ? "5,5" : "0,0";
       }) // 5px 선, 5px 공백
       .attr("stroke-width", 1);
 
     // x축 그리드 그리기
-    const xGridLines = g.selectAll(".grid-line").data(x.ticks(7)).enter().append("g");
+    const xGridLines = g
+      .selectAll(".grid-line")
+      .data(x.ticks(7))
+      .enter()
+      .append("g");
 
     xGridLines
       .append("path")
       .attr("d", (d) => `M${x(d)},0V${height}`)
-      .attr("stroke", (d, i) => (i === 0 ? "#7b5025" : "none")) // 첫번째 그리고 나머지는 그리지 않음
-      .attr("stroke-dasharray", (d, i) => {
+      .attr("stroke", (_d, i) => (i === 0 ? "#7b5025" : "none")) // 첫번째 그리고 나머지는 그리지 않음
+      .attr("stroke-dasharray", (_d, i) => {
         return i !== 0 ? "5,5" : "0,0";
       }) // 5px 선, 5px 공백
       .attr("stroke-width", 1);
@@ -130,7 +140,7 @@ export const GameEnd = ({
       .append("g") // g그룹에 추가
       .attr("class", "tick") // tick 클래스 추가
       .attr("transform", (d) => `translate(${x(d)},0)`) // 좌표 이동
-      .each(function (d) {
+      .each(function (_d) {
         const roughLine = rc.line(0, 0, 0, 6, {
           roughness: 1,
           stroke: "#7b5025", // --color-main-brown-575
@@ -166,7 +176,7 @@ export const GameEnd = ({
       .append("g")
       .attr("class", "tick")
       .attr("transform", (d) => `translate(0,${y(d)})`)
-      .each(function (d) {
+      .each(function (_d) {
         const roughLine = rc.line(0, 0, -6, 0, {
           roughness: 1,
           stroke: "#8B4513",
@@ -200,11 +210,17 @@ export const GameEnd = ({
     // 첫째 돼지 라인 그리기
     // rc는 rough.js의 인스턴스
     for (let i = 0; i < firstPigPoints.length - 1; i++) {
-      const line = rc.line(firstPigPoints[i].x, firstPigPoints[i].y, firstPigPoints[i + 1].x, firstPigPoints[i + 1].y, {
-        roughness: 1.5,
-        stroke: COLORS.first,
-        strokeWidth: 3,
-      });
+      const line = rc.line(
+        firstPigPoints[i].x,
+        firstPigPoints[i].y,
+        firstPigPoints[i + 1].x,
+        firstPigPoints[i + 1].y,
+        {
+          roughness: 1.5,
+          stroke: COLORS.first,
+          strokeWidth: 3,
+        }
+      );
       g.node()?.appendChild(line);
     }
 
@@ -238,11 +254,17 @@ export const GameEnd = ({
 
     // 셋째 돼지 라인 그리기
     for (let i = 0; i < thirdPigPoints.length - 1; i++) {
-      const line = rc.line(thirdPigPoints[i].x, thirdPigPoints[i].y, thirdPigPoints[i + 1].x, thirdPigPoints[i + 1].y, {
-        roughness: 1.5,
-        stroke: COLORS.third,
-        strokeWidth: 3,
-      });
+      const line = rc.line(
+        thirdPigPoints[i].x,
+        thirdPigPoints[i].y,
+        thirdPigPoints[i + 1].x,
+        thirdPigPoints[i + 1].y,
+        {
+          roughness: 1.5,
+          stroke: COLORS.third,
+          strokeWidth: 3,
+        }
+      );
       g.node()?.appendChild(line);
     }
 
@@ -252,13 +274,18 @@ export const GameEnd = ({
     // circle()은 x,y 좌표와 반지름을 받아서 원을 그림
     data.forEach((d, i) => {
       // 첫째 돼지 포인트
-      const firstPigPoint = rc.circle(x(i + 1), y(d[stockNames[0] as keyof typeof d]), 10, {
-        roughness: 1,
-        fill: COLORS.first,
-        fillStyle: "solid",
-        stroke: "#7b5025", // --color-main-brown-575
-        strokeWidth: 3,
-      });
+      const firstPigPoint = rc.circle(
+        x(i + 1),
+        y(d[stockNames[0] as keyof typeof d]),
+        10,
+        {
+          roughness: 1,
+          fill: COLORS.first,
+          fillStyle: "solid",
+          stroke: "#7b5025", // --color-main-brown-575
+          strokeWidth: 3,
+        }
+      );
       g.node()?.appendChild(firstPigPoint);
       // 마지막 데이터 포인트에 첫째 돼지 이미지 추가
       if (i === data.length - 1) {
@@ -271,13 +298,18 @@ export const GameEnd = ({
       }
 
       // 둘째 돼지 포인트
-      const secondPigPoint = rc.circle(x(i + 1), y(d[stockNames[1] as keyof typeof d]), 10, {
-        roughness: 1,
-        fill: COLORS.second,
-        fillStyle: "solid",
-        stroke: "#7b5025", // --color-main-brown-575
-        strokeWidth: 3,
-      });
+      const secondPigPoint = rc.circle(
+        x(i + 1),
+        y(d[stockNames[1] as keyof typeof d]),
+        10,
+        {
+          roughness: 1,
+          fill: COLORS.second,
+          fillStyle: "solid",
+          stroke: "#7b5025", // --color-main-brown-575
+          strokeWidth: 3,
+        }
+      );
       g.node()?.appendChild(secondPigPoint);
       // 마지막 데이터 포인트에 둘째 돼지 이미지 추가
       if (i === data.length - 1) {
@@ -290,13 +322,18 @@ export const GameEnd = ({
       }
 
       // 셋째 돼지 포인트
-      const thirdPigPoint = rc.circle(x(i + 1), y(d[stockNames[2] as keyof typeof d]), 10, {
-        roughness: 1,
-        fill: COLORS.third,
-        fillStyle: "solid",
-        stroke: "#7b5025", // --color-main-brown-575
-        strokeWidth: 3,
-      });
+      const thirdPigPoint = rc.circle(
+        x(i + 1),
+        y(d[stockNames[2] as keyof typeof d]),
+        10,
+        {
+          roughness: 1,
+          fill: COLORS.third,
+          fillStyle: "solid",
+          stroke: "#7b5025", // --color-main-brown-575
+          strokeWidth: 3,
+        }
+      );
       g.node()?.appendChild(thirdPigPoint);
       // 마지막 데이터 포인트에 셋째 돼지 이미지 추가
       if (i === data.length - 1) {
@@ -325,7 +362,9 @@ export const GameEnd = ({
     ];
 
     legendItems.forEach((item, i) => {
-      const legendItem = legend.append("g").attr("transform", `translate(${i * 100}, 0)`);
+      const legendItem = legend
+        .append("g")
+        .attr("transform", `translate(${i * 100}, 0)`);
 
       const circle = rc.circle(0, 0, 10, {
         roughness: 1,
@@ -350,8 +389,15 @@ export const GameEnd = ({
   }, [data]);
 
   return (
-    <Background backgroundImage={backgroundImage} backgroundClassName="flex flex-col items-center justify-center">
-      <BorderModal className="flex flex-col items-center px-10" borderColor="#fff9d0" borderStrokeColor="#7b5025">
+    <Background
+      backgroundImage={backgroundImage}
+      backgroundClassName="flex flex-col items-center justify-center"
+    >
+      <BorderModal
+        className="flex flex-col items-center px-10"
+        borderColor="#fff9d0"
+        borderStrokeColor="#7b5025"
+      >
         {/* 제목 */}
         <TextWithStroke
           text="투자 결과!"
@@ -362,16 +408,36 @@ export const GameEnd = ({
         {/* 그래프 */}
         <div className="relative flex flex-col items-start">
           {/* 차트 돼지  */}
-          <img src={chartImage} alt="차트돼지" className="absolute -top-3 -left-3 w-11 h-11 object-contain z-100" />
+          <img
+            src={chartImage}
+            alt="차트돼지"
+            className="absolute -top-3 -left-3 w-11 h-11 object-contain z-100"
+          />
 
           <div className="bg-[#FFFDFA] p-3 mb-2 rounded-lg shadow-lg w-[23.5rem] h-[11.875rem] relative mx-auto">
-            <svg ref={svgRef} width="100%" height="100%" viewBox="0 0 600 350" preserveAspectRatio="xMidYMid meet" />
+            <svg
+              ref={svgRef}
+              width="100%"
+              height="100%"
+              viewBox="0 0 600 350"
+              preserveAspectRatio="xMidYMid meet"
+            />
           </div>
           {/* 결과  */}
           <div className="flex items-center justify-center gap-x-1">
-            <img src={coin} alt="코인" className="w-5.5 h-5.5" />
-            <div className="text-main-brown-850 text-sm font-bold">총 포인트: {lastPoint}냥</div>
-            <img src={coin} alt="코인" className="w-5.5 h-5.5 ml-2" />
+            <img
+              src={IMAGE_URLS.common.coin}
+              alt="코인"
+              className="w-5.5 h-5.5"
+            />
+            <div className="text-main-brown-850 text-sm font-bold">
+              총 포인트: {lastPoint}냥
+            </div>
+            <img
+              src={IMAGE_URLS.common.coin}
+              alt="코인"
+              className="w-5.5 h-5.5 ml-2"
+            />
             {lastPoint - initialPoint > 0 ? (
               <div className="text-sm font-bold">
                 총 수익:&nbsp;
@@ -382,7 +448,9 @@ export const GameEnd = ({
             ) : lastPoint - initialPoint < 0 ? (
               <div className=" text-sm font-bold">
                 총 수익: &nbsp;
-                <span className="text-main-blue-600">-{Math.abs(lastPoint - initialPoint)}냥</span>
+                <span className="text-main-blue-600">
+                  -{Math.abs(lastPoint - initialPoint)}냥
+                </span>
               </div>
             ) : (
               <div className="text-sm font-bold">총 수익: 0냥</div>
