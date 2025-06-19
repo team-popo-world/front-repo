@@ -2,6 +2,7 @@ import { Background } from "@/components/layout/Background";
 import { TextWithStroke } from "@/components/text/TextWithStroke";
 import { QuestCard } from "../components/QuestCard";
 import { BackArrow } from "@/components/button/BackArrow";
+import NameAndPoint from "@/components/user/NameAndPoint";
 import type { Quest } from "../types/quest";
 
 interface QuestDetailTemplateProps {
@@ -39,6 +40,15 @@ const stateFilterMap: {
   { label: "만료!", color: "bg-orange-300" },
 ];
 
+const emptyMessageMap: Record<Quest["state"], string> = {
+  수락하기: "수락할 수 있는 퀘스트가 없어요!",
+  "다 했어요": "진행 중인 퀘스트가 없어요!",
+  "기다리는 중": "확인 중인 퀘스트가 없어요!",
+  "돈 받기": "보상 받을 퀘스트가 없어요!",
+  "완료!": "완료한 퀘스트가 없어요!",
+  "만료!": "만료된 퀘스트가 없어요!",
+};
+
 export const QuestDetailTemplate = ({
   questType,
   questData,
@@ -54,6 +64,9 @@ export const QuestDetailTemplate = ({
   return (
     // 배경 이미지
     <Background backgroundImage="https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749086237/iPad_Pro_12.9__-_63_fl49sp.webp">
+      {/* 이름, 포인트 정보 */}
+      <NameAndPoint position={{ top: "0.9rem", right: "1.4rem" }} />
+
       <BackArrow onClick={onBack} />
       {/* 포포 이미지 */}
       <img
@@ -140,17 +153,25 @@ export const QuestDetailTemplate = ({
       </div>
       {/* 리스트 */}
       <div className="flex justify-center ">
-        <div className="mt-[4.8rem] z-[10] w-[20rem] h-[11rem] ml-[0.1rem] overflow-scroll  ">
-          {questData.map((quest) => (
-            <QuestCard
-              key={quest.quest_id}
-              quest={quest}
-              onComplete={onComplete}
-              onChangeState={() =>
-                onChangeState(quest.quest_id, quest.child_id, quest.state)
-              }
-            />
-          ))}
+        <div className="mt-[4.8rem] z-[10] w-[20rem] h-[11rem] ml-[0.1rem] overflow-scroll ">
+          {questData.length === 0 ? (
+            <div className="flex justify-center items-center text-[0.8rem] text-brown-800 font-semibold h-[10rem] mt-[0.6rem] bg-[#fff7ea]/45 rounded-xl shadow-md text-[#53300cc1]">
+              {selectedState
+                ? emptyMessageMap[selectedState]
+                : "퀘스트가 없습니다!"}
+            </div>
+          ) : (
+            questData.map((quest) => (
+              <QuestCard
+                key={quest.quest_id}
+                quest={quest}
+                onComplete={onComplete}
+                onChangeState={() =>
+                  onChangeState(quest.quest_id, quest.child_id, quest.state)
+                }
+              />
+            ))
+          )}
         </div>
       </div>
     </Background>
