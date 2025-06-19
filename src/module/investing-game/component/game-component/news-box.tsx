@@ -6,7 +6,7 @@ interface NewsBoxProps {
   hint: string;
 }
 
-export const NewsBox = memo(({ title, hint }: NewsBoxProps) => {
+export const NewsBox = memo(({ title, hint: _hint }: NewsBoxProps) => {
   return (
     <div className="relative flex flex-col items-start justify-center gap-y-0.5 w-[29rem] h-[5.5rem] px-10 mb-2 bg-main-yellow-200 rounded-2xl">
       <h2 className="text-main-brown-850 text-lg font-bold">{title}</h2>

@@ -1,4 +1,3 @@
-import coin from "@/assets/image/common/common_coin.webp";
 import { IMAGE_URLS } from "@/lib/constants/constants";
 import clsx from "clsx";
 
@@ -60,12 +59,27 @@ export const GamePlayStockCard = ({
 
   return (
     <div className="relative flex flex-col items-start px-4 py-2 w-44 h-59 bg-main-yellow-300 border-2 xl:border-5 border-main-brown-450 rounded-xl">
-      <img src={stockImage} alt={name} className="self-center min-w-0 h-14 object-contain mt-4 mb-1" />
-      <h4 className="mb-0.5 text-main-brown-575 text-[0.7rem] font-bold self-center"> {name}</h4>
-      <p className="mb-1 text-main-brown-575 text-[0.55rem] font-bold ">{expectation}</p>
+      <img
+        src={stockImage}
+        alt={name}
+        className="self-center min-w-0 h-14 object-contain mt-4 mb-1"
+      />
+      <h4 className="mb-0.5 text-main-brown-575 text-[0.7rem] font-bold self-center">
+        {" "}
+        {name}
+      </h4>
+      <p className="mb-1 text-main-brown-575 text-[0.55rem] font-bold ">
+        {expectation}
+      </p>
       <div className="flex items-center gap-x-0.5 mb-0.5 mt-auto">
-        <img src={coin} alt="코인" className="w-3 h-3 object-contain" />
-        <span className="text-main-brown-575 text-[0.55rem] font-bold ">현재가격: {currentPrice}냥</span>
+        <img
+          src={IMAGE_URLS.common.coin}
+          alt="코인"
+          className="w-3 h-3 object-contain"
+        />
+        <span className="text-main-brown-575 text-[0.55rem] font-bold ">
+          현재가격: {currentPrice}냥
+        </span>
         <span
           className={clsx("pl-1.5 text-[0.5rem] font-bold", {
             "text-main-red-600": priceChange > 0,
@@ -74,7 +88,11 @@ export const GamePlayStockCard = ({
           })}
         >
           {/* 변동 없을때 빈 문자열 */}
-          {priceChange > 0 ? `+${priceChange}냥` : priceChange < 0 ? `-${Math.abs(priceChange)}냥` : ""}
+          {priceChange > 0
+            ? `+${priceChange}냥`
+            : priceChange < 0
+            ? `-${Math.abs(priceChange)}냥`
+            : ""}
         </span>
       </div>
       <div className="flex items-center gap-x-0.5">
@@ -83,11 +101,15 @@ export const GamePlayStockCard = ({
           alt="물건"
           className="w-3.5 h-3.5 object-contain"
         />
-        <span className="text-main-brown-575 text-[0.55rem] font-bold">보유수량: {quantity}개</span>
+        <span className="text-main-brown-575 text-[0.55rem] font-bold">
+          보유수량: {quantity}개
+        </span>
       </div>
       {/* 개수 선택, 구매 판매 */}
       <div className="relative w-fit flex flex-col  items-center self-center">
-        <div className="font-bold text-main-brown-575 text-[0.55rem]">개수 선택</div>
+        <div className="font-bold text-main-brown-575 text-[0.55rem]">
+          개수 선택
+        </div>
         {/* 개수 선택 버튼 */}
         <div className="flex w-28 mb-1.5 text-center text-[0.65rem] font-bold border-2 xl:border-4 border-main-brown-350 rounded-md ">
           <div
@@ -124,8 +146,14 @@ export const GamePlayStockCard = ({
         {riskType}
       </div>
       <div className="absolute top-6 right-3 flex items-center">
-        <img src={IMAGE_URLS.investing_game.little_pig.little_pig_bulb} alt="전구" className="w-4 h-4 object-contain" />
-        <span className="-ml-0.5 text-main-yellow-400 text-[0.4rem] font-bold">힌트</span>
+        <img
+          src={IMAGE_URLS.investing_game.little_pig.little_pig_bulb}
+          alt="전구"
+          className="w-4 h-4 object-contain"
+        />
+        <span className="-ml-0.5 text-main-yellow-400 text-[0.4rem] font-bold">
+          힌트
+        </span>
       </div>
     </div>
   );

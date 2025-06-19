@@ -73,7 +73,7 @@ export default function QuestDetail() {
       setError(null);
       try {
         const response = await apiClient.get(
-          `http://52.78.53.247:8080/api/quest?type=${questType}`
+          `/api/quest?type=${questType}`
         );
 
         const data = await response.data;

@@ -30,7 +30,7 @@ export function AttandanceTemplate() {
   };
 
   const handleAttendance = () => {
-    postAttendance(getToday()).then((data) => {
+    postAttendance(getToday()).then((_data) => {
       // setAttendance(data);
     });
   };

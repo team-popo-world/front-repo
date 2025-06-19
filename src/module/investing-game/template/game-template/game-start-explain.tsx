@@ -23,7 +23,7 @@ interface GameStartExplainProps {
 
 export const GameStartExplain = ({
   onClose,
-  gameTitle,
+  gameTitle: _gameTitle,
   gameDescription,
   descriptions,
   gamePlayPath,
