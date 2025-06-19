@@ -1,5 +1,4 @@
 import { Background } from "../../../components/layout/Background";
-import backgroundImage from "../../../assets/image/login/login_background.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import apiClient from "../../../lib/api/axios";
@@ -8,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import "../../../styles/toast.css";
 import { useAuthStore } from "@/lib/zustand/store";
 import Cookies from "js-cookie";
+import { IMAGE_URLS } from "@/lib/constants/constants";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -30,13 +30,10 @@ export default function LoginPage() {
       const response = await apiClient.post("/auth/login", form);
       console.log(response.data);
 
-
       // 액세스 토큰 저장
       const accessToken = response.headers["authorization"]?.replace("Bearer ", "");
       if (accessToken) {
-
         setAccessToken(accessToken);
-
       }
 
       // 리프레시 토큰 저장
@@ -69,7 +66,7 @@ export default function LoginPage() {
   };
 
   return (
-    <Background backgroundImage={backgroundImage}>
+    <Background backgroundImage={IMAGE_URLS.login.bg}>
       <form onSubmit={handleSubmit} className="flex flex-col items-center" autoComplete="off">
         <h1
           className="text-[4rem] font-extrabold text-[#BBEB4B] text-center mt-6"
