@@ -1,5 +1,4 @@
 import { IMAGE_URLS } from "@/lib/constants/constants";
-import coin from "@/assets/image/common/common_coin.webp";
 import { Modal } from "@/components/modal/Modal";
 import { motion } from "framer-motion";
 
@@ -38,7 +37,7 @@ export const PointModal = ({ text, price, isOpen, onConfirm, onClose }: PointMod
         >
           <div className="text-lg text-[#6E532C] font-bold text-center whitespace-pre-line">{text}</div>
           <div className="flex items-center gap-x-2 bg-[#FFF6D5] px-4 py-2 rounded-lg">
-            <img src={coin} alt="coin" className="w-6 h-6 object-contain animate-bounce" />
+            <img src={IMAGE_URLS.common.coin} alt="coin" className="w-6 h-6 object-contain animate-bounce" />
             <div className="text-lg text-[#6E532C] font-bold">{price}냥</div>
           </div>
         </motion.div>
