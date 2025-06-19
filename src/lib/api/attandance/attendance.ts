@@ -20,7 +20,10 @@ export async function getAttendance(): Promise<GetAttendanceResponse[]> {
 
 export async function postAttendance(dayOfWeek: string) {
   try {
-    const response = await apiClient.post("/api/attendance", { dayOfWeek, isAttended: true });
+    const response = await apiClient.post<{ weekAttendance: GetAttendanceResponse[] }>("/api/attendance", {
+      dayOfWeek,
+      isAttended: true,
+    });
     return response.data;
   } catch (error) {
     if (error instanceof ApiError) {

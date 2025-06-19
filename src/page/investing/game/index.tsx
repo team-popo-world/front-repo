@@ -8,6 +8,12 @@ import { endGame } from "@/lib/api/invest-game/investClearAPi";
 import { getKSTDateTime } from "@/lib/utils/getKSTDateTime";
 import { sendTurnData } from "@/lib/api/invest-game/investTurnUpdate";
 import { getChapterData } from "@/lib/api/invest-game/investChapterApi";
+import { setNewAudio, stopBackgroundMusic } from "@/lib/utils/sound";
+import { useSoundStore } from "@/lib/zustand/soundStore";
+import LittlePigSound from "@/assets/sound/chapter_1.mp3";
+import TruckSound from "@/assets/sound/chapter_2.mp3";
+import MasicSound from "@/assets/sound/chapter_3.mp3";
+import NinjaSound from "@/assets/sound/chapter_4.mp3";
 
 // 게임 관련 타입 정의
 export interface Stock {
@@ -90,8 +96,15 @@ const INITIAL_GAME_STATE: GameState = {
 const CHAPTER_ID = {
   "little-pig": "1111",
   truck: "2222",
-  ninja: "3333",
-  masic: "4444",
+  masic: "3333",
+  ninja: "4444",
+};
+
+const CHAPTER_SOUND = {
+  "little-pig": LittlePigSound,
+  truck: TruckSound,
+  masic: MasicSound,
+  ninja: NinjaSound,
 };
 
 export default function InvestingGame() {
@@ -105,6 +118,23 @@ export default function InvestingGame() {
   const [sessionId, setSessionId] = useState("");
   const [startedAt, setStartAt] = useState("");
   const navigate = useNavigate();
+  const { isMuted, audio } = useSoundStore();
+
+  // 첫페이지 로드시 배경음악 설정
+  useEffect(() => {
+    setNewAudio(CHAPTER_SOUND[gametype as keyof typeof CHAPTER_SOUND]);
+  }, []);
+
+  // 음소거 상태 변경시 배경음악 정지 또는 재생
+  useEffect(() => {
+    if (isMuted && audio) stopBackgroundMusic();
+    if (isMuted && !audio) return;
+
+    if (audio && !isMuted) {
+      console.log(audio);
+      audio.play();
+    }
+  }, [isMuted, audio]);
 
   // 게임 상태 업데이트 헬퍼 함수
   const updateGameState = (updates: Partial<GameState>) => {
@@ -189,7 +219,7 @@ export default function InvestingGame() {
       };
 
       // 각 주식별로 턴 데이터 전송
-      sendTurnData(sessionId, "1111", gameState.turn, turnData);
+      sendTurnData(sessionId, CHAPTER_ID[gametype as keyof typeof CHAPTER_ID], gameState.turn, turnData);
     });
 
     // 턴 끝남
@@ -222,6 +252,7 @@ export default function InvestingGame() {
     updateGameState({
       turn: nextTurn,
       currentScenario: nextScenario,
+      result: nextScenario.result,
       beforeCount: [...gameState.count],
       beforePrice: [...gameState.price],
       price: nextPrices,

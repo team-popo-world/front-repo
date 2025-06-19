@@ -170,6 +170,11 @@ const IMAGE_URLS = {
     poni: "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1750024423/investing-poni_zrfrbe",
   },
 
+  sound: {
+    on: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750222986/sound_ga7lq2",
+    off: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750222986/Xsound_q2ec8r",
+  },
+
   quest: {
     modal_popo:
       "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1750166596/quest-modal-popo_l4ldtl",
@@ -221,8 +226,21 @@ const IMAGE_URLS = {
     love: "https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749623669/emotion-love_zljlxe.webp",
     embarrassed:
       "https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749623606/emotion-embarrassed_npzyuk.webp",
-
   },
+};
+
+import MainBackgroundMusic from "@/assets/sound/main.mp3";
+import LittlePigSound from "@/assets/sound/chapter_1.mp3";
+import TruckSound from "@/assets/sound/chapter_2.mp3";
+import MasicSound from "@/assets/sound/chapter_3.mp3";
+import NinjaSound from "@/assets/sound/chapter_4.mp3";
+
+const SOUND_URLS = {
+  main: MainBackgroundMusic,
+  little_pig: LittlePigSound,
+  truck: TruckSound,
+  masic: MasicSound,
+  ninja: NinjaSound,
 };
 
 export { BACKGROUND_SIZE, INVESTING_GAME_INITIAL_POINT, IMAGE_URLS };

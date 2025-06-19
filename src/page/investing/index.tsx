@@ -3,11 +3,29 @@ import { InvestingTemplate } from "../../module/investing/template";
 import { useAnimation } from "framer-motion";
 import { useEffect } from "react";
 import { useAuthStore } from "@/lib/zustand/store";
+import { playButtonSound, setNewAudio, stopBackgroundMusic } from "@/lib/utils/sound";
+import ClickSound from "@/assets/sound/button_click.mp3";
+import { useSoundStore } from "@/lib/zustand/soundStore";
+import MainBackgroundMusic from "@/assets/sound/main.mp3";
 
 export default function InvestingPage() {
   const navigate = useNavigate();
   const animation = useAnimation();
   const { point } = useAuthStore();
+  const { isMuted, audio } = useSoundStore();
+
+  useEffect(() => {
+    setNewAudio(MainBackgroundMusic);
+  }, []);
+  // 음소거 상태 변경시 배경음악 정지 또는 재생
+  useEffect(() => {
+    if (isMuted && audio) stopBackgroundMusic();
+    if (isMuted && !audio) return;
+
+    if (audio && !isMuted) {
+      audio.play();
+    }
+  }, [isMuted, audio]);
 
   const chapterPositions: Record<string, { x: number; y: number }> = {
     "little-pig": { x: -210, y: -120 },
@@ -17,6 +35,7 @@ export default function InvestingPage() {
   };
 
   const handleChapterClick = async (chapter: string) => {
+    playButtonSound(ClickSound);
     const { x, y } = chapterPositions[chapter];
     await animation.start({
       rotate: Array.from({ length: 37 }, (_, i) => i * 25),

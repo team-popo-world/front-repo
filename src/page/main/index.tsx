@@ -1,7 +1,11 @@
 // src/page/main/index.tsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MainTemplate from "../../module/main/template";
 import { useNavigate } from "react-router-dom";
+import { useSoundStore } from "@/lib/zustand/soundStore";
+import { useAuthStore } from "@/lib/zustand/store";
+import { setNewAudio, stopBackgroundMusic } from "@/lib/utils/sound";
+import MainBackgroundMusic from "@/assets/sound/main.mp3";
 import { IMAGE_URLS } from "@/lib/constants/constants";
 import { preload } from "react-dom";
 
@@ -16,6 +20,24 @@ const ISLAND_POSITIONS = {
 } as const;
 
 export default function Main() {
+  const { logout } = useAuthStore();
+  const { toggleMute, isMuted, audio } = useSoundStore();
+
+  // 첫페이지 로드시 배경음악 설정
+  useEffect(() => {
+    if (!audio) setNewAudio(MainBackgroundMusic);
+  }, []);
+
+  // 음소거 상태 변경시 배경음악 정지 또는 재생
+  useEffect(() => {
+    if (isMuted && audio) stopBackgroundMusic();
+    if (isMuted && !audio) return;
+
+    if (audio && !isMuted) {
+      audio.play();
+    }
+  }, [isMuted, audio]);
+
   const [isAnimating, setIsAnimating] = useState(false);
   const [targetPosition, setTargetPosition] = useState<{
     top: string;
@@ -26,6 +48,7 @@ export default function Main() {
   });
   const [targetPath, setTargetPath] = useState<string>("");
   const [direction, setDirection] = useState<"left" | "right">("left");
+
   const navigate = useNavigate();
 
   preload(IMAGE_URLS.attandance.circle_popo, { as: "image" });
@@ -102,8 +125,11 @@ export default function Main() {
       isAnimating={isAnimating}
       targetPosition={targetPosition}
       direction={direction}
+      isMuted={isMuted}
       handleIslandClick={handleIslandClick}
       handleAnimationComplete={handleAnimationComplete}
+      toggleMute={toggleMute}
+      logout={logout}
     />
   );
 }

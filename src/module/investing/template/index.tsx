@@ -4,6 +4,7 @@ import { Background } from "../../../components/layout/Background";
 import { IMAGE_URLS } from "@/lib/constants/constants";
 import { BackArrow } from "@/components/button/BackArrow";
 import { motion, useAnimation } from "framer-motion";
+import SoundButton from "@/components/button/SoundButton";
 
 interface InvestingTemplateProps {
   onBack: () => void;
@@ -11,7 +12,6 @@ interface InvestingTemplateProps {
   onAnimationComplete: () => void;
   point: number | null;
 }
-
 
 export const InvestingTemplate = ({
   onBack,
@@ -24,7 +24,10 @@ export const InvestingTemplate = ({
   return (
     // 백그라운드 이미지
     <Background backgroundImage={IMAGE_URLS.investing.bg}>
+      {/* 뒤로가기 버튼 */}
       <BackArrow onClick={onBack} />
+      {/* 음소거 버튼 */}
+      <SoundButton />
       {/* 모의투자 제목 + 보유 코인 div */}
       <div
         aria-label="페이지 제목과 보유 코인 정보 섹션"
@@ -98,7 +101,6 @@ export const InvestingTemplate = ({
       />
 
       <Info price="2000냥" className="absolute right-[4rem] bottom-[1rem]" />
-
 
       {/* 챕터 클릭 포지션 */}
       <div
