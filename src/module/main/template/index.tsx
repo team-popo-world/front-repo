@@ -19,7 +19,11 @@ interface MainTemplateProps {
   isAnimating: boolean;
   targetPosition: { top: string; left: string };
   direction: "left" | "right";
-  handleIslandClick: (island: keyof typeof ISLAND_POSITIONS, path: string, direction?: "left" | "right") => void;
+  handleIslandClick: (
+    island: keyof typeof ISLAND_POSITIONS,
+    path: string,
+    direction?: "left" | "right"
+  ) => void;
   handleAnimationComplete: () => void;
 }
 export default function MainTemplate({
@@ -49,8 +53,15 @@ export default function MainTemplate({
       </div>
 
       {/* 로그아웃 */}
-      <div className="absolute left-[1rem] top-[0.5rem] flex items-center cursor-pointer" onClick={handleLogout}>
-        <img src={IMAGE_URLS.common.logout} alt="로그아웃" className="w-[1.6rem]" />
+      <div
+        className="absolute left-[1rem] top-[0.5rem] flex items-center cursor-pointer"
+        onClick={handleLogout}
+      >
+        <img
+          src={IMAGE_URLS.common.logout}
+          alt="로그아웃"
+          className="w-[1.6rem]"
+        />
         <TextWithStroke
           text="로그아웃"
           className="mt-[0.1rem]"
@@ -73,7 +84,11 @@ export default function MainTemplate({
       {/* 출석 */}
       <Link to="/attandance">
         <div className="absolute top-[0.6rem]  right-[7.6rem]  flex flex-col items-center justify-center ">
-          <img src={IMAGE_URLS.main.attendance} alt="attendance" className="w-[1.8rem]" />
+          <img
+            src={IMAGE_URLS.main.attendance}
+            alt="attendance"
+            className="w-[1.8rem]"
+          />
           <TextWithStroke
             text="출석"
             textClassName="text-main-blue-700 text-[0.88rem]"
@@ -88,31 +103,44 @@ export default function MainTemplate({
       {/* 섬 */}
 
       {/* 시장 */}
-      <div onClick={() => handleIslandClick("market", "/market")} className="cursor-pointer">
-        <img src={IMAGE_URLS.main.market} alt="market" className="absolute top-[3.5rem] left-[2.5rem] w-[8.1rem]" />
-        <div className="absolute top-[10.25rem] left-[5.2rem] px-[0.7rem] text-[0.8rem] pt-[0.08rem] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
+      <div
+        onClick={() => handleIslandClick("market", "/market")}
+        className="cursor-pointer"
+      >
+        <img
+          src={IMAGE_URLS.main.market}
+          alt="market"
+          className="absolute top-[3.5rem] left-[2.5rem] w-[8.1rem]"
+        />
+        <div className="absolute top-[10.25rem] left-[5.25rem] px-[0.7rem] text-[0.8rem] pt-[0.08rem] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
           시장
         </div>
       </div>
 
       {/* 감정일기 */}
-      <div onClick={() => handleIslandClick("emotionDiary", "/emotionDiary")} className="cursor-pointer">
+      <div
+        onClick={() => handleIslandClick("emotionDiary", "/emotionDiary")}
+        className="cursor-pointer"
+      >
         <img
           src={IMAGE_URLS.main.diary}
           alt="emotionsDiary"
-          className="w-[7.6rem] absolute left-[2rem] bottom-[4.7rem]"
+          className="w-[7.8rem] absolute left-[2rem] bottom-[4.7rem]"
         />
-        <div className="absolute  bottom-[4.5rem] left-[3.4rem] pl-[0.7rem] pr-[0.6rem] text-[0.8rem] pt-[0.08rem] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
+        <div className="absolute  bottom-[4.5rem] left-[3.7rem] pl-[0.7rem] pr-[0.6rem] text-[0.8rem] pt-[0.08rem] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
           감정일기
         </div>
       </div>
 
       {/* 포포 키우기 */}
-      <div onClick={() => handleIslandClick("raising", "/raising")} className="cursor-pointer">
+      <div
+        onClick={() => handleIslandClick("raising", "/raising")}
+        className="cursor-pointer"
+      >
         <img
           src={IMAGE_URLS.main.raising}
           alt="raising"
-          className="w-[8rem] absolute left-[8.75rem] bottom-[1.64rem]"
+          className="w-[8.2rem] absolute left-[8.77rem] bottom-[1.58rem]"
         />
         <div className="absolute bottom-[1.5rem] left-[10rem]  px-[0.7rem] text-[0.8rem] pt-[0.08rem] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
           포포 키우기
@@ -120,25 +148,46 @@ export default function MainTemplate({
       </div>
 
       {/* 적금 */}
-      <div onClick={() => handleIslandClick("savings", "/savings", "right")} className="cursor-pointer">
-        <img src={IMAGE_URLS.main.saving} alt="savings" className="w-[8rem] right-[9.75rem] bottom-[0.9rem] absolute" />
-        <div className="absolute bottom-[1rem] right-[12.27rem]  px-[0.85rem] text-[0.8rem] pt-[0.08rem]  font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
+      <div
+        onClick={() => handleIslandClick("savings", "/savings", "right")}
+        className="cursor-pointer"
+      >
+        <img
+          src={IMAGE_URLS.main.saving}
+          alt="savings"
+          className="w-[8.2rem] right-[9.75rem] bottom-[0.9rem] absolute"
+        />
+        <div className="absolute bottom-[1rem] right-[12.3rem]  px-[1rem] text-[0.8rem] pt-[0.08rem]  font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
           적금
         </div>
       </div>
 
       {/* 퀘스트 */}
-      <div onClick={() => handleIslandClick("quest", "/quest", "right")} className="cursor-pointer">
-        <img src={IMAGE_URLS.main.quest} alt="quest" className="w-[7.2rem] absolute right-[2.4rem] bottom-[6.25rem]" />
+      <div
+        onClick={() => handleIslandClick("quest", "/quest", "right")}
+        className="cursor-pointer"
+      >
+        <img
+          src={IMAGE_URLS.main.quest}
+          alt="quest"
+          className="w-[7.2rem] absolute right-[2.4rem] bottom-[6.25rem]"
+        />
         <div className="absolute bottom-[6rem] right-[3.8rem]  px-[0.85rem] text-[0.8rem] pt-[0.08rem]   font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
           퀘스트
         </div>
       </div>
 
       {/* 모의투자 */}
-      <div onClick={() => handleIslandClick("investing", "/investing", "right")} className="cursor-pointer">
-        <img src={IMAGE_URLS.main.investing} alt="quiz" className="w-[7.5rem] absolute  right-[2.75rem] top-[5.5rem]" />
-        <div className="absolute top-[11.4rem] right-[4rem]  px-[0.85rem] text-[0.8rem] pt-[0.08rem] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
+      <div
+        onClick={() => handleIslandClick("investing", "/investing", "right")}
+        className="cursor-pointer"
+      >
+        <img
+          src={IMAGE_URLS.main.investing}
+          alt="quiz"
+          className="w-[7.5rem] absolute  right-[2.75rem] top-[5.5rem]"
+        />
+        <div className="absolute top-[11.4rem] right-[4.2rem]  px-[0.85rem] text-[0.8rem] pt-[0.08rem] font-bold text-main-brown-800 bg-main-yellow-700 border md:border-2 border-main-brown-700 rounded-lg">
           모의투자
         </div>
       </div>

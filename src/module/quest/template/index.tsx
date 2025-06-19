@@ -1,6 +1,7 @@
 import { BackArrow } from "@/components/button/BackArrow";
 import { Background } from "../../../components/layout/Background";
 import { TextWithStroke } from "@/components/text/TextWithStroke";
+import NameAndPoint from "@/components/user/NameAndPoint";
 
 interface QuestTemplateProps {
   onClickQuest?: (quest: string) => void;

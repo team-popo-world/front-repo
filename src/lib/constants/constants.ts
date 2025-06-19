@@ -170,6 +170,10 @@ const IMAGE_URLS = {
     poni: "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1750024423/investing-poni_zrfrbe",
   },
 
+  quest: {
+    modal_popo:
+      "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1750166596/quest-modal-popo_l4ldtl",
+
   raising: {
     apple:
       "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750155644/raising_apple_nvewgu",
@@ -217,6 +221,7 @@ const IMAGE_URLS = {
     love: "https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749623669/emotion-love_zljlxe.webp",
     embarrassed:
       "https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749623606/emotion-embarrassed_npzyuk.webp",
+
   },
 };
 
