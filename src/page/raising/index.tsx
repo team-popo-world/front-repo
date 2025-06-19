@@ -56,7 +56,7 @@ export default function RaisingPage() {
                   toggleFeed(feed.name);
                 }}
               >
-                <img src={feed.img} alt={feed.name} className="w-8 h-8 mr-2" />
+                <img src={feed.img} alt={feed.name} className="w-8 h-8 object-contain mr-2" />
                 <span className="font-bold ml-5 text-lg text-[#6F4223]">{feed.count}개</span>
               </div>
             ))}
