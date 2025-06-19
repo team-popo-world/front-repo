@@ -163,9 +163,7 @@ export default function QuestDetail() {
       if (!nextState) return;
 
       setQuestData((prev) =>
-        prev.map((quest) =>
-          quest.quest_id === questId ? { ...quest, state: nextState } : quest
-        )
+        prev.map((quest) => (quest.quest_id === questId ? { ...quest, state: nextState } : quest))
       );
 
       // reward 저장

@@ -90,7 +90,12 @@ export const useAuthStore = create<AuthStore>()(
             throw new Error("No refresh token");
           }
 
-          const response = await apiClient.post("/auth/token/refresh", { refreshToken });
+          const response = await apiClient.post(`/auth/token/refresh`, {
+            withCredentials: true,
+            headers: {
+              ["Refresh-Token"]: `${refreshToken}`,
+            },
+          });
           const accessToken = response.headers["authorization"]?.replace("Bearer ", "");
 
           if (accessToken) {

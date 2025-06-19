@@ -4,9 +4,11 @@ import { TextWithStroke } from "../../../components/text/TextWithStroke";
 import { Link } from "react-router-dom";
 import { Background } from "../../../components/layout/Background";
 import { Poni } from "../components/Poni";
-
-import { useAuthStore } from "@/lib/zustand/store";
 import NameAndPoint from "@/components/user/NameAndPoint";
+import { playButtonSound } from "@/lib/utils/sound";
+import ClickSound from "@/assets/sound/button_click.mp3";
+import backSound from "@/assets/sound/back_click.mp3";
+
 const ISLAND_POSITIONS = {
   market: { top: "4.25rem", left: "3.25rem" },
   emotionDiary: { top: "11rem", left: "3rem" },
@@ -19,26 +21,22 @@ interface MainTemplateProps {
   isAnimating: boolean;
   targetPosition: { top: string; left: string };
   direction: "left" | "right";
-  handleIslandClick: (
-    island: keyof typeof ISLAND_POSITIONS,
-    path: string,
-    direction?: "left" | "right"
-  ) => void;
+  isMuted: boolean;
+  handleIslandClick: (island: keyof typeof ISLAND_POSITIONS, path: string, direction?: "left" | "right") => void;
   handleAnimationComplete: () => void;
+  toggleMute: () => void;
+  logout: () => void;
 }
 export default function MainTemplate({
   isAnimating,
   targetPosition,
   direction,
+  isMuted,
   handleIslandClick,
   handleAnimationComplete,
+  toggleMute,
+  logout,
 }: MainTemplateProps) {
-  const { logout } = useAuthStore();
-
-  const handleLogout = () => {
-    logout();
-  };
-
   return (
     <Background backgroundImage={IMAGE_URLS.main.bg}>
       {/* 여백 */}
@@ -55,13 +53,13 @@ export default function MainTemplate({
       {/* 로그아웃 */}
       <div
         className="absolute left-[1rem] top-[0.5rem] flex items-center cursor-pointer"
-        onClick={handleLogout}
+        onClick={() => {
+          playButtonSound(backSound);
+          logout();
+        }}
       >
-        <img
-          src={IMAGE_URLS.common.logout}
-          alt="로그아웃"
-          className="w-[1.6rem]"
-        />
+        <img src={IMAGE_URLS.common.logout} alt="로그아웃" className="w-[1.6rem]" />
+
         <TextWithStroke
           text="로그아웃"
           className="mt-[0.1rem]"
@@ -69,9 +67,22 @@ export default function MainTemplate({
           strokeClassName="text-main-brown-800 text-[0.9rem] text-stroke-width-[0.15rem] text-stroke-color-main-brown-800"
         />
       </div>
+      <div
+        className="absolute  left-[6.5rem] top-[0.7rem] flex flex-col items-center cursor-pointer"
+        onClick={() => {
+          playButtonSound(ClickSound);
+          toggleMute();
+        }}
+      >
+        {isMuted ? (
+          <img src={IMAGE_URLS.sound.off} alt="sound" className="w-[1.6rem]" />
+        ) : (
+          <img src={IMAGE_URLS.sound.on} alt="sound" className="w-[1.6rem]" />
+        )}
+      </div>
       {/* 퀴즈 */}
-      <Link to="/quiz">
-        <div className="absolute top-[0.5rem] right-[9.8rem]  flex flex-col justify-center items-center ">
+      <Link to="/quiz" onClick={() => playButtonSound(ClickSound)}>
+      <div className="absolute top-[0.5rem] right-[9.8rem]  flex flex-col justify-center items-center ">
           <img src={IMAGE_URLS.main.quiz} alt="quiz" className="w-[1.8rem]" />
           <TextWithStroke
             text="퀴즈"
@@ -82,8 +93,8 @@ export default function MainTemplate({
       </Link>
 
       {/* 출석 */}
-      <Link to="/attandance">
-        <div className="absolute top-[0.6rem]  right-[7.6rem]  flex flex-col items-center justify-center ">
+      <Link to="/attandance" onClick={() => playButtonSound(ClickSound)}>
+      <div className="absolute top-[0.6rem]  right-[7.6rem]  flex flex-col items-center justify-center ">
           <img
             src={IMAGE_URLS.main.attendance}
             alt="attendance"
@@ -104,7 +115,10 @@ export default function MainTemplate({
 
       {/* 시장 */}
       <div
-        onClick={() => handleIslandClick("market", "/market")}
+        onClick={() => {
+          playButtonSound(ClickSound);
+          handleIslandClick("market", "/market");
+        }}
         className="cursor-pointer"
       >
         <img
@@ -119,7 +133,10 @@ export default function MainTemplate({
 
       {/* 감정일기 */}
       <div
-        onClick={() => handleIslandClick("emotionDiary", "/emotionDiary")}
+        onClick={() => {
+          playButtonSound(ClickSound);
+          handleIslandClick("emotionDiary", "/emotionDiary");
+        }}
         className="cursor-pointer"
       >
         <img
@@ -134,7 +151,10 @@ export default function MainTemplate({
 
       {/* 포포 키우기 */}
       <div
-        onClick={() => handleIslandClick("raising", "/raising")}
+        onClick={() => {
+          playButtonSound(ClickSound);
+          handleIslandClick("raising", "/raising");
+        }}
         className="cursor-pointer"
       >
         <img
@@ -149,10 +169,13 @@ export default function MainTemplate({
 
       {/* 적금 */}
       <div
-        onClick={() => handleIslandClick("savings", "/savings", "right")}
+        onClick={() => {
+          playButtonSound(ClickSound);
+          handleIslandClick("savings", "/savings", "right");
+        }}
         className="cursor-pointer"
       >
-        <img
+          <img
           src={IMAGE_URLS.main.saving}
           alt="savings"
           className="w-[8.2rem] right-[9.75rem] bottom-[0.9rem] absolute"
@@ -164,7 +187,10 @@ export default function MainTemplate({
 
       {/* 퀘스트 */}
       <div
-        onClick={() => handleIslandClick("quest", "/quest", "right")}
+        onClick={() => {
+          playButtonSound(ClickSound);
+          handleIslandClick("quest", "/quest", "right");
+        }}
         className="cursor-pointer"
       >
         <img
@@ -179,7 +205,10 @@ export default function MainTemplate({
 
       {/* 모의투자 */}
       <div
-        onClick={() => handleIslandClick("investing", "/investing", "right")}
+        onClick={() => {
+          playButtonSound(ClickSound);
+          handleIslandClick("investing", "/investing", "right");
+        }}
         className="cursor-pointer"
       >
         <img

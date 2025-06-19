@@ -3,6 +3,7 @@ import { TextWithStroke } from "@/components/text/TextWithStroke";
 import { useState } from "react";
 import { GameStartExplain } from "./game-start-explain";
 import { BackArrow } from "@/components/button/BackArrow";
+import SoundButton from "@/components/button/SoundButton";
 
 interface GameCharacter {
   image: string;
@@ -67,6 +68,7 @@ export const GameStart = ({
     return (
       <Background backgroundImage={backgroundImage} backgroundClassName="flex flex-col items-center justify-center">
         <BackArrow />
+        <SoundButton />
         <GameStartExplain
           onClose={() => setIsGameStartModalOpen(false)}
           gameTitle={gameTitle}
@@ -85,7 +87,10 @@ export const GameStart = ({
   // 모달 뜬것이 없다면 게임 시작화면을 보여준다.
   return (
     <Background backgroundImage={backgroundImage} backgroundClassName="flex flex-col items-center">
+      {/* 뒤로가기 버튼 */}
       <BackArrow />
+      {/* 음소거 버튼 */}
+      <SoundButton />
       {/* 제목 */}
       {/* leading-[1.2] 줄간격 조정 */}
       <TextWithStroke

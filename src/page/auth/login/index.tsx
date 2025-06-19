@@ -38,6 +38,7 @@ export default function LoginPage() {
 
       // 리프레시 토큰 저장
       const refreshToken = response.headers["refresh-token"];
+      console.log(refreshToken);
       if (refreshToken) {
         Cookies.set("refreshToken", refreshToken, {
           expires: 14, // 14일 후 만료
