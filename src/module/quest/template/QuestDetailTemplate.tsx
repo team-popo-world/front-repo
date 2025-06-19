@@ -153,7 +153,7 @@ export const QuestDetailTemplate = ({
       </div>
       {/* 리스트 */}
       <div className="flex justify-center ">
-        <div className="mt-[4.8rem] z-[10] w-[20rem] h-[11rem] ml-[0.1rem] overflow-scroll ">
+        <div className="mt-[4.8rem] z-[10] w-[20rem] h-[11rem] ml-[0.1rem] overflow-scroll scrollbar-hidden">
           {questData.length === 0 ? (
             <div className="flex justify-center items-center text-[0.8rem] text-brown-800 font-semibold h-[10rem] mt-[0.6rem] bg-[#fff7ea]/45 rounded-xl shadow-md text-[#53300cc1]">
               {selectedState
