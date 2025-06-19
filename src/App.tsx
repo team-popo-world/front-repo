@@ -32,8 +32,6 @@ const queryClient = new QueryClient({
   },
 });
 
-console.log("테스트");
-
 function App() {
   return (
     <QueryClientProvider client={queryClient}>

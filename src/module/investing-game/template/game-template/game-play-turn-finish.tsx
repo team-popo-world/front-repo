@@ -1,7 +1,7 @@
 // src/module/investing-game/template/little-pig-template/game-play-turn-finish.tsx
+import { IMAGE_URLS } from "@/lib/constants/constants";
 import { BorderModal } from "@/module/investing-game/component/game-component/border-modal";
 import { TurnFinishStockCard } from "@/module/investing-game/component/game-component/turn-finish-stock-card";
-import coin from "@/assets/image/common/common_coin.webp";
 
 // 돼지 데이터 타입 정의
 interface StockData {
@@ -42,7 +42,10 @@ export const GamePlayTurnFinish = ({
       borderColor={borderColor}
       borderStrokeColor={borderStrokeColor}
     >
-      <h1 className={`self-center mt-2.5 mb-1.5 text-[1.65rem] font-extrabold`} style={{ color: titleTextColor }}>
+      <h1
+        className={`self-center mt-2.5 mb-1.5 text-[1.65rem] font-extrabold`}
+        style={{ color: titleTextColor }}
+      >
         {turn + 1 <= 6 ? turn + 1 : turn}
         {turn + 1 <= 6 ? "턴 시작!" : "턴 종료!"}
       </h1>
@@ -55,7 +58,11 @@ export const GamePlayTurnFinish = ({
       </section>
 
       <div className="flex items-center gap-x-1 self-center">
-        <img src={coin} alt="코인" className="w-8 h-8 object-contain" />
+        <img
+          src={IMAGE_URLS.common.coin}
+          alt="코인"
+          className="w-8 h-8 object-contain"
+        />
         <p className={`text-lg font-bold`}>총 자산: {totalPoint}냥</p>
       </div>
       <button

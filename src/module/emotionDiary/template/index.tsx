@@ -72,8 +72,8 @@ export const EmotionDiaryTemplate = ({
       </div>
 
       {/* 일기 리스트 */}
-      <div className="flex justify-center items-center ml-[1rem] mt-[0.8rem] h-[12rem] px-[1rem] ">
-        <div className=" flex flex-col gap-[0.4rem] w-[27rem]  items-center overflow-scroll h-full px-[0.2rem]">
+      <div className="flex justify-center items-center ml-[1rem] mt-[0.8rem] h-[12rem] px-[1rem] scrollbar-hidden">
+        <div className=" flex flex-col gap-[0.4rem] w-[27rem]  items-center overflow-scroll h-full px-[0.8rem] scrollbar-hidden">
           {diaryData.map((diary, index) => (
             <DiaryCard
               key={diary.emotionDiaryId}
