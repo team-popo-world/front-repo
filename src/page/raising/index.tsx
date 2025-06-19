@@ -6,7 +6,7 @@ import { useState } from "react";
 export default function RaisingPage() {
   const [level, setLevel] = useState(1);
   const [exp, setExp] = useState(0);
-  const [maxExp, setMaxExp] = useState(100);
+  const [maxExp, _setMaxExp] = useState(100);
   const [isFeedModalOpen, setIsFeedModalOpen] = useState(false);
   const [showExpMsg, setShowExpMsg] = useState(false);
   const [addedExp, setAddedExp] = useState(0);
@@ -19,7 +19,7 @@ export default function RaisingPage() {
     { name: "broccoli", img: IMAGE_URLS.raising.broccoli, count: 3 },
   ]);
   const [levelUp, setLevelUp] = useState(false);
-  const [pendingExpMsg, setPendingExpMsg] = useState(false);
+  const [_pendingExpMsg, setPendingExpMsg] = useState(false);
   const [characterAnim, setCharacterAnim] = useState(false);
 
   function getCharacterImg(level: number) {

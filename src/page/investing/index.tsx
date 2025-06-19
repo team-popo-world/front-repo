@@ -59,7 +59,6 @@ export default function InvestingPage() {
     <InvestingTemplate
       onBack={handleBack}
       onChapterClick={handleChapterClick}
-      animation={animation}
       onAnimationComplete={() => {}}
       point={point}
     />

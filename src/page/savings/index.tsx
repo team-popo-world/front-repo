@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { BackArrow } from "../../components/button/BackArrow";
 import { ko } from "date-fns/locale";
-import { addDays, isAfter, isSameDay } from "date-fns";
+import { addDays, isAfter as _isAfter, isSameDay as _isSameDay } from "date-fns";
 import { TextWithStroke } from "../../components/text/TextWithStroke";
 import apiClient from "../../lib/api/axios";
 import { useAuthStore } from "@/lib/zustand/store";
@@ -47,7 +47,7 @@ export default function SavingsPage() {
   const [currentAmount, setCurrentAmount] = useState<string>(""); // 현재 저축된 금액
   const [goalAmount, setGoalAmount] = useState<string>(""); // 목표 저축 금액
   const [bonusAmount, setBonusAmount] = useState<string>(""); // 보너스 금액 상태 추가
-  const [createMessage, setCreateMessage] = useState("");
+  const [_createMessage, setCreateMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   // 입력 모달 관련 상태
@@ -219,9 +219,7 @@ export default function SavingsPage() {
     if (isCreated && endDate) {
       const now = new Date();
       const end = new Date(endDate);
-      const goal = Number(goalAmount);
-      const current = Number(currentAmount);
-      const bonus = Number(bonusAmount);
+    
       if (now >= end) {
         // 목표 달성 시 보너스 지급 등은 서버에서 처리
         resetSavingsAccount();

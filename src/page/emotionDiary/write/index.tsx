@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient, { ApiError } from "@/lib/api/axios";
 
-const API_URL = "http://52.78.53.247:8080/api/diary";
+const API_URL = "/api/diary";
 
 export default function EmotionDiaryWritePage() {
   const navigate = useNavigate();

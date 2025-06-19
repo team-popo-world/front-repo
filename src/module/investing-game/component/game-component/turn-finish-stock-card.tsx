@@ -10,13 +10,8 @@ interface StockCardProps {
   textColor: string;
 }
 
-export const TurnFinishStockCard = ({
-  image,
-  name,
-  priceChange,
-  countChange,
-  textColor,
-}: StockCardProps) => {
+export const TurnFinishStockCard = ({ image, name, priceChange, countChange, textColor: _textColor }: StockCardProps) => {
+
   return (
     <div className="flex flex-col px-1 items-center">
       <img

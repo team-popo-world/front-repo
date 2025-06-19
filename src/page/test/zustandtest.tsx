@@ -2,16 +2,16 @@ import { useAuthStore } from "@/lib/zustand/store";
 
 export const ZustandTest = () => {
   // Zustand 스토어에서 필요한 상태와 액션들을 가져옴
-  const { accessToken, isAuthenticated, user, setAccessToken, setUser, logout } = useAuthStore();
+  const { accessToken, isAuthenticated, setAccessToken, logout } = useAuthStore();
 
-  const dummyUser = {
-    email: "test@example.com",
-    name: "테스트 유저",
-  };
+  // const dummyUser = {
+  //   email: "test@example.com",
+  //   name: "테스트 유저",
+  // };
 
   const handleLogin = () => {
     setAccessToken("dummy-access-token");
-    setUser(dummyUser);
+    // setUser(dummyUser);
   };
 
   const handleLogout = () => {
@@ -27,7 +27,7 @@ export const ZustandTest = () => {
         <div className="p-4 border rounded">
           <h2 className="font-bold mb-2">현재 상태:</h2>
           <pre className="bg-gray-100 p-2 rounded">
-            {JSON.stringify({ accessToken, isAuthenticated, user }, null, 2)}
+            {JSON.stringify({ accessToken, isAuthenticated}, null, 2)}
           </pre>
         </div>
 
@@ -45,8 +45,8 @@ export const ZustandTest = () => {
         {isAuthenticated && (
           <div className="p-4 bg-green-100 rounded">
             <p>로그인 상태입니다!</p>
-            <p>이메일: {user?.email}</p>
-            <p>이름: {user?.name}</p>
+            {/* <p>이메일: {user?.email}</p>
+            <p>이름: {user?.name}</p> */}
           </div>
         )}
       </div>

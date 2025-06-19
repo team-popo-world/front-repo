@@ -3,13 +3,11 @@ import { Info } from "../components/Info";
 import { Background } from "../../../components/layout/Background";
 import { IMAGE_URLS } from "@/lib/constants/constants";
 import { BackArrow } from "@/components/button/BackArrow";
-import type { AnimationControls } from "framer-motion";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 
 interface InvestingTemplateProps {
   onBack: () => void;
   onChapterClick: (chapter: string) => void;
-  animation: AnimationControls;
   onAnimationComplete: () => void;
   point: number | null;
 }
@@ -17,11 +15,12 @@ interface InvestingTemplateProps {
 
 export const InvestingTemplate = ({
   onBack,
-  animation,
   onChapterClick,
   onAnimationComplete,
   point,
 }: InvestingTemplateProps) => {
+  const controls = useAnimation();
+
   return (
     // 백그라운드 이미지
     <Background backgroundImage={IMAGE_URLS.investing.bg}>
@@ -65,7 +64,7 @@ export const InvestingTemplate = ({
         src={IMAGE_URLS.investing.poni}
         alt="포니 캐릭터"
         className="absolute h-[11.25rem] left-[14.5rem] top-[9rem]"
-        animate={animation}
+        animate={controls}
         transition={{ duration: 1 }}
         onAnimationComplete={onAnimationComplete}
       />
