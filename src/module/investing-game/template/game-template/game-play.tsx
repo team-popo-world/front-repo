@@ -7,7 +7,7 @@ import { Modal } from "@/components/modal/Modal";
 import type { GameState } from "@/page/investing/game/index";
 import { useState, memo } from "react";
 import { BackArrow } from "@/components/button/BackArrow";
-import { GameOutModal } from "../../component/little-pig-component/game-out-modal";
+import { GameOutModal } from "@/module/investing-game/component/game-component/game-out-modal";
 import { useNavigate } from "react-router-dom";
 import { playButtonSound } from "@/lib/utils/sound";
 import ClickSound from "@/assets/sound/button_click.mp3";
@@ -15,6 +15,7 @@ import SoundButton from "@/components/button/SoundButton";
 import { IMAGE_URLS } from "@/lib/constants/constants";
 
 interface GamePlayProps {
+  gameType: string;
   gameState: GameState;
   updateGameState: (updates: any) => void;
   handleTurnFinish: () => void;
@@ -22,10 +23,12 @@ interface GamePlayProps {
   backgroundImage: string;
   characterImages: string[];
   titleTextColor: string;
-  textColor: string;
   buttonColor: string;
   borderColor: string;
   borderStrokeColor: string;
+  sirenImage?: string;
+  newsImage?: string;
+  closeImage?: string;
 }
 
 interface StockData {
@@ -38,6 +41,7 @@ interface StockData {
 const MemoizedTextWithStroke = memo(TextWithStroke);
 
 export const GamePlay = ({
+  gameType,
   gameState,
   updateGameState,
   handleTurnFinish,
@@ -45,10 +49,12 @@ export const GamePlay = ({
   backgroundImage,
   characterImages,
   titleTextColor,
-  textColor,
   buttonColor,
   borderColor,
   borderStrokeColor,
+  sirenImage,
+  newsImage,
+  closeImage,
 }: GamePlayProps) => {
   // 턴 종료시 결과창 모달
   const [isTurnFinishModalOpen, setIsTurnFinishModalOpen] = useState(false);
@@ -112,10 +118,10 @@ export const GamePlay = ({
           result={gameState.result}
           totalPoint={calculatedPoint()}
           titleTextColor={titleTextColor}
-          textColor={textColor}
           buttonColor={buttonColor}
           borderColor={borderColor}
           borderStrokeColor={borderStrokeColor}
+          sirenImage={sirenImage}
         />
       </Modal>
       <Modal isOpen={isGameOutModalOpen}>
@@ -128,6 +134,8 @@ export const GamePlay = ({
           onCancel={() => {
             setIsGameOutModalOpen(false);
           }}
+          sirenImage={sirenImage}
+          closeImage={closeImage}
         />
       </Modal>
 
@@ -137,6 +145,7 @@ export const GamePlay = ({
           if (isTurnFinishModalOpen) return;
           setIsGameOutModalOpen(true);
         }}
+        color={gameType === "ninja" ? "white" : "gray"}
       />
       {/* 음소거 버튼 */}
       <SoundButton />
@@ -164,6 +173,8 @@ export const GamePlay = ({
       <NewsBox
         title={gameState.currentScenario.news}
         hint={gameState.currentScenario.news_hint}
+        sirenImage={sirenImage}
+        newsImage={newsImage}
       />
 
       <section className="relative flex items-center justify-center gap-x-2.5">

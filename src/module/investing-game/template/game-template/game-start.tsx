@@ -4,6 +4,7 @@ import { useState } from "react";
 import { GameStartExplain } from "./game-start-explain";
 import { BackArrow } from "@/components/button/BackArrow";
 import SoundButton from "@/components/button/SoundButton";
+import { playButtonSound } from "@/lib/utils/sound";
 
 interface GameCharacter {
   image: string;
@@ -36,6 +37,8 @@ interface GameStartProps {
   stockButtonStrokeColor: string;
   startButtonBgColor: string;
   startButtonStrokeColor: string;
+  sirenImage?: string;
+  gameType: string;
 }
 
 export const GameStart = ({
@@ -59,6 +62,8 @@ export const GameStart = ({
   stockButtonStrokeColor,
   startButtonBgColor,
   startButtonStrokeColor,
+  sirenImage,
+  gameType,
 }: GameStartProps) => {
   // 게임 설명 모달 상태
   const [isGameStartModalOpen, setIsGameStartModalOpen] = useState(false);
@@ -67,7 +72,7 @@ export const GameStart = ({
   if (isGameStartModalOpen) {
     return (
       <Background backgroundImage={backgroundImage} backgroundClassName="flex flex-col items-center justify-center">
-        <BackArrow />
+        <BackArrow color={gameType === "ninja" ? "white" : "gray"} />
         <SoundButton />
         <GameStartExplain
           onClose={() => setIsGameStartModalOpen(false)}
@@ -79,6 +84,7 @@ export const GameStart = ({
           stockNameColor={stockNameColor}
           borderColor={borderColor}
           borderStrokeColor={borderStrokeColor}
+          sirenImage={sirenImage}
         />
       </Background>
     );
@@ -88,7 +94,7 @@ export const GameStart = ({
   return (
     <Background backgroundImage={backgroundImage} backgroundClassName="flex flex-col items-center">
       {/* 뒤로가기 버튼 */}
-      <BackArrow />
+      <BackArrow color={gameType === "ninja" ? "white" : "gray"} />
       {/* 음소거 버튼 */}
       <SoundButton />
       {/* 제목 */}
@@ -127,7 +133,10 @@ export const GameStart = ({
       <button
         className="px-6 py-2 border-3 xl:border-5 rounded-lg active:scale-95 transition-all duration-100"
         style={{ backgroundColor: startButtonBgColor, borderColor: startButtonStrokeColor }}
-        onClick={() => setIsGameStartModalOpen(true)}
+        onClick={() => {
+          setIsGameStartModalOpen(true);
+          playButtonSound();
+        } }
       >
         <span className="text-white text-xl font-bold">투자 게임 시작</span>
       </button>

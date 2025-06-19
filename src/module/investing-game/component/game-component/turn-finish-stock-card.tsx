@@ -7,10 +7,9 @@ interface StockCardProps {
   name: string;
   priceChange: number;
   countChange: number;
-  textColor: string;
 }
 
-export const TurnFinishStockCard = ({ image, name, priceChange, countChange, textColor: _textColor }: StockCardProps) => {
+export const TurnFinishStockCard = ({ image, name, priceChange, countChange }: StockCardProps) => {
 
   return (
     <div className="flex flex-col px-1 items-center">
