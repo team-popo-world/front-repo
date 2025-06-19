@@ -1,9 +1,11 @@
 // src/page/main/index.tsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import MainTemplate from "../../module/main/template";
 import { useNavigate } from "react-router-dom";
 import { useSoundStore } from "@/lib/zustand/soundStore";
 import { useAuthStore } from "@/lib/zustand/store";
+import { setNewAudio, stopBackgroundMusic } from "@/lib/utils/sound";
+import MainBackgroundMusic from "@/assets/sound/main.mp3";
 
 // 섬별 위치 정보
 const ISLAND_POSITIONS = {
@@ -17,7 +19,22 @@ const ISLAND_POSITIONS = {
 
 export default function Main() {
   const { logout } = useAuthStore();
-  const { toggleMute, isMuted } = useSoundStore();
+  const { toggleMute, isMuted, audio } = useSoundStore();
+
+  // 첫페이지 로드시 배경음악 설정
+  useEffect(() => {
+    if (!audio) setNewAudio(MainBackgroundMusic);
+  }, []);
+
+  // 음소거 상태 변경시 배경음악 정지 또는 재생
+  useEffect(() => {
+    if (isMuted && audio) stopBackgroundMusic();
+    if (isMuted && !audio) return;
+
+    if (audio && !isMuted) {
+      audio.play();
+    }
+  }, [isMuted, audio]);
 
   const [isAnimating, setIsAnimating] = useState(false);
   const [targetPosition, setTargetPosition] = useState<{ top: string; left: string }>({

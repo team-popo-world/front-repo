@@ -12,6 +12,7 @@ import { GameOutModal } from "../../component/little-pig-component/game-out-moda
 import { useNavigate } from "react-router-dom";
 import { playButtonSound } from "@/lib/utils/sound";
 import ClickSound from "@/assets/sound/button_click.mp3";
+import SoundButton from "@/components/button/SoundButton";
 
 interface GamePlayProps {
   gameState: GameState;
@@ -128,6 +129,8 @@ export const GamePlay = ({
           setIsGameOutModalOpen(true);
         }}
       />
+      {/* 음소거 버튼 */}
+      <SoundButton />
 
       <div className="self-end mt-4 mr-6 mb-1">
         <MemoizedTextWithStroke

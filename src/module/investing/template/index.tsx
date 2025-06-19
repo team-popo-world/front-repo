@@ -5,6 +5,7 @@ import { IMAGE_URLS } from "@/lib/constants/constants";
 import { BackArrow } from "@/components/button/BackArrow";
 import type { AnimationControls } from "framer-motion";
 import { motion } from "framer-motion";
+import SoundButton from "@/components/button/SoundButton";
 
 interface InvestingTemplateProps {
   onBack: () => void;
@@ -24,7 +25,10 @@ export const InvestingTemplate = ({
   return (
     // 백그라운드 이미지
     <Background backgroundImage={IMAGE_URLS.investing.bg}>
+      {/* 뒤로가기 버튼 */}
       <BackArrow onClick={onBack} />
+      {/* 음소거 버튼 */}
+      <SoundButton />
       {/* 모의투자 제목 + 보유 코인 div */}
       <div
         aria-label="페이지 제목과 보유 코인 정보 섹션"

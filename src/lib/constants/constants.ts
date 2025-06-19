@@ -144,4 +144,18 @@ const IMAGE_URLS = {
   },
 };
 
-export { BACKGROUND_SIZE, INVESTING_GAME_INITIAL_POINT, IMAGE_URLS };
+import MainBackgroundMusic from "@/assets/sound/main.mp3";
+import LittlePigSound from "@/assets/sound/chapter_1.mp3";
+import TruckSound from "@/assets/sound/chapter_2.mp3";
+import MasicSound from "@/assets/sound/chapter_3.mp3";
+import NinjaSound from "@/assets/sound/chapter_4.mp3";
+
+const SOUND_URLS = {
+  main: MainBackgroundMusic,
+  little_pig: LittlePigSound,
+  truck: TruckSound,
+  masic: MasicSound,
+  ninja: NinjaSound,
+};
+
+export { BACKGROUND_SIZE, INVESTING_GAME_INITIAL_POINT, IMAGE_URLS, SOUND_URLS };
