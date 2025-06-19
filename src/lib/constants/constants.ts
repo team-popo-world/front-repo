@@ -173,7 +173,7 @@ const IMAGE_URLS = {
   quest: {
     modal_popo:
       "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1750166596/quest-modal-popo_l4ldtl",
-
+  },
   raising: {
     apple:
       "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750155644/raising_apple_nvewgu",
