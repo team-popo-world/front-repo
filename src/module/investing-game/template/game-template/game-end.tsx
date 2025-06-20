@@ -27,6 +27,7 @@ interface GameEndProps {
   chartImage: string;
   stockNames: string[];
   scenario: Scenario[];
+  sirenImage?: string;
 }
 
 export const GameEnd = ({
@@ -34,9 +35,10 @@ export const GameEnd = ({
   initialPoint,
   backgroundImage,
   characterImages,
-  chartImage,
+  chartImage = IMAGE_URLS.investing_game.base.chart_popo,
   stockNames,
   scenario,
+  sirenImage,
 }: GameEndProps) => {
   const formatData = () => {
     return scenario.map((turn) => ({
@@ -397,6 +399,7 @@ export const GameEnd = ({
         className="flex flex-col items-center px-10"
         borderColor="#fff9d0"
         borderStrokeColor="#7b5025"
+        sirenImage={sirenImage}
       >
         {/* 제목 */}
         <TextWithStroke
@@ -410,7 +413,7 @@ export const GameEnd = ({
           {/* 차트 돼지  */}
           <img
             src={chartImage}
-            alt="차트돼지"
+            alt="차트이미지"
             className="absolute -top-3 -left-3 w-11 h-11 object-contain z-100"
           />
 

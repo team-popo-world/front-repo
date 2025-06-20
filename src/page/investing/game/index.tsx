@@ -131,7 +131,6 @@ export default function InvestingGame() {
     if (isMuted && !audio) return;
 
     if (audio && !isMuted) {
-      console.log(audio);
       audio.play();
     }
   }, [isMuted, audio]);
@@ -146,14 +145,12 @@ export default function InvestingGame() {
     if (gameStage === "game-play") {
       const fetchChapterData = async () => {
         const result = await getChapterData(CHAPTER_ID[gametype as keyof typeof CHAPTER_ID]);
-        console.log(result);
         if (result.success && result.data) {
           const data = result.data;
           const sessionId = data.sessionId; // 게임 세션 id 추출
           setSessionId(sessionId); // 게임 세션 id 저장
           const story = JSON.parse(data.story); // 게임 시나리오 추출
-          console.log(story);
-
+          console.log(data.story);
           setGameState((prev) => ({
             ...prev,
             scenario: story, // 게임 시나리오 저장
@@ -161,8 +158,8 @@ export default function InvestingGame() {
             result: story[1].result, // 뉴스에 대한 결과 초기화 (이번턴 뉴스에 대한 결과는 다음턴 시나리오에 있음)
             price: story[0].stocks.map((stock: Stock) => stock.current_value), // 첫번째 시나리오의 주식 가격 저장
             nextPrice: story[1].stocks.map((stock: Stock) => stock.current_value), // 다음 턴 주식 가격 저장
-            turnMax: story.length, // 게임 시나리오 길이 저장
-            news_tag: story[0].news_tag, // 뭔지 모르겠음
+            turnMax: story.length - 1, // 게임 시나리오 길이 저장
+            news_tag: story[0].news_tag, // 뉴스 태그
           }));
 
           const nowKST = getKSTDateTime();
@@ -188,7 +185,6 @@ export default function InvestingGame() {
   };
 
   const handleTurnFinish = () => {
-    console.log("턴 종료");
     // TurnData 생성
     const nowKST = getKSTDateTime();
     setStartAt(nowKST); // 현재시간 업데이트 다음턴 시작시간
@@ -224,7 +220,7 @@ export default function InvestingGame() {
 
     // 턴 끝남
     // 만약 게임이 끝났다면 게임 종료 처리
-    if (gameState.turn >= gameState.turnMax - 1) {
+    if (gameState.turn >= gameState.turnMax) {
       const lastPoint =
         gameState.point + gameState.price.reduce((acc, curr, index) => acc + curr * gameState.count[index], 0);
       updateGameState({ isGameOver: true });
@@ -238,21 +234,23 @@ export default function InvestingGame() {
     const nextTurn = gameState.turn + 1;
     const nextScenario = gameState.scenario[nextTurn - 1];
     const nextPrices = nextScenario.stocks.map((stock) => stock.current_value);
+    const newResult = gameState.scenario[nextTurn].result;
 
-    // 다 다음턴 주식 가격 계산
+    // 다음턴 주식 가격 계산
     let nextNextPrices: number[] = [0, 0, 0];
-    if (gameState.turn + 2 <= gameState.turnMax) {
+    if (gameState.turn + 1 <= gameState.turnMax) {
       const nextNextTurn = gameState.turn + 2;
       const nextNextScenario = gameState.scenario[nextNextTurn - 1];
       nextNextPrices = nextNextScenario.stocks.map((stock) => stock.current_value);
     } else {
       nextNextPrices = nextPrices;
+
     }
 
     updateGameState({
       turn: nextTurn,
       currentScenario: nextScenario,
-      result: nextScenario.result,
+      result: newResult,
       beforeCount: [...gameState.count],
       beforePrice: [...gameState.price],
       price: nextPrices,

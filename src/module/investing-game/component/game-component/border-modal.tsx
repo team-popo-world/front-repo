@@ -6,11 +6,12 @@ interface PinkBorderModalProps {
   className?: string;
   borderColor?: string;
   borderStrokeColor?: string;
+  sirenImage?: string;
 }
 
 // #ff9d9d pink
 
-export const BorderModal = ({ children, borderColor, borderStrokeColor, className = "" }: PinkBorderModalProps) => {
+export const BorderModal = ({ children, borderColor, borderStrokeColor, className = "", sirenImage = IMAGE_URLS.investing_game.base.siren_popo}: PinkBorderModalProps) => {
   return (
     <div
       className={`relative flex items-center justify-center w-[33.5rem] h-[21.5rem] border-2 sm:border-3 md:border-4 xl:border-5 rounded-4xl`}
@@ -22,7 +23,7 @@ export const BorderModal = ({ children, borderColor, borderStrokeColor, classNam
       >
         {children}
         <img
-          src={IMAGE_URLS.investing_game.little_pig.little_siren_pig}
+          src={sirenImage}
           alt="siren pig"
           className="absolute -bottom-6 -right-7 min-w-0 h-20 object-contain"
         />

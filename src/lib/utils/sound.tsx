@@ -1,6 +1,7 @@
 import { useSoundStore } from "../zustand/soundStore";
+import buttonSound from "@/assets/sound/button_click.mp3";
 
-export const playButtonSound = (url: string, volume: number = 1) => {
+export const playButtonSound = (url: string = buttonSound, volume: number = 1) => {
   const { isMuted } = useSoundStore.getState();
   if (isMuted) return;
 
@@ -28,7 +29,6 @@ export const setNewAudio = (url: string, volume: number = 0.5, loop: boolean = t
   }
 
   const newAudio = new Audio(url);
-  console.log(newAudio);
   newAudio.volume = volume;
   newAudio.loop = loop;
   setAudio(newAudio);

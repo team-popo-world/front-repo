@@ -33,6 +33,10 @@ const IMAGE_URLS = {
       "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1749847143/logout_dzoadd",
     star: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750391714/star_exp_vldb1o",
     loading_bg: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750392131/moving_bg_sge2uz",
+    "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1749847143/logout_dzoadd",
+    back_arrow_black:"https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750335615/back_arrow_black_gpxrtd",
+    back_arrow_white:"https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750335615/back_arrow_white_qabhqn",
+    back_arrow_gray:"https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750335615/back_arrow_gray_pm2mvr",
   },
   main: {
     bg: "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1749831440/main-background_lviawu",
@@ -137,7 +141,7 @@ const IMAGE_URLS = {
     },
     truck: {
       truck_bg:
-        "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1749913467/truck_bg_xseoj4",
+        "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750318032/truck_bg_ibydrj",
       taco_truck:
         "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1749913467/taco_truck_i7bcbo",
       sandwich_truck:
@@ -147,7 +151,7 @@ const IMAGE_URLS = {
     },
     ninja: {
       ninja_bg:
-        "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1749913467/ninja_bg_wvm8dt",
+        "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750318032/ninja_bg_uqcua9  ",
       ninja1:
         "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1749913467/ninja1_wrrxcv",
       ninja2:
@@ -157,7 +161,7 @@ const IMAGE_URLS = {
     },
     masic: {
       masic_bg:
-        "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1749913467/masic_bg_r3lztv",
+        "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750318033/magic_bg_p5jjam",
       masic_1:
         "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1749913467/masic1_welc4w",
       masic_2:
@@ -166,6 +170,18 @@ const IMAGE_URLS = {
       masic_3:
         "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1749913467/masic3_b9xjo9",
     },
+    base:{
+      good_popo:
+        "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750318033/good_popo_rc92ze",
+      news_popo:
+        "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750318033/news_popo_dnninl",
+      siren_popo:
+        "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750318033/siren_popo_gfuo6t",
+      chart_popo:
+        "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750318033/chart_popo_zge2rf",
+      x_popo:
+        "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750333955/xpopo_vnpgcm",
+    }
   },
   investing: {
     bg: "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1750022907/investing-bg_pvefqn",
@@ -231,19 +247,19 @@ const IMAGE_URLS = {
   },
 };
 
-import MainBackgroundMusic from "@/assets/sound/main.mp3";
-import LittlePigSound from "@/assets/sound/chapter_1.mp3";
-import TruckSound from "@/assets/sound/chapter_2.mp3";
-import MasicSound from "@/assets/sound/chapter_3.mp3";
-import NinjaSound from "@/assets/sound/chapter_4.mp3";
+// import MainBackgroundMusic from "@/assets/sound/main.mp3";
+// import LittlePigSound from "@/assets/sound/chapter_1.mp3";
+// import TruckSound from "@/assets/sound/chapter_2.mp3";
+// import MasicSound from "@/assets/sound/chapter_3.mp3";
+// import NinjaSound from "@/assets/sound/chapter_4.mp3";
 
-const SOUND_URLS = {
-  main: MainBackgroundMusic,
-  little_pig: LittlePigSound,
-  truck: TruckSound,
-  masic: MasicSound,
-  ninja: NinjaSound,
-};
+// const SOUND_URLS = {
+//   main: MainBackgroundMusic,
+//   little_pig: LittlePigSound,
+//   truck: TruckSound,
+//   masic: MasicSound,
+//   ninja: NinjaSound,
+// };
 
 export { BACKGROUND_SIZE, INVESTING_GAME_INITIAL_POINT, IMAGE_URLS };
 

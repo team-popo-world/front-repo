@@ -8,9 +8,11 @@ import backSound from "@/assets/sound/back_click.mp3";
 interface GameOutModalProps {
   onConfirm: () => void;
   onCancel: () => void;
+  closeImage?: string;
+  sirenImage?: string;
 }
 
-export const GameOutModal = memo(({ onConfirm, onCancel }: GameOutModalProps) => {
+export const GameOutModal = memo(({ onConfirm, onCancel, sirenImage = IMAGE_URLS.investing_game.base.siren_popo, closeImage = IMAGE_URLS.investing_game.base.x_popo }: GameOutModalProps) => {
   return (
     <div className="relative flex flex-col items-start px-11 mb-5 pt-7 pb-5 justify-between w-[24rem] h-[12rem]  bg-main-yellow-200 rounded-2xl border-2 lg:border-5 border-main-yellow-500">
       <h2 className="text-main-brown-850 text-xl font-bold">게임 종료</h2>
@@ -41,12 +43,12 @@ export const GameOutModal = memo(({ onConfirm, onCancel }: GameOutModalProps) =>
       </div>
 
       <img
-        src={IMAGE_URLS.investing_game.little_pig.little_pig_close}
+        src={closeImage}
         alt="닫기 돼지"
         className="absolute -top-4 -left-5 min-w-0 h-15 object-contain"
       />
       <img
-        src={IMAGE_URLS.investing_game.little_pig.little_siren_pig}
+        src={sirenImage}
         alt="사이렌 돼지"
         className="absolute -bottom-6 -right-4 min-w-0 h-16 object-contain"
       />

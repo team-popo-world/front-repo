@@ -33,12 +33,11 @@ export default function LoginPage() {
       const accessToken = response.headers["authorization"]?.replace("Bearer ", "");
       console.log(accessToken);
       if (accessToken) {
-        setAccessToken(accessToken);
+        setAccessToken("accessToken");
       }
 
       // 리프레시 토큰 저장
       const refreshToken = response.headers["refresh-token"];
-      console.log(refreshToken);
       if (refreshToken) {
         Cookies.set("refreshToken", refreshToken, {
           expires: 14, // 14일 후 만료
@@ -50,7 +49,6 @@ export default function LoginPage() {
       // 사용자 정보 저장
       if (response.data) {
         login(response.data.name, response.data.point);
-        console.log("로그인 성공");
       }
 
       // 메인 페이지로 이동
