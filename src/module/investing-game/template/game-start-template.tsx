@@ -64,18 +64,20 @@ export const GameStartTemplate = ({ gameType }: GameStartTemplateProps) => {
             },
           ]}
           gamePlayPath="/investing/game/little-pig?stage=game-play"
-          textColor="#c55e5e"
-          stockNameColor="#c55e5e"
-          borderColor="#ff9d9d"
-          borderStrokeColor="#7a5c34"
-          titleTextColor="#fff9d0"
-          titleStrokeColor="#6a3909"
-          subtitleTextColor="#ffac2a"
-          subtitleStrokeColor="#6a3909"
-          stockButtonBgColor="#a86332"
-          stockButtonStrokeColor="#895835"
-          startButtonBgColor="#fe6e38"
-          startButtonStrokeColor="#e45628"
+          textColor="#c55e5e" // 모달 텍스트 색
+          stockNameColor="#c55e5e" // 모달 버튼 색
+          borderColor="#ff9d9d" // 모달 테두리색
+          borderStrokeColor="#7a5c34" // 모달 테두리 스트로크 색 
+          titleTextColor="#fff9d0" // 게임 시작 제목 색
+          titleStrokeColor="#6a3909" // 게임 시작 제목 스트로크 색
+          subtitleTextColor="#ffac2a" // 게임 시작 서브타이틀 색
+          subtitleStrokeColor="#6a3909" // 게임 시작 서브타이틀 스트로크 색
+          stockButtonBgColor="#a86332" // 종목 카드 버튼 색
+          stockButtonStrokeColor="#895835" // 종목 카드 버튼 스트로크 색
+          startButtonBgColor="#fe6e38" // 게임 시작 버튼 색
+          startButtonStrokeColor="#e45628" // 게임 시작 버튼 스트로크 색
+          sirenImage={IMAGE_URLS.investing_game.little_pig.little_siren_pig} // 모달 사이렌 이미지
+          gameType={gameType}
         />
       );
     case "truck":
@@ -142,6 +144,7 @@ export const GameStartTemplate = ({ gameType }: GameStartTemplateProps) => {
           stockButtonStrokeColor="#895835"
           startButtonBgColor="#fe6e38"
           startButtonStrokeColor="#e45628"
+          gameType={gameType}
         />
       );
     case "ninja":
@@ -213,6 +216,7 @@ export const GameStartTemplate = ({ gameType }: GameStartTemplateProps) => {
           stockButtonStrokeColor="#895835"
           startButtonBgColor="#fe6e38"
           startButtonStrokeColor="#e45628"
+          gameType={gameType}
         />
       );
     case "masic":
@@ -283,6 +287,7 @@ export const GameStartTemplate = ({ gameType }: GameStartTemplateProps) => {
           stockButtonStrokeColor="#1D79BA"
           startButtonBgColor="#374752"
           startButtonStrokeColor="#374752"
+          gameType={gameType}
         />
       );
     default:

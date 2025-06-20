@@ -59,7 +59,6 @@ apiClient.interceptors.request.use(
   },
   (error) => {
     // 요청 설정 중 에러 발생 시 처리
-    console.log(error);
     return Promise.reject(new ApiError(0, "요청 설정 중 오류가 발생했습니다."));
   }
 );
@@ -81,6 +80,12 @@ apiClient.interceptors.response.use(
     // 1. 네트워크 에러 처리
     if (!error.response) {
       return Promise.reject(new ApiError(0, "네트워크 연결을 확인해주세요."));
+    }
+    
+    if (error.config?.url?.includes('/auth/token/refresh')) {
+      Cookies.remove("refreshToken");
+      useAuthStore.getState().logout();
+      return Promise.reject(new ApiError(401, "세션이 만료되었습니다. 다시 로그인해주세요."));
     }
 
     const { status } = error.response;
@@ -106,12 +111,21 @@ apiClient.interceptors.response.use(
         );
 
         const accessToken = response.headers["authorization"]?.replace("Bearer ", "");
+        const newRefreshToken = response.headers["refresh-token"];
+
         if (accessToken) {
           useAuthStore.getState().setAccessToken(accessToken);
         }
+        if (newRefreshToken) {
+          Cookies.set("refreshToken", newRefreshToken, {
+            expires: 14, // 14일 후 만료
+            secure: true,
+            sameSite: "strict", // CSRF 공격 방지
+          });
+        }
 
         // 새로운 access 토큰으로 원래 요청 재시도
-        if (error.config) {
+        if (error.config) { 
           error.config.headers.Authorization = `Bearer ${accessToken}`;
           return apiClient(error.config);
         }

@@ -23,6 +23,7 @@ export const GamePlayTemplate = ({
     case "little-pig":
       return (
         <GamePlay
+          gameType={gameType}
           gameState={gameState}
           updateGameState={updateGameState}
           handleTurnFinish={handleTurnFinish}
@@ -33,16 +34,19 @@ export const GamePlayTemplate = ({
             IMAGE_URLS.investing_game.little_pig.little_pig_2,
             IMAGE_URLS.investing_game.little_pig.little_pig_3,
           ]}
-          titleTextColor="#c55e5e"
-          textColor="#7b5025"
-          buttonColor="#c55e5e"
-          borderColor="#ff9d9d"
-          borderStrokeColor="#7a5c34"
+          titleTextColor="#c55e5e" // 모달 제목
+          buttonColor="#c55e5e" // 모달 버튼
+          borderColor="#ff9d9d" // 모달 테두리
+          borderStrokeColor="#7a5c34" // 모달 테두리 스트로크
+          sirenImage={IMAGE_URLS.investing_game.little_pig.little_siren_pig}
+          newsImage={IMAGE_URLS.investing_game.little_pig.little_news_pig}
+          closeImage={IMAGE_URLS.investing_game.little_pig.little_pig_close}
         />
       );
     case "truck":
       return (
         <GamePlay
+          gameType={gameType}
           gameState={gameState}
           updateGameState={updateGameState}
           handleTurnFinish={handleTurnFinish}
@@ -54,15 +58,17 @@ export const GamePlayTemplate = ({
             IMAGE_URLS.investing_game.truck.icecream_truck,
           ]}
           titleTextColor="#1D79BA"
-          textColor="#1D79BA"
           buttonColor="#1D79BA"
           borderColor="#518EB9"
           borderStrokeColor="#374752"
+          sirenImage={IMAGE_URLS.investing_game.base.siren_popo}
+          newsImage={IMAGE_URLS.investing_game.base.news_popo}
         />
       );
     case "ninja":
       return (
         <GamePlay
+          gameType={gameType}
           gameState={gameState}
           updateGameState={updateGameState}
           handleTurnFinish={handleTurnFinish}
@@ -74,15 +80,17 @@ export const GamePlayTemplate = ({
             IMAGE_URLS.investing_game.ninja.ninja3,
           ]}
           titleTextColor="#7A5C34"
-          textColor="#7A5C34"
           buttonColor="#7A5C34"
           borderColor="#A2A07C"
           borderStrokeColor="#555555"
+          sirenImage={IMAGE_URLS.investing_game.base.siren_popo}
+          newsImage={IMAGE_URLS.investing_game.base.news_popo}
         />
       );
     case "masic":
       return (
         <GamePlay
+          gameType={gameType}
           gameState={gameState}
           updateGameState={updateGameState}
           handleTurnFinish={handleTurnFinish}
@@ -94,10 +102,11 @@ export const GamePlayTemplate = ({
             IMAGE_URLS.investing_game.masic.masic_3,
           ]}
           titleTextColor="#1D79BA"
-          textColor="#000000"
           buttonColor="#1D79BA"
           borderColor="#518EB9"
           borderStrokeColor="#374752"
+          sirenImage={IMAGE_URLS.investing_game.base.siren_popo}
+          newsImage={IMAGE_URLS.investing_game.base.news_popo}
         />
       );
   }

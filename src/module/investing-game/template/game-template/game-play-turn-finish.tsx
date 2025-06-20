@@ -20,10 +20,10 @@ interface GamePlayTurnFinishProps {
   result: string;
   totalPoint: number;
   titleTextColor: string;
-  textColor: string;
   buttonColor: string;
   borderColor: string;
   borderStrokeColor: string;
+  sirenImage?: string;
 }
 
 export const GamePlayTurnFinish = ({
@@ -33,16 +33,17 @@ export const GamePlayTurnFinish = ({
   result,
   totalPoint,
   titleTextColor,
-  textColor,
   buttonColor,
   borderColor,
   borderStrokeColor,
+  sirenImage,
 }: GamePlayTurnFinishProps) => {
   return (
     <BorderModal
       className="flex flex-col items-start px-10 "
       borderColor={borderColor}
       borderStrokeColor={borderStrokeColor}
+      sirenImage={sirenImage}
     >
       <h1
         className={`self-center mt-2.5 mb-1.5 text-[1.65rem] font-extrabold`}
@@ -55,7 +56,7 @@ export const GamePlayTurnFinish = ({
 
       <section className="mb-4 grid grid-cols-3 gap-x-2 w-full">
         {stockData.map((stock, index) => (
-          <TurnFinishStockCard key={index} {...stock} textColor={textColor} />
+          <TurnFinishStockCard key={index} {...stock} />
         ))}
       </section>
 

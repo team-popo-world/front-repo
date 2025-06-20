@@ -8,6 +8,7 @@ import NameAndPoint from "@/components/user/NameAndPoint";
 import { playButtonSound } from "@/lib/utils/sound";
 import ClickSound from "@/assets/sound/button_click.mp3";
 import backSound from "@/assets/sound/back_click.mp3";
+import SoundButton from "@/components/button/SoundButton";
 
 const ISLAND_POSITIONS = {
   market: { top: "4.25rem", left: "3.25rem" },
@@ -67,19 +68,9 @@ export default function MainTemplate({
           strokeClassName="text-main-brown-800 text-[0.9rem] text-stroke-width-[0.15rem] text-stroke-color-main-brown-800"
         />
       </div>
-      <div
-        className="absolute  left-[6.5rem] top-[0.7rem] flex flex-col items-center cursor-pointer"
-        onClick={() => {
-          playButtonSound(ClickSound);
-          toggleMute();
-        }}
-      >
-        {isMuted ? (
-          <img src={IMAGE_URLS.sound.off} alt="sound" className="w-[1.6rem]" />
-        ) : (
-          <img src={IMAGE_URLS.sound.on} alt="sound" className="w-[1.6rem]" />
-        )}
-      </div>
+      {/* 소리버튼 */}
+      <SoundButton className="absolute  left-[6.5rem] top-[0.7rem] flex flex-col items-center cursor-pointer active:scale-95 transition-all duration-300" />
+
       {/* 퀴즈 */}
       <Link to="/quiz" onClick={() => playButtonSound(ClickSound)}>
       <div className="absolute top-[0.5rem] right-[9.8rem]  flex flex-col justify-center items-center ">

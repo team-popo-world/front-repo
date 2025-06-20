@@ -72,6 +72,7 @@ export default function Main() {
         ...Object.values(IMAGE_URLS.investing_game.masic),
         ...Object.values(IMAGE_URLS.investing_game.ninja),
         ...Object.values(IMAGE_URLS.investing_game.truck),
+        ...Object.values(IMAGE_URLS.investing_game.base),
       ];
       investingPageImages.forEach((image) => {
         preload(image, { as: "image" });

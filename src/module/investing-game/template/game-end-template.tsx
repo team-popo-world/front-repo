@@ -27,6 +27,7 @@ export const GameEndTemplate = ({ gameType, lastPoint, initialPoint, stockNames,
           ]}
           chartImage={IMAGE_URLS.investing_game.little_pig.little_pig_chart}
           scenario={scenario}
+          sirenImage={IMAGE_URLS.investing_game.little_pig.little_siren_pig}
         />
       );
     case "truck":
@@ -41,7 +42,7 @@ export const GameEndTemplate = ({ gameType, lastPoint, initialPoint, stockNames,
             IMAGE_URLS.investing_game.truck.sandwich_truck,
             IMAGE_URLS.investing_game.truck.icecream_truck,
           ]}
-          chartImage={IMAGE_URLS.investing_game.little_pig.little_pig_chart}
+          chartImage={IMAGE_URLS.investing_game.base.chart_popo}
           scenario={scenario}
         />
       );
@@ -57,7 +58,7 @@ export const GameEndTemplate = ({ gameType, lastPoint, initialPoint, stockNames,
             IMAGE_URLS.investing_game.ninja.ninja2,
             IMAGE_URLS.investing_game.ninja.ninja3,
           ]}
-          chartImage={IMAGE_URLS.investing_game.little_pig.little_pig_chart}
+          chartImage={IMAGE_URLS.investing_game.base.chart_popo}
           scenario={scenario}
         />
       );
@@ -73,7 +74,7 @@ export const GameEndTemplate = ({ gameType, lastPoint, initialPoint, stockNames,
             IMAGE_URLS.investing_game.masic.masic_2,
             IMAGE_URLS.investing_game.masic.masic_3,
           ]}
-          chartImage={IMAGE_URLS.investing_game.little_pig.little_pig_chart}
+          chartImage={IMAGE_URLS.investing_game.base.chart_popo}
           scenario={scenario}
         />
       );
