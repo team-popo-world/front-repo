@@ -6,7 +6,7 @@ import { SpeechBubble } from "../components/SpeechBubble";
 import { Modal } from "@/components/modal/Modal";
 import { PurchaseModal } from "../components/PurchaseModal";
 import NameAndPoint from "@/components/user/NameAndPoint";
-import type { StoreItem } from "@/lib/api/market/store";
+import type { StoreItem } from "@/lib/api/market/getStore";
 
 interface NpcShopTemplateProps {
   isOpen: boolean;

@@ -1,9 +1,8 @@
 import { InventoryTemplate } from "@/module/market/template/inventory";
 import { useEffect, useState } from "react";
-import { IMAGE_URLS } from "@/lib/constants/constants";
 import { useNavigate } from "react-router-dom";
-import { getInventory, type InventoryItem } from "@/lib/api/market/inventory";
-import { useProduct } from "@/lib/api/market/use-product";
+import { getInventory, type InventoryItem } from "@/lib/api/market/getInventory";
+import { useProduct } from "@/lib/api/market/useProduct";
 
 export const TEXT_MESSAGE = {
   not_product: {

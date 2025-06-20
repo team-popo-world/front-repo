@@ -74,7 +74,7 @@ export const QuestCard = React.memo(
             alt="퀘스트 이미지"
             className="w-[3rem] h-[3rem] rounded-lg object-contain  border-white shadow"
           />
-          <div className="flex flex-col gap-[0.1rem] w-[10rem] ml-[1rem] mr-[1rem]  ">
+          <div className="flex flex-col gap-[0.1rem] w-[10rem] ml-[1rem] mr-[1rem] ">
             <span className="font-bold text-[0.73rem]">{quest.name}</span>
             <span className="text-[0.68rem] text-gray-600">
               {quest.description}
@@ -83,12 +83,12 @@ export const QuestCard = React.memo(
               기한: {formatDateToKorean(quest.end_date)}
             </span>
           </div>
-          <div className="flex flex-col min-w-fit justify-start items-center ">
+          <div className="flex flex-col min-w-fit w-[3rem] justify-start items-center ">
             <div
               className={`text-white cursor-pointer w-full text-[0.73rem] px-[0.375rem] py-[0.2rem] rounded text-center ${
                 statusColor[quest.state]
               }`}
-              onClick={onChangeState}
+              onClick={handleClick}
             >
               {quest.state}
             </div>

@@ -6,7 +6,7 @@ import { InventoryDarkWoodTitle } from "../components/WoodTitle";
 import { Modal } from "@/components/modal/Modal";
 import { InventoryModal } from "../components/InventoryModal";
 import NameAndPoint from "@/components/user/NameAndPoint";
-import type { InventoryItem } from "@/lib/api/market/inventory";
+import type { InventoryItem } from "@/lib/api/market/getInventory";
 
 interface InventoryTemplateProps {
   isOpen: boolean;

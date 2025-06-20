@@ -2,17 +2,15 @@ import apiClient from "../axios";
 
 interface UseProductRequest {
   productId: string;
-  amount: number;
 }
 
 interface UseProductResponse {
-  remainingStock: number;
-  usedAmount: number;
+  productId: string;
 }
 
-export const useProduct = async ({ productId, amount }: UseProductRequest): Promise<UseProductResponse> => {
+export const useProduct = async ({ productId }: UseProductRequest): Promise<UseProductResponse> => {
   try {
-    const response = await apiClient.post("/api/store/inventory/usage", { productId, amount });
+    const response = await apiClient.post("/api/store/inventory/usage", { productId });
     if (response.status !== 200) {
       throw new Error("Failed to use product");
     }

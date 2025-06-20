@@ -1,4 +1,5 @@
 import apiClient from "../axios";
+
 export interface InventoryItem {
   productId: string;
   name: string;
@@ -6,6 +7,7 @@ export interface InventoryItem {
   stock: number;
   type: string;
   exp: number;
+  purchasedAt: string;
 }
 
 export const getInventory = async (): Promise<InventoryItem[]> => {
@@ -22,13 +24,3 @@ export const getInventory = async (): Promise<InventoryItem[]> => {
   }
 };
 
-// [
-//   {
-//     productId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-//     name: "string",
-//     imageUrl: "string",
-//     stock: 0,
-//     type: "string",
-//     exp: 0,
-//   }
-// ];

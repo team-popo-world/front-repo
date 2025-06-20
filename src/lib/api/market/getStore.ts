@@ -1,4 +1,5 @@
 import apiClient from "../axios";
+
 export interface StoreItem {
   id: string;
   name: string;

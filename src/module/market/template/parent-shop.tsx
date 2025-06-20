@@ -8,7 +8,7 @@ import { PurchaseModal } from "../components/PurchaseModal";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import NameAndPoint from "@/components/user/NameAndPoint";
-import type { StoreItem } from "@/lib/api/market/store";
+import type { StoreItem } from "@/lib/api/market/getStore";
 
 interface ParentShopTemplateProps {
   isOpen: boolean;

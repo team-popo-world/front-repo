@@ -1,9 +1,8 @@
 import { ParentShopTemplate } from "@/module/market/template/parent-shop";
 import { useEffect, useState } from "react";
-import { IMAGE_URLS } from "@/lib/constants/constants";
 import { useNavigate } from "react-router-dom";
-import { getStoreItems, type StoreItem } from "@/lib/api/market/store";
-import { buyProduct } from "@/lib/api/market/buy-product";
+import { getStoreItems, type StoreItem } from "@/lib/api/market/getStore";
+import { buyProduct } from "@/lib/api/market/buyProduct";
 import { useAuthStore } from "../../../lib/zustand/store";
 
 export const TEXT_MESSAGE = {
