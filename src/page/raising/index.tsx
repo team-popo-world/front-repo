@@ -1,7 +1,106 @@
 import { Background } from "../../components/layout/Background";
 import { IMAGE_URLS } from "../../lib/constants/constants";
+import { BackArrow } from "../../components/button/BackArrow";
+import { useState, useEffect } from "react";
+import apiClient from "../../lib/api/axios";
 
-import { useState } from "react";
+// 먹이 타입 정의
+interface Feed {
+  productId: string;
+  name: string;
+  imageUrl: string;
+  stock: number;
+  type: string;
+  exp: number;
+  price: number;
+}
+
+// 포포 키우기 응답 타입
+interface FeedsResponse {
+  currentLevel: number;
+  currentExperience: number;
+  totalExperience: number;
+  availableFeeds: Feed[];
+}
+
+// 먹이 주기 응답 타입
+interface FeedResponse {
+  newLevel: number;
+  currentExperience: number;
+  totalExperience: number;
+  gainedExperience: number;
+  levelUp: boolean;
+  fedItems: string[];
+  message: string;
+}
+
+// 먹이 이미지 매핑
+const feedImageMap: Record<string, keyof typeof IMAGE_URLS.raising> = {
+  "당근": "carrot",
+  "물고기": "fish",
+  "빵": "bread",
+  "사과": "apple",
+  "수박": "watermelon",
+  "브로콜리": "broccoli"
+};
+
+// 기본 먹이 목록 (모든 가능한 먹이 정보)
+const ALL_FEEDS: Feed[] = [
+  {
+    productId: "2e54bc74-2ac1-427d-8d36-db32ff3a55f1",
+    name: "수박",
+    imageUrl: "https://res.cloudinary.com/djmcg7zgu/image/upload/w_auto,f_auto,q_auto/v1749382424/watermelon_vrrndc",
+    stock: 0,
+    type: "npc",
+    exp: 20,
+    price: 300
+  },
+  {
+    productId: "81809d00-7af4-4784-a962-6b48ddecc576",
+    name: "브로콜리",
+    imageUrl: "https://res.cloudinary.com/djmcg7zgu/image/upload/w_auto,f_auto,q_auto/v1749382424/broccoli_nmpcqu",
+    stock: 0,
+    type: "npc",
+    exp: 14,
+    price: 120
+  },
+  {
+    productId: "3e2724e3-0f74-490c-8022-ade43bdd2bb1",
+    name: "빵",
+    imageUrl: "https://res.cloudinary.com/djmcg7zgu/image/upload/w_auto,f_auto,q_auto/v1749382424/bread_nykeqe",
+    stock: 0,
+    type: "npc",
+    exp: 12,
+    price: 150
+  },
+  {
+    productId: "b51ef10c-8974-4bb7-87a3-2be5ed8e4948",
+    name: "사과",
+    imageUrl: "https://res.cloudinary.com/djmcg7zgu/image/upload/w_auto,f_auto,q_auto/v1749382424/apple_dyzpm6",
+    stock: 0,
+    type: "npc",
+    exp: 8,
+    price: 80
+  },
+  {
+    productId: "6de9042e-4170-4847-aeef-4d0f59fd9cb7",
+    name: "당근",
+    imageUrl: "https://res.cloudinary.com/djmcg7zgu/image/upload/w_auto,f_auto,q_auto/v1749382424/carrot_i3xbjj",
+    stock: 0,
+    type: "npc",
+    exp: 10,
+    price: 100
+  },
+  {
+    productId: "40c049d1-d8cc-41f5-9947-84d9ea2352f7",
+    name: "물고기",
+    imageUrl: "https://res.cloudinary.com/djmcg7zgu/image/upload/w_auto,f_auto,q_auto/v1749382424/fish_hqsqfs",
+    stock: 0,
+    type: "npc",
+    exp: 15,
+    price: 200
+  }
+];
 
 export default function RaisingPage() {
   const [level, setLevel] = useState(1);
@@ -10,17 +109,45 @@ export default function RaisingPage() {
   const [isFeedModalOpen, setIsFeedModalOpen] = useState(false);
   const [showExpMsg, setShowExpMsg] = useState(false);
   const [addedExp, setAddedExp] = useState(0);
-  const [feedList, setFeedList] = useState([
-    { name: "carrot", img: IMAGE_URLS.raising.carrot, count: 3 },
-    { name: "bread", img: IMAGE_URLS.raising.bread, count: 8 },
-    { name: "fish", img: IMAGE_URLS.raising.fish, count: 7 },
-    { name: "apple", img: IMAGE_URLS.raising.apple, count: 2 },
-    { name: "watermelon", img: IMAGE_URLS.raising.watermelon, count: 5 },
-    { name: "broccoli", img: IMAGE_URLS.raising.broccoli, count: 3 },
-  ]);
+  const [feedList, setFeedList] = useState<Feed[]>([]);
   const [levelUp, setLevelUp] = useState(false);
   const [_pendingExpMsg, setPendingExpMsg] = useState(false);
   const [characterAnim, setCharacterAnim] = useState(false);
+  const [selected, setSelected] = useState<string[]>([]);
+
+  // 먹이 목록 조회
+  const fetchFeeds = async () => {
+    try {
+      const response = await apiClient.get<FeedsResponse>("/api/popo/feeds");
+      const { currentLevel, currentExperience, availableFeeds } = response.data;
+      
+      // API 응답과 기본 먹이 목록을 합침
+      const mergedFeeds = ALL_FEEDS.map(defaultFeed => {
+        const apiFeed = availableFeeds.find(feed => feed.productId === defaultFeed.productId);
+        if (apiFeed) {
+          return {
+            ...apiFeed,
+            stock: apiFeed.stock ?? 0  // stock이 undefined나 null이면 0으로 표시
+          };
+        }
+        return defaultFeed;  // API에 없는 먹이는 기본 정보(stock: 0) 사용
+      });
+
+      setLevel(currentLevel);
+      setExp(currentExperience);
+      setFeedList(mergedFeeds);
+    } catch (error) {
+      console.error("먹이 목록 조회 실패:", error);
+      setLevel(1);
+      setExp(0);
+      setFeedList(ALL_FEEDS);  // 에러 시 모든 먹이를 0개로 표시
+    }
+  };
+
+  // 컴포넌트 마운트 시 먹이 목록 조회
+  useEffect(() => {
+    fetchFeeds();
+  }, []);
 
   function getCharacterImg(level: number) {
     if (level >= 5) return IMAGE_URLS.raising.character5;
@@ -31,45 +158,49 @@ export default function RaisingPage() {
   }
 
   function FeedModal({ onCancel, onConfirm }: { onCancel: () => void; onConfirm: (selectedFeeds: string[]) => void }) {
-    const [selected, setSelected] = useState<string[]>([]);
-
-    const toggleFeed = (feedName: string) => {
-      setSelected((prev) => (prev.includes(feedName) ? prev.filter((name) => name !== feedName) : [...prev, feedName]));
+    const toggleFeed = (feedId: string) => {
+      setSelected((prev) => 
+        prev.includes(feedId) ? prev.filter((id) => id !== feedId) : [...prev, feedId]
+      );
     };
 
     return (
       <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/30">
-        <div className="relative bg-[#FFF6D1]/100 rounded-3xl px-10 py-8 min-w-[420px]">
+        <div className="relative bg-[#FFF6D1]/100 rounded-3xl px-10 py-8 min-w-[420px]">    
           <div className="absolute left-1/2 -top-6 -translate-x-1/2 bg-[#EBD057] text-center py-2 rounded-xl font-bold text-2xl text-[#834400] w-50">
             먹이 선택하기
           </div>
           <div className="grid grid-cols-2 gap-x-8 gap-y-4 mt-8 mb-6">
             {feedList.map((feed) => (
               <div
-                key={feed.name}
+                key={feed.productId}
                 className={`flex items-center bg-white rounded-xl px-4 py-2 shadow
-                  ${feed.count === 0 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
-                  ${selected.includes(feed.name) ? "ring-4 ring-yellow-300" : ""}
+                  ${feed.stock === 0 ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}
+                  ${selected.includes(feed.productId) ? "ring-4 ring-yellow-300" : ""}
                 `}
                 onClick={() => {
-                  if (feed.count === 0) return;
-                  toggleFeed(feed.name);
+                  if (feed.stock === 0) return;
+                  toggleFeed(feed.productId);
                 }}
               >
-                <img src={feed.img} alt={feed.name} className="w-8 h-8 mr-2" />
-                <span className="font-bold ml-5 text-lg text-[#6F4223]">{feed.count}개</span>
+                <img 
+                  src={IMAGE_URLS.raising[feedImageMap[feed.name]]} 
+                  alt={feed.name} 
+                  className="w-8 h-8 object-contain mr-2" 
+                />
+                <span className="font-bold ml-5 text-lg text-[#6F4223]">{feed.stock}개</span>
               </div>
             ))}
           </div>
           <div className="flex justify-center gap-4 mt-2">
             <button
-              className="bg-[#EBD057] text-[#834400] font-bold px-6 py-1 rounded-xl text-xl shadow"
+              className="bg-[#EBD057] text-[#834400] font-bold px-6 py-1 rounded-xl text-xl shadow cursor-pointer"
               onClick={onCancel}
             >
               취소
             </button>
             <button
-              className="bg-[#EBD057] text-[#834400] font-bold px-6 py-1 rounded-xl text-xl shadow"
+              className="bg-[#EBD057] text-[#834400] font-bold px-6 py-1 rounded-xl text-xl shadow cursor-pointer"
               onClick={() => onConfirm(selected)}
             >
               확인
@@ -80,21 +211,28 @@ export default function RaisingPage() {
     );
   }
 
-  const handleFeedConfirm = (selectedFeeds: string[]) => {
+  const handleFeedConfirm = async (selectedFeeds: string[]) => {
     setIsFeedModalOpen(false);
     if (selectedFeeds.length > 0) {
-      const expToAdd = selectedFeeds.length * 20;
-      setAddedExp(expToAdd);
+      try {
+        // 선택한 먹이 ID 목록을 서버에 전송
+        const response = await apiClient.post<FeedResponse>("/api/popo/feed", {
+          feedItems: selectedFeeds.map(id => ({
+            productId: id,
+            amount: 1
+          }))
+        });
 
-      setExp((prev) => {
-        let totalExp = prev + expToAdd;
-        let newLevel = level;
-        let didLevelUp = false;
-        while (totalExp >= maxExp) {
-          totalExp -= maxExp;
-          newLevel += 1;
-          didLevelUp = true;
-        }
+        const { 
+          newLevel,
+          currentExperience: newExp,
+          gainedExperience,
+          levelUp: didLevelUp,
+          message 
+        } = response.data;
+
+        setAddedExp(gainedExperience);
+
         if (didLevelUp) {
           setLevelUp(true);
           setPendingExpMsg(true);
@@ -107,21 +245,34 @@ export default function RaisingPage() {
           setShowExpMsg(true);
           setTimeout(() => setShowExpMsg(false), 1000);
         }
-        setLevel(newLevel);
-        return totalExp;
-      });
 
-      setFeedList((prev) =>
-        prev.map((feed) => (selectedFeeds.includes(feed.name) ? { ...feed, count: Math.max(0, feed.count - 1) } : feed))
-      );
+        setLevel(newLevel);
+        setExp(newExp);
+        setSelected([]);
+        
+        // 먹이 목록 갱신
+        fetchFeeds();
+      } catch (error: any) {
+        console.error("먹이 주기 실패:", error);
+        if (error.response?.data?.message) {
+          // 서버에서 전달된 에러 메시지가 있다면 표시
+          alert(error.response.data.message);
+        } else {
+          alert("먹이 주기에 실패했습니다.");
+        }
+      }
     }
   };
 
   return (
     <Background backgroundImage={IMAGE_URLS.raising.background}>
+      <div className="absolute top-3 left-1 w-23 min-h-0 flex flex-wrap active:scale-95 transition-all duration-100 z-50">
+        <BackArrow />
+      </div>
       <div className="flex flex-col items-center">
         <h1 className="mt-9 text-[2rem] font-bold text-[#834400] bg-[#EBD057] px-8 py-1 rounded-[1rem]">포포 키우기</h1>
         <div className="relative w-[13rem] h-[13rem] flex items-end justify-center mt-5">
+          
           <img
             src={getCharacterImg(level)}
             alt={`character${level}`}
@@ -139,8 +290,11 @@ export default function RaisingPage() {
           <div className="flex items-center justify-between mb-2">
             <span className="font-bold text-2xl text-[#6F4223]">Level {level}</span>
             <button
-              className="bg-yellow-300 text-[#834400] font-bold px-6 py-1 rounded-xl text-xl shadow"
-              onClick={() => setIsFeedModalOpen(true)}
+              className="bg-yellow-300 text-[#834400] font-bold px-6 py-1 rounded-xl text-xl shadow cursor-pointer"
+              onClick={() => {
+                fetchFeeds(); // 먹이 주기 버튼 클릭 시 먹이 목록 실시간 조회
+                setIsFeedModalOpen(true);
+              }}
             >
               먹이 주기
             </button>
@@ -155,12 +309,20 @@ export default function RaisingPage() {
             />
           </div>
         </div>
-        {isFeedModalOpen && <FeedModal onCancel={() => setIsFeedModalOpen(false)} onConfirm={handleFeedConfirm} />}
+        {isFeedModalOpen && (
+          <FeedModal
+            onCancel={() => {
+              setIsFeedModalOpen(false);
+              setSelected([]);
+            }}
+            onConfirm={handleFeedConfirm}
+          />
+        )}
         {levelUp && (
           <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/30">
             <div className="bg-[#FFF6D1] rounded-2xl px-8 py-6 shadow text-center flex flex-col items-center">
               <div className="text-3xl font-extrabold text-yellow-500 mb-2">레벨업!</div>
-              <img src={getCharacterImg(level + 1)} alt={`character${level + 1}`} className="w-40 h-40 mx-auto mb-2" />
+              <img src={getCharacterImg(level)} alt={`character${level}`} className="w-40 h-40 mx-auto mb-2" />
               <div className="text-xl font-bold text-[#6F4223] mb-2">포포가 성장했어요!</div>
             </div>
           </div>
