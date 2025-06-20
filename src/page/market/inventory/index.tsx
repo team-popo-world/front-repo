@@ -78,8 +78,10 @@ export default function Inventory() {
     navigate("/market", { state: { from: "inventory" } });
   };
 
-  const handleUseProduct = () => {
-    useProduct({ productId: selectedProduct?.productId || "", amount: 1 });
+  const handleUseProduct = (exp?: number) => {
+    navigate("/raising", { state: { from: "inventory" } });
+    return;
+    useProduct({ productId: selectedProduct?.productId || "" });
     setIsOpen(false);
   };
 

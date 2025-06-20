@@ -10,6 +10,10 @@ export const TEXT_MESSAGE = {
     text: "아직 상품이 없어요. \n 다음에 찾아주세요!",
     buttonText: "",
   },
+  first_and_last: {
+    text: "상점을 구경해봐요!",
+    buttonText: "",
+  },
   first: {
     text: "더 많은 상품을 보고 싶나요?",
     buttonText: "더보기",
@@ -32,6 +36,7 @@ export default function NpcShop() {
   const [productIndex, setProductIndex] = useState(0);
   const lastIndex = Math.ceil(productList.length / 3) - 1;
   const [selectedProduct, setSelectedProduct] = useState<StoreItem | null>(null);
+  const [isCompleteOpen, setIsCompleteOpen] = useState(false);
 
   useEffect(() => {
     getStoreItems("parent").then((items) => {
@@ -42,6 +47,9 @@ export default function NpcShop() {
   const getMessage = () => {
     if (productList.length === 0) {
       return TEXT_MESSAGE.not_product;
+    }
+    if (productIndex === 0 || productIndex === lastIndex) {
+      return TEXT_MESSAGE.first_and_last;
     }
     if (productIndex === 0) {
       return TEXT_MESSAGE.first;
@@ -75,9 +83,15 @@ export default function NpcShop() {
     try {
       const response = await buyProduct({ productId: selectedProduct?.id || "", amount: 1 });
       setPoint(response.currentPoint);
+      setIsCompleteOpen(true);
     } catch (error) {
       console.error("Failed to buy product", error);
     }
+  };
+
+  const handleComplete = () => {
+    setIsCompleteOpen(false);
+    setIsOpen(false);
   };
 
   return (
@@ -92,6 +106,8 @@ export default function NpcShop() {
       productList={productList}
       handleBack={handleBack}
       handlePurchase={handlePurchase}
+      isCompleteOpen={isCompleteOpen}
+      handleComplete={handleComplete}
     />
   );
 }

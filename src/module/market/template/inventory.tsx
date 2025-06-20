@@ -7,6 +7,7 @@ import { Modal } from "@/components/modal/Modal";
 import { InventoryModal } from "../components/InventoryModal";
 import NameAndPoint from "@/components/user/NameAndPoint";
 import type { InventoryItem } from "@/lib/api/market/getInventory";
+import { TextWithStroke } from "@/components/text/TextWithStroke";
 
 interface InventoryTemplateProps {
   isOpen: boolean;
@@ -50,8 +51,9 @@ export const InventoryTemplate = ({
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <InventoryModal
           text={selectedProduct?.name || ""}
-          price={selectedProduct?.exp || 0}
+          price={selectedProduct?.price || 0}
           image={selectedProduct?.imageUrl || ""}
+          exp={selectedProduct?.exp || 0}
           onConfirm={handleUseProduct}
           onClose={() => setIsOpen(false)}
         />
@@ -62,7 +64,7 @@ export const InventoryTemplate = ({
           .fill(0)
           .map((_, row) => (
             <div key={row} className="flex items-center gap-x-13">
-              {productList.slice(productIndex * 9 + row * 3, productIndex * 9 + (row + 1) * 3).map((product) => (
+              {productList.slice(_productIndex * 9 + row * 3, _productIndex * 9 + (row + 1) * 3).map((product) => (
                 <div
                   className="relative w-[3.8rem] active:scale-95 transition-all duration-100 flex flex-col items-center gap-y-1"
                   key={product.name}
@@ -72,6 +74,16 @@ export const InventoryTemplate = ({
                   <div className="bg-[#5C3600] py-0.5 px-1 text-[0.5rem] text-[#FFEDDA] text-center rounded-md whitespace-nowrap max-w-[3.8rem] truncate">
                     {product.name}
                   </div>
+                  {/* 재고 표시 */}
+                  {product.exp > 0 && (
+                  <div className="absolute top-6 left-10">
+                    <TextWithStroke
+                      text={product.stock.toString()}
+                      textClassName="text-[#060502] font-bold text-[0.6rem]"
+                      strokeClassName="text-[#FFF9D7] font-bold text-[0.6rem] text-stroke-width-[0.12rem] text-stroke-color-[#FFF9D7]"
+                    />
+                  </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -81,12 +93,4 @@ export const InventoryTemplate = ({
   );
 };
 
-{
-  /* <div className="absolute top-4 left-8">
-<TextWithStroke
-  text={product.quantity.toString()}
-  textClassName="text-[#060502] font-bold text-[0.6rem]"
-  strokeClassName="text-[#FFF9D7] font-bold text-[0.6rem] text-stroke-width-[0.12rem] text-stroke-color-[#FFF9D7]"
-/>
-</div> */
-}
+

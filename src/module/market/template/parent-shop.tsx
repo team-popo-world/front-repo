@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import clsx from "clsx";
 import NameAndPoint from "@/components/user/NameAndPoint";
 import type { StoreItem } from "@/lib/api/market/getStore";
+import { CompleteModal } from "../components/CompleteModal";
 
 interface ParentShopTemplateProps {
   isOpen: boolean;
@@ -21,6 +22,8 @@ interface ParentShopTemplateProps {
   productList: StoreItem[];
   handleBack: () => void;
   handlePurchase: () => void;
+  isCompleteOpen: boolean;
+  handleComplete: () => void;
 }
 
 export const ParentShopTemplate = ({
@@ -34,6 +37,8 @@ export const ParentShopTemplate = ({
   productList,
   handleBack,
   handlePurchase,
+  isCompleteOpen,
+  handleComplete,
 }: ParentShopTemplateProps) => {
   const [isCurtainOpen, setIsCurtainOpen] = useState(false);
   const [isCurtainOpen2, setIsCurtainOpen2] = useState(true);
@@ -74,6 +79,16 @@ export const ParentShopTemplate = ({
             price={selectedProduct?.price || 0}
             onConfirm={handlePurchase}
             onClose={() => setIsOpen(false)}
+          />
+        </Modal>
+        <Modal isOpen={isCompleteOpen} onClose={handleComplete}>
+          <CompleteModal
+            text={`${selectedProduct?.name}을 구매했어요!`}
+            price={selectedProduct?.price || 0}
+            image={selectedProduct?.imageUrl || ""}
+            isOpen={isCompleteOpen}   
+            onConfirm={handleComplete}
+            onClose={handleComplete}
           />
         </Modal>
         {/* 뒤로가기 */}

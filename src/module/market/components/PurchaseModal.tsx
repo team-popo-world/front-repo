@@ -26,8 +26,8 @@ export const PurchaseModal = ({
         className="w-24 h-24 object-contain absolute bottom-0 -left-10"
       />
       <h4 className="text-[#EE9223] text-[1.5rem] font-extrabold">구매하기</h4>
-      <div className="flex items-center justify-center gap-x-6">
-        <img src={image} alt="coin" className="w-26 h-26 object-contain" />
+      <div className="flex items-center justify-center gap-x-10">
+        <img src={image} alt="coin" className="w-24 h-24 object-contain" />
         <div className="flex flex-col gap-y-2">
           <div className="text-xl text-[#6E532C] font-bold">{text}</div>
           <div className="flex items-center gap-x-1">

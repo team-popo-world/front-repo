@@ -31,6 +31,8 @@ const IMAGE_URLS = {
     name: "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1749845855/user-name_xyiwu8",
     logout:
       "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1749847143/logout_dzoadd",
+    star: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750391714/star_exp_vldb1o",
+    loading_bg: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750392131/moving_bg_sge2uz",
   },
   main: {
     bg: "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1749831440/main-background_lviawu",

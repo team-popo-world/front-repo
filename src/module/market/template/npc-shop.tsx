@@ -7,6 +7,7 @@ import { Modal } from "@/components/modal/Modal";
 import { PurchaseModal } from "../components/PurchaseModal";
 import NameAndPoint from "@/components/user/NameAndPoint";
 import type { StoreItem } from "@/lib/api/market/getStore";
+import { CompleteModal } from "../components/CompleteModal";
 
 interface NpcShopTemplateProps {
   isOpen: boolean;
@@ -19,6 +20,8 @@ interface NpcShopTemplateProps {
   product_list: StoreItem[];
   handleBack: () => void;
   handlePurchase: () => void;
+  isCompleteOpen: boolean;
+  handleComplete: () => void;
 }
 
 export const NpcShopTemplate = ({
@@ -32,6 +35,8 @@ export const NpcShopTemplate = ({
   product_list,
   handleBack,
   handlePurchase,
+  isCompleteOpen,
+  handleComplete,
 }: NpcShopTemplateProps) => {
   return (
     <Background backgroundImage={IMAGE_URLS.market.npc_shop_bg}>
@@ -45,7 +50,17 @@ export const NpcShopTemplate = ({
           onClose={() => setIsOpen(false)}
         />
       </Modal>
-      {/* 뒤로가기 */}
+      <Modal isOpen={isCompleteOpen} onClose={handleComplete}>
+        <CompleteModal
+          text={`${selectedProduct?.name}을 구매했어요!`}
+          price={selectedProduct?.price || 0}
+          image={selectedProduct?.imageUrl || ""}
+          isOpen={isCompleteOpen}
+          onConfirm={handleComplete}
+          onClose={handleComplete}
+        />
+      </Modal>
+        {/* 뒤로가기 */}
       <BackArrow onClick={handleBack} />
       {/* 이름과 포인트 */}
       <NameAndPoint />

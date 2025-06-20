@@ -2,8 +2,23 @@ import { Background } from "../../components/layout/Background";
 import { IMAGE_URLS } from "../../lib/constants/constants";
 
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import { Loading } from "@/components/loading/loading";
 
 export default function RaisingPage() {
+  const { state } = useLocation();
+  const { from } = state || {};
+  const [isLoading, setIsLoading] = useState(true);
+  
+  if(from === "inventory") {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
+    return <Loading />;
+  } else {
+    setIsLoading(false);
+  } 
+
   const [level, setLevel] = useState(1);
   const [exp, setExp] = useState(0);
   const [maxExp, _setMaxExp] = useState(100);

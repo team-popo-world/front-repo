@@ -27,6 +27,7 @@ export const TEXT_MESSAGE = {
 export default function NpcShop() {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
+  const [isCompleteOpen, setIsCompleteOpen] = useState(false);
   const [productIndex, setProductIndex] = useState(0);
   const [storeItems, setStoreItems] = useState<StoreItem[]>([]);
   const lastIndex = Math.ceil(storeItems.length / 3) - 1;
@@ -74,9 +75,15 @@ export default function NpcShop() {
     try {
       const response = await buyProduct({ productId: selectedProduct?.id || "", amount: 1 });
       setPoint(response.currentPoint);
+      setIsCompleteOpen(true);
     } catch (error) {
       console.error("Failed to buy product", error);
     }
+  };
+
+  const handleComplete = () => {
+    setIsCompleteOpen(false);
+    setIsOpen(false);
   };
 
   return (
@@ -91,6 +98,8 @@ export default function NpcShop() {
       product_list={storeItems}
       handleBack={handleBack}
       handlePurchase={handlePurchase}
+      isCompleteOpen={isCompleteOpen}
+      handleComplete={handleComplete}
     />
   );
 }

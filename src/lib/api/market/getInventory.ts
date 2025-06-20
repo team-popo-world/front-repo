@@ -7,12 +7,15 @@ export interface InventoryItem {
   stock: number;
   type: string;
   exp: number;
+  price: number;
   purchasedAt: string;
 }
+
 
 export const getInventory = async (): Promise<InventoryItem[]> => {
   try {
     const response = await apiClient.get("/api/store/inventory");
+    console.log(response.data);
     if (response.status !== 200) {
       throw new Error("Failed to fetch inventory");
     }

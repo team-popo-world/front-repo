@@ -9,6 +9,7 @@ interface UseProductResponse {
 }
 
 export const useProduct = async ({ productId }: UseProductRequest): Promise<UseProductResponse> => {
+  console.log(productId);
   try {
     const response = await apiClient.post("/api/store/inventory/usage", { productId });
     if (response.status !== 200) {

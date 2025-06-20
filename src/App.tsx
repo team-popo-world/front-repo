@@ -58,6 +58,7 @@ function App() {
               <Route path="detail/:questType" element={<QuestDetail />} />
               <Route path="detail/complete" element={<QuestComplete />} />
             </Route>
+            {/* 포포 키우기 */}
             <Route path="/raising" element={<Raising />} />
             {/* 감정일기 */}
             <Route path="/emotionDiary">
