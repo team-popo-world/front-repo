@@ -59,22 +59,26 @@ export const Poni = ({
   );
 };
 
-export const Loading = () => {
+export const ToRasingLandLoading1 = () => {
   return (
     <Background backgroundImage={IMAGE_URLS.common.loading_bg}>
-      
-      {/* 로딩 중인 포니 */}
+      {/* 로딩 중인 포니 - 섬에 다가가는 애니메이션 */}
       <motion.div
         className="absolute w-40 h-40"
-        initial={{ left: "-10rem", top: "50%" }}
-        animate={{
-          left: ["-10rem", "10rem", "-10rem"],
+        initial={{ 
+          left: "100%", 
           top: "50%",
+          scale: 0.8,
+          zIndex: 10
+        }}
+        animate={{
+          left: ["40rem", "-10rem"],
+          top: ["50%", "45%"],
+          scale: [0.8, 1.2],
         }}
         transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut",
+          duration: 4,
+          ease: "linear",
         }}
       >
         <motion.img
@@ -97,9 +101,10 @@ export const Loading = () => {
         />
       </motion.div>
 
+
       {/* 로딩 텍스트 */}
       <motion.div
-        className="absolute bottom-20 left-1/2 transform -translate-x-1/2"
+        className="absolute bottom-4 right-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.5 }}
