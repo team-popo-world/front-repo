@@ -10,6 +10,10 @@ import { TextWithStroke } from "../../components/text/TextWithStroke";
 import apiClient from "../../lib/api/axios";
 import { useAuthStore } from "@/lib/zustand/store";
 import { IMAGE_URLS } from "@/lib/constants/constants";
+import { setNewAudio, stopBackgroundMusic } from "@/lib/utils/sound";
+import { useSoundStore } from "@/lib/zustand/soundStore";
+import SavingsBackgroundMusic from "@/assets/sound/saving.mp3";
+import SoundButton from "@/components/button/SoundButton";
 
 const IS_TEST_MODE = false;
 
@@ -36,6 +40,24 @@ async function createSavingsAccount(goalAmount: number, createdAt: string, endDa
 }
 
 export default function SavingsPage() {
+
+  const { isMuted, audio } = useSoundStore();
+
+  // 첫페이지 로드시 배경음악 설정
+  useEffect(() => {
+    setNewAudio(SavingsBackgroundMusic, 1);
+  }, []);
+
+  // 음소거 상태 변경시 배경음악 정지 또는 재생
+  useEffect(() => {
+    if (isMuted && audio) stopBackgroundMusic();
+    if (isMuted && !audio) return;
+
+    if (audio && !isMuted) {
+      audio.play();
+    }
+  }, [isMuted, audio]);
+  
   // ========== 상태 관리 변수들 ==========
 
   // 날짜 관련 상태
@@ -400,7 +422,10 @@ export default function SavingsPage() {
             />
           </div>
         </div>
+        {/* 뒤로가기 */}
         <BackArrow />
+        {/* 음소거 버튼 */}
+        <SoundButton /> 
 
         {/* 페이지 제목 */}
         <div className="w-full flex flex-col items-center mt-8">

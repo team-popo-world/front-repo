@@ -5,9 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { useSoundStore } from "@/lib/zustand/soundStore";
 import { useAuthStore } from "@/lib/zustand/store";
 import { setNewAudio, stopBackgroundMusic } from "@/lib/utils/sound";
-import MainBackgroundMusic from "@/assets/sound/main.mp3";
 import { IMAGE_URLS } from "@/lib/constants/constants";
 import { preload } from "react-dom";
+import MainBackgroundMusic from "@/assets/sound/main1.mp3";
 
 // 섬별 위치 정보
 const ISLAND_POSITIONS = {
@@ -25,7 +25,7 @@ export default function Main() {
 
   // 첫페이지 로드시 배경음악 설정
   useEffect(() => {
-    if (!audio) setNewAudio(MainBackgroundMusic);
+    setNewAudio(MainBackgroundMusic, 0.4);
   }, []);
 
   // 음소거 상태 변경시 배경음악 정지 또는 재생

@@ -3,6 +3,9 @@ import { EmotionDiaryTemplate } from "../../module/emotionDiary/template";
 import { useEffect, useState } from "react";
 import apiClient, { ApiError } from "@/lib/api/axios";
 import type { Diary } from "@/module/emotionDiary/types/diary";
+import { setNewAudio, stopBackgroundMusic } from "@/lib/utils/sound";
+import { useSoundStore } from "@/lib/zustand/soundStore";
+import EmotionDiaryBackgroundMusic from "@/assets/sound/diary.mp3";
 
 const API_URL = "/api/diary";
 
@@ -16,6 +19,21 @@ export default function EmotionDiaryPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
 
+  const { isMuted, audio } = useSoundStore();
+
+  useEffect(() => {
+    setNewAudio(EmotionDiaryBackgroundMusic, 0.6);
+  }, []);
+  // 음소거 상태 변경시 배경음악 정지 또는 재생
+  useEffect(() => {
+    if (isMuted && audio) stopBackgroundMusic();
+    if (isMuted && !audio) return;
+
+    if (audio && !isMuted) {
+      audio.play();
+    }
+  }, [isMuted, audio]);
+  
   // 작성한 일기 목록 조회
   useEffect(() => {
     const fetchData = async () => {

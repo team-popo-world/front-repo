@@ -3,6 +3,7 @@ import { DiaryCard } from "../components/DiaryCard";
 import { BackArrow } from "@/components/button/BackArrow";
 import type { Diary } from "../types/diary";
 import { WriteLimitModal } from "../components/writeLimitModal";
+import SoundButton from "@/components/button/SoundButton";
 
 interface EmotionDiaryTemplateProps {
   onClickWrite: () => void;
@@ -35,7 +36,8 @@ export const EmotionDiaryTemplate = ({
     <Background backgroundImage="https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749237608/ChatGPT_Image_2025%E1%84%82%E1%85%A7%E1%86%AB_6%E1%84%8B%E1%85%AF%E1%86%AF_7%E1%84%8B%E1%85%B5%E1%86%AF_%E1%84%8B%E1%85%A9%E1%84%8C%E1%85%A5%E1%86%AB_04_17_24_1_yzgzkl.webp">
       {/* 뒤로가기 */}
       <BackArrow onClick={onBack} />
-
+      {/* 음소거 버튼 */}
+      <SoundButton />
       {/* 제목 */}
       <div
         aria-label="제목: 감정일기"

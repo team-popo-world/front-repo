@@ -8,6 +8,7 @@ import { InventoryModal } from "../components/InventoryModal";
 import NameAndPoint from "@/components/user/NameAndPoint";
 import type { InventoryItem } from "@/lib/api/market/getInventory";
 import { TextWithStroke } from "@/components/text/TextWithStroke";
+import SoundButton from "@/components/button/SoundButton";
 
 interface InventoryTemplateProps {
   isOpen: boolean;
@@ -38,6 +39,8 @@ export const InventoryTemplate = ({
     <Background backgroundImage={IMAGE_URLS.market.inventory_bg}>
       {/* 뒤로가기 */}
       <BackArrow onClick={handleBack} />
+      {/* 음소거 버튼 */}
+      <SoundButton />
       {/* 이름과 포인트 */}
       <NameAndPoint />
       {/* 제목 */}

@@ -6,6 +6,10 @@ import apiClient from "../../lib/api/axios";
 import { ToRasingLandLoading1 } from "@/components/loading/ToRasingLandLoading1";
 import { ToRasingLandLoading2 } from "@/components/loading/ToRasingLandLoading2";
 import { useLocation, useNavigate } from "react-router-dom";
+import { setNewAudio, stopBackgroundMusic } from "@/lib/utils/sound";
+import { useSoundStore } from "@/lib/zustand/soundStore";
+import RaisingBackgroundMusic from "@/assets/sound/raising.mp3";
+import SoundButton from "@/components/button/SoundButton";
 
 // 먹이 타입 정의
 interface Feed {
@@ -106,6 +110,22 @@ const ALL_FEEDS: Feed[] = [
 ];
 
 export default function RaisingPage() {
+  // 배경음악 설정
+  const { isMuted, audio } = useSoundStore();
+
+  useEffect(() => {
+    setNewAudio(RaisingBackgroundMusic);
+  }, []);
+  // 음소거 상태 변경시 배경음악 정지 또는 재생
+  useEffect(() => {
+    if (isMuted && audio) stopBackgroundMusic();
+    if (isMuted && !audio) return;
+
+    if (audio && !isMuted) {
+      audio.play();
+    }
+  }, [isMuted, audio]);
+
   const [level, setLevel] = useState(1);
   const [exp, setExp] = useState(0);
   const [maxExp, _setMaxExp] = useState(100);
@@ -118,7 +138,7 @@ export default function RaisingPage() {
   const [characterAnim, setCharacterAnim] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
   // 로딩 상태 인벤토리에서 먹이 사용시 이동
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   // 먹이 목록 조회
   const fetchFeeds = async () => {
@@ -165,6 +185,7 @@ export default function RaisingPage() {
   // 인벤토리에서 먹이 사용시 로딩 화면 출력
   const { state } = useLocation();
   const from = state?.from;
+  console.log(from);
   if(from === "inventory") {
     setIsLoading(true);
   }
@@ -282,9 +303,11 @@ export default function RaisingPage() {
 
   return (
     <Background backgroundImage={IMAGE_URLS.raising.background}>
-      <div className="absolute top-3 left-1 w-23 min-h-0 flex flex-wrap active:scale-95 transition-all duration-100 z-50">
-        <BackArrow />
-      </div>
+      {/* 뒤로가기 */}
+      <BackArrow />
+      {/* 음소거 버튼 */}
+      <SoundButton />
+      {/* 제목 */}
       <div className="flex flex-col items-center">
         <h1 className="mt-9 text-[2rem] font-bold text-[#834400] bg-[#EBD057] px-8 py-1 rounded-[1rem]">포포 키우기</h1>
         <div className="relative w-[13rem] h-[13rem] flex items-end justify-center mt-5">

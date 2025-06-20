@@ -6,7 +6,7 @@ import { useAuthStore } from "@/lib/zustand/store";
 import { playButtonSound, setNewAudio, stopBackgroundMusic } from "@/lib/utils/sound";
 import ClickSound from "@/assets/sound/button_click.mp3";
 import { useSoundStore } from "@/lib/zustand/soundStore";
-import MainBackgroundMusic from "@/assets/sound/main.mp3";
+import InvestingBackgroundMusic from "@/assets/sound/invest.mp3";
 
 export default function InvestingPage() {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ export default function InvestingPage() {
   const { isMuted, audio } = useSoundStore();
 
   useEffect(() => {
-    setNewAudio(MainBackgroundMusic);
+    setNewAudio(InvestingBackgroundMusic);
   }, []);
   // 음소거 상태 변경시 배경음악 정지 또는 재생
   useEffect(() => {

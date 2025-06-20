@@ -11,7 +11,7 @@ export const playButtonSound = (url: string = buttonSound, volume: number = 1) =
 };
 
 // 배경음악 설정
-export const setNewAudio = (url: string, volume: number = 0.5, loop: boolean = true) => {
+export const setNewAudio = (url: string, volume: number = 1, loop: boolean = true) => {
   const { audio, setAudio } = useSoundStore.getState();
   if (audio) {
     audio.pause();

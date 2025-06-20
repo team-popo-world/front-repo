@@ -3,14 +3,34 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { MarketTemplate } from "../../module/market/template";
 import { preload } from "react-dom";
 import { IMAGE_URLS } from "@/lib/constants/constants";
+import { setNewAudio, stopBackgroundMusic } from "@/lib/utils/sound";
+import { useSoundStore } from "@/lib/zustand/soundStore";
+import MarketBackgroundMusic from "@/assets/sound/market.mp3";
+
+const marketPageImages = [
+  IMAGE_URLS.market.bg,
+  IMAGE_URLS.market.popo,
+  IMAGE_URLS.market.npc_shop,
+  IMAGE_URLS.market.inventory,
+  IMAGE_URLS.market.parent_shop,
+];
 export default function MarketPage() {
-  const marketPageImages = [
-    IMAGE_URLS.market.bg,
-    IMAGE_URLS.market.popo,
-    IMAGE_URLS.market.npc_shop,
-    IMAGE_URLS.market.inventory,
-    IMAGE_URLS.market.parent_shop,
-  ];
+  const { isMuted, audio } = useSoundStore();
+
+    // 첫페이지 로드시 배경음악 설정
+    useEffect(() => {
+      setNewAudio(MarketBackgroundMusic, 0.8);
+    }, []);
+  
+    // 음소거 상태 변경시 배경음악 정지 또는 재생
+    useEffect(() => {
+      if (isMuted && audio) stopBackgroundMusic();
+      if (isMuted && !audio) return;
+  
+      if (audio && !isMuted) {
+        audio.play();
+      }
+    }, [isMuted, audio]);
 
   marketPageImages.forEach((image) => {
     preload(image, { as: "image" });

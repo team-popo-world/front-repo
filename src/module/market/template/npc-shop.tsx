@@ -8,6 +8,7 @@ import { PurchaseModal } from "../components/PurchaseModal";
 import NameAndPoint from "@/components/user/NameAndPoint";
 import type { StoreItem } from "@/lib/api/market/getStore";
 import { CompleteModal } from "../components/CompleteModal";
+import SoundButton from "@/components/button/SoundButton";
 
 interface NpcShopTemplateProps {
   isOpen: boolean;
@@ -60,8 +61,10 @@ export const NpcShopTemplate = ({
           onClose={handleComplete}
         />
       </Modal>
-        {/* 뒤로가기 */}
+      {/* 뒤로가기 */}
       <BackArrow onClick={handleBack} />
+      {/* 음소거 버튼 */}
+      <SoundButton /> 
       {/* 이름과 포인트 */}
       <NameAndPoint />
       {/* 제목 */}

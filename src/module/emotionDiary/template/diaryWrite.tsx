@@ -1,6 +1,7 @@
 import { BackArrow } from "@/components/button/BackArrow";
 import { Background } from "@/components/layout/Background";
 import { emotionList } from "../constants/emotionList";
+import SoundButton from "@/components/button/SoundButton";
 
 interface DiaryWriteTemplateProps {
   onBack: () => void;
@@ -20,7 +21,8 @@ export const DiaryWriteTemplate = ({
     <Background backgroundImage="https://res.cloudinary.com/dgmbxvpv9/image/upload/v1749622517/diary-write-bg_bld452.webp">
       {/* 뒤로가기 */}
       <BackArrow onClick={onBack} />
-
+      {/* 음소거 버튼 */}
+      <SoundButton />
       {/* 제목 */}
       <div
         aria-label="제목: 오늘의 일기"

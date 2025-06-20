@@ -10,10 +10,10 @@ import { sendTurnData } from "@/lib/api/invest-game/investTurnUpdate";
 import { getChapterData } from "@/lib/api/invest-game/investChapterApi";
 import { setNewAudio, stopBackgroundMusic } from "@/lib/utils/sound";
 import { useSoundStore } from "@/lib/zustand/soundStore";
-import LittlePigSound from "@/assets/sound/chapter_1.mp3";
-import TruckSound from "@/assets/sound/chapter_2.mp3";
-import MasicSound from "@/assets/sound/chapter_3.mp3";
-import NinjaSound from "@/assets/sound/chapter_4.mp3";
+import LittlePigSound from "@/assets/sound/chapter1.mp3";
+import TruckSound from "@/assets/sound/chapter2.mp3";
+import MasicSound from "@/assets/sound/chapter3.mp3";
+import NinjaSound from "@/assets/sound/chapter4.mp3";
 
 // 게임 관련 타입 정의
 export interface Stock {
@@ -122,7 +122,7 @@ export default function InvestingGame() {
 
   // 첫페이지 로드시 배경음악 설정
   useEffect(() => {
-    setNewAudio(CHAPTER_SOUND[gametype as keyof typeof CHAPTER_SOUND]);
+    setNewAudio(CHAPTER_SOUND[gametype as keyof typeof CHAPTER_SOUND], 1);
   }, []);
 
   // 음소거 상태 변경시 배경음악 정지 또는 재생
