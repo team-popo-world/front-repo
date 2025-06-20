@@ -68,7 +68,7 @@ export const Loading = () => {
         className="absolute w-40 h-40"
         initial={{ left: "-10rem", top: "50%" }}
         animate={{
-          left: ["-10rem", "calc(100% + 10rem)"],
+          left: ["-10rem", "10rem", "-10rem"],
           top: "50%",
         }}
         transition={{

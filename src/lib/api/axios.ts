@@ -33,6 +33,10 @@ const apiClient = axios.create({
   withCredentials: true, // CORS 요청에서 쿠키 전송을 허용
 });
 
+// 재시도 횟수를 추적하는 Map
+const retryCountMap = new Map<string, number>();
+const MAX_RETRY_COUNT = 3;
+
 /**
  * 요청 인터셉터
  * 모든 요청이 서버로 전송되기 전에 실행됨
@@ -69,11 +73,13 @@ apiClient.interceptors.request.use(
  * 주요 기능:
  * 1. 네트워크 에러 처리
  * 2. HTTP 상태 코드별 에러 처리
- * 3. 인증 에러 시 토큰 갱신
+ * 3. 인증 에러 시 토큰 갱신 (최대 3번)
  */
 apiClient.interceptors.response.use(
   (response) => {
-    // 응답 헤더 로깅
+    // 응답 성공 시 재시도 카운터 초기화
+    const requestKey = `${response.config.method}-${response.config.url}`;
+    retryCountMap.delete(requestKey);
     return response;
   },
   async (error: AxiosError) => {
@@ -82,6 +88,7 @@ apiClient.interceptors.response.use(
       return Promise.reject(new ApiError(0, "네트워크 연결을 확인해주세요."));
     }
     
+    // 토큰 갱신 요청 자체가 실패한 경우 무한 반복 방지
     if (error.config?.url?.includes('/auth/token/refresh')) {
       Cookies.remove("refreshToken");
       useAuthStore.getState().logout();
@@ -91,7 +98,22 @@ apiClient.interceptors.response.use(
     const { status } = error.response;
 
     if (status === 401) {
+      // 재시도 횟수 확인
+      const requestKey = `${error.config?.method}-${error.config?.url}`;
+      const currentRetryCount = retryCountMap.get(requestKey) || 0;
+      
+      if (currentRetryCount >= MAX_RETRY_COUNT) {
+        // 최대 재시도 횟수 초과 시 로그아웃
+        retryCountMap.delete(requestKey);
+        Cookies.remove("refreshToken");
+        useAuthStore.getState().logout();
+        return Promise.reject(new ApiError(401, "인증에 실패했습니다. 다시 로그인해주세요."));
+      }
+
       try {
+        // 재시도 횟수 증가
+        retryCountMap.set(requestKey, currentRetryCount + 1);
+
         // refresh 토큰으로 새로운 access 토큰 발급 요청
         const refreshToken = Cookies.get("refreshToken");
         if (!refreshToken) {
@@ -110,8 +132,14 @@ apiClient.interceptors.response.use(
           }
         );
 
-        const accessToken = response.headers["authorization"]?.replace("Bearer ", "");
+        // 204 응답의 경우 헤더에서 토큰을 가져오거나 다른 방식으로 처리
+        let accessToken = response.headers["authorization"]?.replace("Bearer ", "");
         const newRefreshToken = response.headers["refresh-token"];
+
+        // accessToken이 여전히 없으면 에러 처리
+        if (!accessToken) {
+          throw new Error("Access token not received from refresh");
+        }
 
         if (accessToken) {
           useAuthStore.getState().setAccessToken(accessToken);
@@ -131,6 +159,7 @@ apiClient.interceptors.response.use(
         }
       } catch (refreshError) {
         // refresh 토큰도 만료된 경우
+        retryCountMap.delete(requestKey);
         Cookies.remove("refreshToken");
         useAuthStore.getState().logout();
 

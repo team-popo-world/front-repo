@@ -32,8 +32,7 @@ const IMAGE_URLS = {
     logout:
       "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1749847143/logout_dzoadd",
     star: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750391714/star_exp_vldb1o",
-    loading_bg: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750392131/moving_bg_sge2uz",
-    "https://res.cloudinary.com/dgmbxvpv9/image/upload/f_auto,q_auto/v1749847143/logout_dzoadd",
+    loading_bg: "https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750394379/loading_bg_2_xybuad",
     back_arrow_black:"https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750335615/back_arrow_black_gpxrtd",
     back_arrow_white:"https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750335615/back_arrow_white_qabhqn",
     back_arrow_gray:"https://res.cloudinary.com/djmcg7zgu/image/upload/f_auto,q_auto/v1750335615/back_arrow_gray_pm2mvr",

@@ -79,10 +79,12 @@ export default function Inventory() {
   };
 
   const handleUseProduct = (exp?: number) => {
-    navigate("/raising", { state: { from: "inventory" } });
-    return;
     useProduct({ productId: selectedProduct?.productId || "" });
     setIsOpen(false);
+
+    if (exp && exp > 0) {
+      navigate("/raising", { state: { from: "inventory" } });
+    }
   };
 
   return (
