@@ -45,14 +45,14 @@ export const InventorySpeechBubble = ({ text, buttonText, className, onClick }: 
     <div className={clsx("absolute top-24 right-10", className)}>
       <div
         className={clsx(
-          "flex flex-col items-center justify-center px-2 pt-1 pb-1 min-w-[9rem] max-w-[10rem] min-h-[3.5rem] max-h-[5rem] bg-[#F6D8B8] border-2 lg:border-4 border-[#97784A] rounded-4xl"
+          "flex flex-col items-center justify-center px-2 pt-1 pb-1 min-w-[9rem] max-w-[10rem] min-h-[3rem] max-h-[5rem] bg-[#F6D8B8] border-2 lg:border-4 border-[#97784A] rounded-4xl"
         )}
       >
         {/* 단어단위 줄바꿈, 줄간격, 줄바꿈 처리 */}
         <p
           className={clsx(
-            "text-[#6E532C] text-[0.6rem] font-bold text-center  leading-tight whitespace-pre-line",
-            buttonText ? "pt-1 px-1" : "pt-0"
+            "text-[#6E532C]  font-bold text-center  leading-tight whitespace-pre-line",
+            buttonText ? "pt-1 px-1 text-[0.6rem]" : "pt-0 text-[0.7rem]"
           )}
         >
           {text}

@@ -8,17 +8,22 @@ import { PurchaseModal } from "../components/PurchaseModal";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 import NameAndPoint from "@/components/user/NameAndPoint";
+import type { StoreItem } from "@/lib/api/market/getStore";
+import { CompleteModal } from "../components/CompleteModal";
 
 interface ParentShopTemplateProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
   productIndex: number;
-  selectedProduct: { name: string; price: number; image: string } | null;
+  selectedProduct: StoreItem | null;
   currentMessage: { text: string; buttonText: string };
   handleSpeechBubbleClick: () => void;
-  handleProductClick: (product: { name: string; price: number; image: string }) => void;
-  PRODUCT_LIST: { name: string; price: number; image: string }[];
+  handleProductClick: (product: StoreItem) => void;
+  productList: StoreItem[];
   handleBack: () => void;
+  handlePurchase: () => void;
+  isCompleteOpen: boolean;
+  handleComplete: () => void;
 }
 
 export const ParentShopTemplate = ({
@@ -29,8 +34,11 @@ export const ParentShopTemplate = ({
   currentMessage,
   handleSpeechBubbleClick,
   handleProductClick,
-  PRODUCT_LIST,
+  productList,
   handleBack,
+  handlePurchase,
+  isCompleteOpen,
+  handleComplete,
 }: ParentShopTemplateProps) => {
   const [isCurtainOpen, setIsCurtainOpen] = useState(false);
   const [isCurtainOpen2, setIsCurtainOpen2] = useState(true);
@@ -38,7 +46,6 @@ export const ParentShopTemplate = ({
   useEffect(() => {
     setIsCurtainOpen(true);
   }, []);
-
   return (
     <div className="relative w-full h-full overflow-hidden">
       {/* 커튼 애니메이션 */}
@@ -67,16 +74,30 @@ export const ParentShopTemplate = ({
         {/* 모달 */}
         <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
           <PurchaseModal
-            image={selectedProduct?.image || ""}
+            image={selectedProduct?.imageUrl || ""}
             text={selectedProduct?.name || ""}
             price={selectedProduct?.price || 0}
-            onConfirm={() => setIsOpen(false)}
+            onConfirm={handlePurchase}
             onClose={() => setIsOpen(false)}
           />
         </Modal>
+        <Modal isOpen={isCompleteOpen} onClose={handleComplete}>
+          <CompleteModal
+            text={`${selectedProduct?.name}을 구매했어요!`}
+            price={selectedProduct?.price || 0}
+            image={selectedProduct?.imageUrl || ""}
+            isOpen={isCompleteOpen}   
+            onConfirm={handleComplete}
+            onClose={handleComplete}
+          />
+        </Modal>
+        {/* 뒤로가기 */}
         <BackArrow onClick={handleBack} />
+        {/* 이름과 포인트 */}
         <NameAndPoint />
+        {/* 제목 */}
         <DarkWoodTitle title="부모님 상점" />
+        {/* 말풍선 */}
         <SpeechBubble
           text={currentMessage.text}
           buttonText={currentMessage.buttonText}
@@ -84,20 +105,24 @@ export const ParentShopTemplate = ({
         />
         {/* 상품들 */}
         <div className="absolute bottom-29 left-1/2 -translate-x-1/2 w-75 flex items-center gap-x-14">
-          {PRODUCT_LIST.slice(productIndex * 3, (productIndex + 1) * 3).map((product) => (
+          {productList.slice(productIndex * 3, (productIndex + 1) * 3).map((product) => (
             <div
               className="relative active:scale-95 transition-all duration-100"
-              key={product.name}
+              key={product.id}
               onClick={() => handleProductClick(product)}
             >
               <img src={IMAGE_URLS.items.dish} alt="dish" className="w-14 h-14 object-contain" />
-              <img src={product.image} alt={product.name} className="w-8 h-8 top-0 left-3.5 absolute object-contain" />
+              <img
+                src={product.imageUrl}
+                alt={product.name}
+                className="w-8 h-8 top-0 left-3.5 absolute object-contain"
+              />
             </div>
           ))}
         </div>
         {/* 가격표 */}
         <div className="absolute bottom-12 left-1/2 -translate-x-1/2 w-86 flex items-stretch gap-x-2">
-          {PRODUCT_LIST.slice(productIndex * 3, (productIndex + 1) * 3).map((product) => (
+          {productList.slice(productIndex * 3, (productIndex + 1) * 3).map((product) => (
             <div
               className="flex flex-col justify-center items-center gap-y-0.5 w-26 px-4 py-1.5 bg-[#F6D8B8] border-2 border-[#97784A] rounded-md min-h-[3.5rem] active:scale-95 transition-all duration-100"
               key={product.name}

@@ -1,11 +1,16 @@
 import { InventoryTemplate } from "@/module/market/template/inventory";
-import { useState } from "react";
-import { IMAGE_URLS } from "@/lib/constants/constants";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getInventory, type InventoryItem } from "@/lib/api/market/getInventory";
+import { useProduct } from "@/lib/api/market/useProduct";
 
 export const TEXT_MESSAGE = {
   not_product: {
     text: "아직 상품이 없어요. \n 다음에 찾아주세요!",
+    buttonText: "",
+  },
+  first_and_last: {
+    text: "창고를 구경해봐요!",
     buttonText: "",
   },
   first: {
@@ -22,69 +27,26 @@ export const TEXT_MESSAGE = {
   },
 };
 
-export const PRODUCT_LIST = [
-  {
-    name: "노트북 10분",
-    image: IMAGE_URLS.items.donut,
-    price: 100,
-  },
-  {
-    name: "노트북 20분",
-    image: IMAGE_URLS.items.Bungeoppang,
-    price: 100,
-  },
-  {
-    name: "노트북 30분",
-    image: IMAGE_URLS.items.carrot,
-    price: 100,
-  },
-  {
-    name: "노트북 40분",
-    image: IMAGE_URLS.items.strawberry,
-    price: 100,
-  },
-  {
-    name: "노트북 50분",
-    image: IMAGE_URLS.items.donut,
-    price: 100,
-  },
-  {
-    name: "노트북 60분",
-    image: IMAGE_URLS.items.apple,
-    price: 100,
-  },
-  {
-    name: "노트북 70분",
-    image: IMAGE_URLS.items.feed,
-    price: 100,
-  },
-  {
-    name: "노트북 80분",
-    image: IMAGE_URLS.items.strawberry,
-    price: 100,
-  },
-  {
-    name: "노트북 90분",
-    image: IMAGE_URLS.items.feed,
-    price: 100,
-  },
-  {
-    name: "노트북 100분",
-    image: IMAGE_URLS.items.carrot,
-    price: 100,
-  },
-];
-
 export default function Inventory() {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [productIndex, setProductIndex] = useState(0);
-  const lastIndex = Math.ceil(PRODUCT_LIST.length / 3) - 1;
-  const [selectedProduct, setSelectedProduct] = useState<{ name: string; price: number; image: string } | null>(null);
-  const navigate = useNavigate();
+  const [selectedProduct, setSelectedProduct] = useState<InventoryItem | null>(null);
+  const [productList, setProductList] = useState<InventoryItem[]>([]);
+  const lastIndex = Math.ceil(productList.length / 3) - 1;
+
+  useEffect(() => {
+    getInventory().then((items) => {
+      setProductList(items);
+    });
+  }, []);
 
   const getMessage = () => {
-    if (PRODUCT_LIST.length === 0) {
+    if (productList.length === 0) {
       return TEXT_MESSAGE.not_product;
+    }
+    if (productIndex === 0 && lastIndex === 0) {
+      return TEXT_MESSAGE.first_and_last;
     }
     if (productIndex === 0) {
       return TEXT_MESSAGE.first;
@@ -96,8 +58,10 @@ export default function Inventory() {
   };
 
   const currentMessage = getMessage();
-
   const handleSpeechBubbleClick = () => {
+    if (productIndex === lastIndex) {
+      return setProductIndex(0);
+    }
     if (currentMessage.buttonText === "더보기") {
       setProductIndex((prev) => prev + 1);
     } else if (currentMessage.buttonText === "처음으로") {
@@ -105,7 +69,7 @@ export default function Inventory() {
     }
   };
 
-  const handleProductClick = (product: { name: string; price: number; image: string }) => {
+  const handleProductClick = (product: InventoryItem) => {
     setSelectedProduct(product);
     setIsOpen(true);
   };
@@ -114,17 +78,27 @@ export default function Inventory() {
     navigate("/market", { state: { from: "inventory" } });
   };
 
+  const handleUseProduct = (exp?: number) => {
+    useProduct({ productId: selectedProduct?.productId || "" });
+    setIsOpen(false);
+
+    if (exp && exp > 0) {
+      navigate("/raising", { state: { from: "inventory" } });
+    }
+  };
+
   return (
     <InventoryTemplate
       isOpen={isOpen}
       setIsOpen={setIsOpen}
+      productList={productList}
       productIndex={productIndex}
       selectedProduct={selectedProduct}
       currentMessage={currentMessage}
       handleSpeechBubbleClick={handleSpeechBubbleClick}
       handleProductClick={handleProductClick}
-      PRODUCT_LIST={PRODUCT_LIST}
       handleBack={handleBack}
+      handleUseProduct={handleUseProduct}
     />
   );
 }

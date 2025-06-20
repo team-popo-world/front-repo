@@ -39,10 +39,12 @@ function App() {
         <Routes>
           <Route path="/" element={<ProtectedRouter />}>
             <Route index element={<Main />} />
+            {/* 투자 */}
             <Route path="/investing">
               <Route index element={<Investing />} />
               <Route path="game/:gametype" element={<InvestingGame />} />
             </Route>
+            {/* 시장 */}
             <Route path="/market">
               <Route index element={<Market />} />
               <Route path="parent" element={<ParentShop />} />
@@ -50,12 +52,15 @@ function App() {
               <Route path="inventory" element={<Inventory />} />
             </Route>
             <Route path="/savings" element={<Savings />} />
+            {/* 퀘스트 */}
             <Route path="/quest">
               <Route index element={<Quest />} />
               <Route path="detail/:questType" element={<QuestDetail />} />
               <Route path="detail/complete" element={<QuestComplete />} />
             </Route>
+            {/* 포포 키우기 */}
             <Route path="/raising" element={<Raising />} />
+            {/* 감정일기 */}
             <Route path="/emotionDiary">
               <Route index element={<EmotionDiary />} />
               <Route path="write" element={<DiaryWrite />}></Route>
@@ -63,6 +68,7 @@ function App() {
             <Route path="/attandance" element={<Attandance />} />
             <Route path="/quiz" element={<Quiz />} />
           </Route>
+          {/* 로그인 */}
           <Route path="/auth/login" element={<LoginPage />} />
           <Route path="/auth/register" element={<RegisterPage />} />
           <Route path="*" element={<NotFound />} />

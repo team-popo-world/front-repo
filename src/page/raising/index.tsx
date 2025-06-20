@@ -3,6 +3,9 @@ import { IMAGE_URLS } from "../../lib/constants/constants";
 import { BackArrow } from "../../components/button/BackArrow";
 import { useState, useEffect } from "react";
 import apiClient from "../../lib/api/axios";
+import { ToRasingLandLoading1 } from "@/components/loading/ToRasingLandLoading1";
+import { ToRasingLandLoading2 } from "@/components/loading/ToRasingLandLoading2";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // 먹이 타입 정의
 interface Feed {
@@ -114,6 +117,8 @@ export default function RaisingPage() {
   const [_pendingExpMsg, setPendingExpMsg] = useState(false);
   const [characterAnim, setCharacterAnim] = useState(false);
   const [selected, setSelected] = useState<string[]>([]);
+  // 로딩 상태 인벤토리에서 먹이 사용시 이동
+  const [isLoading, setIsLoading] = useState(true);
 
   // 먹이 목록 조회
   const fetchFeeds = async () => {
@@ -155,6 +160,17 @@ export default function RaisingPage() {
     if (level == 3) return IMAGE_URLS.raising.character3;
     if (level == 2) return IMAGE_URLS.raising.character2;
     return IMAGE_URLS.raising.character1;
+  }
+
+  // 인벤토리에서 먹이 사용시 로딩 화면 출력
+  const { state } = useLocation();
+  const from = state?.from;
+  if(from === "inventory") {
+    setIsLoading(true);
+  }
+
+  if(isLoading) {
+    return <ToRasingLandLoading2 onAnimationComplete={() => setIsLoading(false)}/>;
   }
 
   function FeedModal({ onCancel, onConfirm }: { onCancel: () => void; onConfirm: (selectedFeeds: string[]) => void }) {

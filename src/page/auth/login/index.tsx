@@ -31,6 +31,7 @@ export default function LoginPage() {
 
       // 액세스 토큰 저장
       const accessToken = response.headers["authorization"]?.replace("Bearer ", "");
+      console.log(accessToken);
       if (accessToken) {
         setAccessToken("accessToken");
       }
